@@ -6,7 +6,7 @@ import javax.swing.JPanel;
 public class Panel extends JPanel{
 	
 	Panel(){
-		setBackground(new Color(82, 18, 120));
+		setBackground(new Color(12, 12, 100));
 
 	}
 
