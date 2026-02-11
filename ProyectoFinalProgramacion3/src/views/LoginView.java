@@ -13,7 +13,7 @@ import javax.swing.SwingConstants;
 public class LoginView extends JPanel{
 	public LoginView(){
 		setLayout(null);
-		setBackground(new Color(20, 20, 20));
+		setBackground(new Color(15, 19, 20));
 		
 		JButton btnConfimar = new JButton("Ingresar");
 		btnConfimar.setFont(new Font("Times New Roman", Font.PLAIN, 23));
