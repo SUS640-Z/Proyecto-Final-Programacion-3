@@ -16,8 +16,15 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
+import java.awt.FlowLayout;
+import java.awt.BorderLayout;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+import javax.swing.BoxLayout;
+import javax.swing.SpringLayout;
 
-public class poco extends JFrame {
+public class Poco extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -29,7 +36,7 @@ public class poco extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					poco frame = new poco();
+					Poco frame = new Poco();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -41,9 +48,9 @@ public class poco extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public poco() {
+	public Poco() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 600, 600);
+		setBounds(100, 100, 667, 519);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -110,18 +117,32 @@ public class poco extends JFrame {
 		lblUsuarioRequerido.setForeground(new Color(195, 136, 93));
 		getContentPane().add(lblUsuarioRequerido);
 		
+		
 		JLabel lblCafeImg = new JLabel("");
-		lblCafeImg.setBounds(80, 180, 350, 350);
+		lblCafeImg.setBounds(125, 320, 350, 350);
 		lblCafeImg.setIcon(cargarIcono("../img/cafe.png", 350, 350));
-		contentPane.add(lblCafeImg);
+		getContentPane().add(lblCafeImg);
 		
+		JPanel panel = new JPanel();
+		panel.setBackground(new Color(128, 255, 128));
+		panel.setBounds(10, 53, 299, 218);
+		contentPane.add(panel);
+		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
 		
+		JPanel panel_1_1 = new JPanel();
+		panel_1_1.setBounds(270, 228, 299, 57);
+		contentPane.add(panel_1_1);
+		panel_1_1.setBackground(new Color(255, 255, 128));
+		panel_1_1.setLayout(new BoxLayout(panel_1_1, BoxLayout.X_AXIS));
 		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBounds(413, 27, 299, 218);
+		contentPane.add(panel_1);
+		panel_1.setBackground(new Color(128, 255, 255));
+		panel_1.setLayout(new BoxLayout(panel_1, BoxLayout.X_AXIS));
 		
-	
-
 	}
-
+	
 	private ImageIcon cargarIcono(String ruta, int ancho, int largo) {
 
 		try {
