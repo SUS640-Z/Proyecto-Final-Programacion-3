@@ -139,7 +139,6 @@ public class GribBagLayout extends JFrame {
 		textField.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 		textField.setColumns(25);
 		GridBagConstraints gbc_textField = new GridBagConstraints();
-		gbc_textField.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField.gridwidth = 4;
 		gbc_textField.insets = new Insets(0, 0, 5, 0);
 		gbc_textField.gridx = 0;
@@ -203,7 +202,6 @@ public class GribBagLayout extends JFrame {
 		textField_1.setColumns(25);
 		textField_1.setBounds(95,245, 140, 25);
 		GridBagConstraints gbc_textField_1 = new GridBagConstraints();
-		gbc_textField_1.fill = GridBagConstraints.HORIZONTAL;
 		gbc_textField_1.gridwidth = 4;
 		gbc_textField_1.insets = new Insets(0, 0, 5, 5);
 		gbc_textField_1.gridx = 0;

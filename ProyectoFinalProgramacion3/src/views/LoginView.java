@@ -3,6 +3,8 @@ package views;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JPasswordField;
 import javax.imageio.ImageIO;
@@ -14,6 +16,9 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
+import components.LblAviso;
+import components.LblSubtitulo;
+
 public class LoginView extends JPanel{
 	public LoginView(){
 		setLayout(null);
@@ -24,26 +29,22 @@ public class LoginView extends JPanel{
 		btnConfimar.setBackground(new Color(48, 60, 26));
 		btnConfimar.setForeground(Color.WHITE);
 		btnConfimar.setBounds(143,317, 316, 40);
-		btnConfimar.setBorder(new LineBorder(Color.GRAY, 3, true));				
+		btnConfimar.setBorder(new LineBorder(Color.GRAY, 3, true));	
 		add(btnConfimar);
 				
 		//USUARIO
-		JLabel labelUsuario = new JLabel("USUARIO");
-		labelUsuario.setBounds(133, 131, 120, 25);
-		labelUsuario.setForeground(Color.WHITE);
-		labelUsuario.setFont(new Font("Times New Roman", Font.PLAIN, 20));
-		add(labelUsuario);
+		LblSubtitulo lblUsuario = new LblSubtitulo("USUARIO");
+		lblUsuario.setBounds(133, 131, 120, 25);
+		add(lblUsuario);
 		
 		JTextField txtUsuario = new JTextField();
 		txtUsuario.setBounds(143, 155, 316, 25);
 		add(txtUsuario);
 
 		// CONTRASENA
-		JLabel labelContrasena = new JLabel("CONTRASENA");
-		labelContrasena.setBounds(133, 220, 140, 25);
-		labelContrasena.setForeground(Color.WHITE);
-		labelContrasena.setFont(new Font("Times New Roman", Font.PLAIN, 20));
-		add(labelContrasena);
+		LblSubtitulo lblContasena = new LblSubtitulo("CONTRASEÑA");
+		lblContasena.setBounds(133, 220, 140, 25);
+		add(lblContasena);
 
 		JPasswordField txtContrasena = new JPasswordField();
 		txtContrasena.setBounds(143, 246, 316, 25);
@@ -58,26 +59,16 @@ public class LoginView extends JPanel{
 		lblIniciarSesion.setHorizontalAlignment(SwingConstants.CENTER);
 		add(lblIniciarSesion);
 		
-		JLabel lblErrorIngresarDatos = new JLabel("Usuario y/o Contraseña son incorrectos");
-		lblErrorIngresarDatos.setHorizontalAlignment(SwingConstants.CENTER);
-		lblErrorIngresarDatos.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-		lblErrorIngresarDatos.setBackground(new Color(128, 255, 255));
+		LblAviso lblErrorIngresarDatos = new LblAviso("");
 		lblErrorIngresarDatos.setBounds(143, 357, 316, 57);
-		lblErrorIngresarDatos.setForeground(new Color(195, 136, 93));
 		add(lblErrorIngresarDatos);
 		
-		JLabel lblContraseaRequerida = new JLabel("Contraseña Requerida");
-		lblContraseaRequerida.setFont(new Font("Times New Roman", Font.PLAIN, 14));
-		lblContraseaRequerida.setBackground(new Color(128, 255, 255));
+		LblAviso lblContraseaRequerida = new LblAviso("");
 		lblContraseaRequerida.setBounds(357, 253, 140, 57);
-		lblContraseaRequerida.setForeground(new Color(195, 136, 93));
 		add(lblContraseaRequerida);
 		
-		JLabel lblUsuarioRequerido = new JLabel("Usuario Requerido");
-		lblUsuarioRequerido.setFont(new Font("Times New Roman", Font.PLAIN, 14));
-		lblUsuarioRequerido.setBackground(new Color(128, 255, 255));
+		LblAviso lblUsuarioRequerido = new LblAviso("");
 		lblUsuarioRequerido.setBounds(357, 166, 140, 57);
-		lblUsuarioRequerido.setForeground(new Color(195, 136, 93));
 		add(lblUsuarioRequerido);
 		
 		
@@ -85,6 +76,24 @@ public class LoginView extends JPanel{
 		lblCafeImg.setBounds(125, 320, 350, 350);
 		lblCafeImg.setIcon(cargarIcono("../img/cafe.png", 350, 350));
 		add(lblCafeImg);
+		
+		
+		btnConfimar.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				
+				if(txtUsuario.getText().trim().equals("")) {
+					lblUsuarioRequerido.setText("Usuario Requerido");
+				}else{
+					lblUsuarioRequerido.setText("");
+				}
+				
+				if(new String(txtContrasena.getPassword()).trim().equals("")) {
+					lblContraseaRequerida.setText("Contraseña Requerida");
+				}else{
+					lblContraseaRequerida.setText("");
+				}
+			}
+		});
 		
 		
 	}
