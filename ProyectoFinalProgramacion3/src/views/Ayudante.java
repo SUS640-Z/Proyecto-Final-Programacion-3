@@ -1,31 +1,57 @@
 package views;
 
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
 
-import javax.swing.JPasswordField;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import components.LblAviso;
 import components.LblSubtitulo;
 
-public class LoginView extends JPanel{
-	public LoginView(){
-		setLayout(null);
+public class Ayudante extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+	private JPanel contentPane;
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					Ayudante frame = new Ayudante();
+					frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
+	/**
+	 * Create the frame.
+	 */
+	public Ayudante() {
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 676, 608);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		getContentPane().setLayout(null);
 		setBackground(new Color(15, 19, 9));
 		
 		JButton btnConfimar = new JButton("Ingresar");
@@ -34,25 +60,25 @@ public class LoginView extends JPanel{
 		btnConfimar.setForeground(Color.WHITE);
 		btnConfimar.setBounds(143,317, 316, 40);
 		btnConfimar.setBorder(new LineBorder(Color.GRAY, 3, true));	
-		add(btnConfimar);
+		getContentPane().add(btnConfimar);
 				
 		//USUARIO
 		LblSubtitulo lblUsuario = new LblSubtitulo("USUARIO");
 		lblUsuario.setBounds(133, 131, 120, 25);
-		add(lblUsuario);
+		getContentPane().add(lblUsuario);
 		
 		JTextField txtUsuario = new JTextField();
 		txtUsuario.setBounds(143, 155, 316, 25);
-		add(txtUsuario);
+		getContentPane().add(txtUsuario);
 
 		// CONTRASENA
 		LblSubtitulo lblContasena = new LblSubtitulo("CONTRASEÑA");
 		lblContasena.setBounds(133, 220, 140, 25);
-		add(lblContasena);
+		getContentPane().add(lblContasena);
 
 		JPasswordField txtContrasena = new JPasswordField();
 		txtContrasena.setBounds(143, 246, 316, 25);
-		add(txtContrasena);
+		getContentPane().add(txtContrasena);
 		
 		//Titulo de inicio de sesion
 		JLabel lblIniciarSesion = new JLabel("Iniciar Sesion");
@@ -61,45 +87,25 @@ public class LoginView extends JPanel{
 		lblIniciarSesion.setBounds(169, 41, 254, 62);
 		lblIniciarSesion.setForeground(Color.WHITE);
 		lblIniciarSesion.setHorizontalAlignment(SwingConstants.CENTER);
-		add(lblIniciarSesion);
+		getContentPane().add(lblIniciarSesion);
 		
 		LblAviso lblErrorIngresarDatos = new LblAviso("");
 		lblErrorIngresarDatos.setBounds(143, 357, 316, 57);
-		add(lblErrorIngresarDatos);
+		getContentPane().add(lblErrorIngresarDatos);
 		
 		LblAviso lblContraseaRequerida = new LblAviso("");
 		lblContraseaRequerida.setBounds(357, 253, 140, 57);
-		add(lblContraseaRequerida);
+		getContentPane().add(lblContraseaRequerida);
 		
 		LblAviso lblUsuarioRequerido = new LblAviso("");
 		lblUsuarioRequerido.setBounds(357, 166, 140, 57);
-		add(lblUsuarioRequerido);
+		getContentPane().add(lblUsuarioRequerido);
 		
 		
 		JLabel lblCafeImg = new JLabel("");
 		lblCafeImg.setBounds(125, 320, 350, 350);
 		lblCafeImg.setIcon(cargarIcono("../img/cafe.png", 350, 350));
-		add(lblCafeImg);
-		
-		
-		btnConfimar.addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent e) {
-				
-				if(txtUsuario.getText().trim().equals("")) {
-					lblUsuarioRequerido.setText("Usuario Requerido");
-				}else{
-					lblUsuarioRequerido.setText("");
-				}
-				
-				if(new String(txtContrasena.getPassword()).trim().equals("")) {
-					lblContraseaRequerida.setText("Contraseña Requerida");
-				}else{
-					lblContraseaRequerida.setText("");
-				}
-			}
-		});
-		
-		
+		getContentPane().add(lblCafeImg);
 	}
 	
 	private ImageIcon cargarIcono(String ruta, int ancho, int largo) {
@@ -114,22 +120,6 @@ public class LoginView extends JPanel{
 		
 		return null;
 	}
-	
-	public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		Graphics2D g2 = (Graphics2D) g;
-		
-		Image fondo = null;
-		try {
-			fondo=ImageIO.read(new File(""));
-			
-			g2.drawImage(fondo, 0, 0,getWidth(),getHeight(),null);
-			
-		}catch (IOException ex) {
-			System.out.println("La imagen no existe");
-		
-		}
-	}
-	
-	
+
 }
+
