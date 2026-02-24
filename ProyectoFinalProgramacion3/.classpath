@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="com.jgoodies.common_1.8.1.v20240327-0800.jar"/>
 	<classpathentry kind="lib" path="com.miglayout.swing_11.4.2.jar"/>
 	<classpathentry kind="lib" path="com.miglayout.core_11.4.2.jar"/>
+	<classpathentry kind="lib" path="/Proyecto-Final-Programacion-3/ProyectoFinalProgramacion3/src/lib/flatlaf-3.4.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

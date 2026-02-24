@@ -12,7 +12,7 @@ public class Ventana extends JFrame{
 	public Ventana() {
 		//setSize(500,500);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setTitle("Green Coffe");
+		setTitle("SaturnBucks");
 		//setLocation(100,100);
 		setBounds(200,100,640,640); // cordenadas y tamaño
 		setResizable(false);
