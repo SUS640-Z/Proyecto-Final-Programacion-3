@@ -37,7 +37,7 @@ public class LoginView extends JPanel{
 		add(btnConfimar);
 				
 		//USUARIO
-		LblSubtitulo lblUsuario = new LblSubtitulo("USUARIO");
+		LblSubtitulo lblUsuario = new LblSubtitulo("USUARIO: ");
 		lblUsuario.setBounds(133, 131, 120, 25);
 		add(lblUsuario);
 		
@@ -46,7 +46,7 @@ public class LoginView extends JPanel{
 		add(txtUsuario);
 
 		// CONTRASENA
-		LblSubtitulo lblContasena = new LblSubtitulo("CONTRASEÑA");
+		LblSubtitulo lblContasena = new LblSubtitulo("CONTRASEÑA:");
 		lblContasena.setBounds(133, 220, 140, 25);
 		add(lblContasena);
 

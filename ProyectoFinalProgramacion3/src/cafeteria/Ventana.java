@@ -6,6 +6,7 @@ import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 
+import views.Dirreccion;
 import views.LoginView;
 
 public class Ventana extends JFrame{
