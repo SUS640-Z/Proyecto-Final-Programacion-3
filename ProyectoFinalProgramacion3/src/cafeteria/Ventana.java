@@ -11,7 +11,7 @@ import views.LoginView;
 
 public class Ventana extends JFrame{
 	public Ventana() {
-		//setSize(500,500);
+		//setSize(600,600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("SaturnBucks");
 		//setLocation(100,100);
