@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,19 +13,36 @@ import java.io.IOException;
 
 import javax.swing.JPasswordField;
 import javax.imageio.ImageIO;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.border.EmptyBorder;
 
 import components.LblAviso;
 import components.LblSubtitulo;
 
 public class LoginView extends JPanel{
 	public LoginView(){
+		
+	    setLayout(new GridBagLayout()); 
+
+	    Border emptyBorder = BorderFactory.createEmptyBorder(10, 10, 10, 10);
+	    Border panelTitledBorder = BorderFactory.createTitledBorder(
+	            BorderFactory.createLineBorder(Color.WHITE, 2),
+	            "LOG IN", 
+	            TitledBorder.CENTER,
+	            TitledBorder.TOP,
+	            new Font("Arial", Font.BOLD, 14),
+	            Color.WHITE);
+
+	    setBorder(BorderFactory.createCompoundBorder(emptyBorder, panelTitledBorder));
 		setLayout(null);
 		setBackground(new Color(15, 19, 9));
 		
@@ -39,6 +57,7 @@ public class LoginView extends JPanel{
 		//USUARIO
 		LblSubtitulo lblUsuario = new LblSubtitulo("USUARIO: ");
 		lblUsuario.setBounds(133, 131, 120, 25);
+		lblUsuario.setForeground(Color.WHITE);
 		add(lblUsuario);
 		
 		JTextField txtUsuario = new JTextField();
@@ -48,13 +67,14 @@ public class LoginView extends JPanel{
 		// CONTRASENA
 		LblSubtitulo lblContasena = new LblSubtitulo("CONTRASEÑA:");
 		lblContasena.setBounds(133, 220, 140, 25);
+		lblContasena.setForeground(Color.WHITE);
 		add(lblContasena);
 
 		JPasswordField txtContrasena = new JPasswordField();
 		txtContrasena.setBounds(143, 246, 316, 25);
 		add(txtContrasena);
 		
-		//Titulo de inicio de sesion
+
 		JLabel lblIniciarSesion = new JLabel("Iniciar Sesion");
 		lblIniciarSesion.setFont(new Font("Times New Roman", Font.PLAIN, 40));
 		lblIniciarSesion.setForeground(new Color(255, 255, 255));
@@ -76,9 +96,8 @@ public class LoginView extends JPanel{
 		add(lblUsuarioRequerido);
 		
 		
-		JLabel lblCafeImg = new JLabel("");
-		lblCafeImg.setBounds(125, 320, 350, 350);
-		lblCafeImg.setIcon(cargarIcono("../img/cafe.png", 350, 350));
+		JLabel lblCafeImg = new JLabel("", cargarIcono("../img/cafe.png", 300, 300), JLabel.CENTER);
+		lblCafeImg.setBounds(145, 290, 350, 350); 
 		add(lblCafeImg);
 		
 		
@@ -87,12 +106,14 @@ public class LoginView extends JPanel{
 				
 				if(txtUsuario.getText().trim().equals("")) {
 					lblUsuarioRequerido.setText("Usuario Requerido");
+					lblUsuarioRequerido.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 				}else{
 					lblUsuarioRequerido.setText("");
 				}
 				
 				if(new String(txtContrasena.getPassword()).trim().equals("")) {
 					lblContraseaRequerida.setText("Contraseña Requerida");
+					lblContraseaRequerida.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 				}else{
 					lblContraseaRequerida.setText("");
 				}

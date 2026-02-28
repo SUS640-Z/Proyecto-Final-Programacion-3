@@ -11,9 +11,9 @@ public class Main {
 	public static void main(String[] args) {
 
 	FlatLightLaf.setup();
-	//Ventana ventana = new Ventana();
+	Ventana ventana = new Ventana();
 	//VentanaBienvenida bienvenida = new VentanaBienvenida();
-	Dirreccion direcion = new Dirreccion();
+	//Dirreccion direcion = new Dirreccion();
 	}
 }
 
