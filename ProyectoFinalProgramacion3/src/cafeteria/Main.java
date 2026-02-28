@@ -5,7 +5,7 @@ import javax.swing.UIManager;
 import com.formdev.flatlaf.FlatLightLaf;
 
 import views.Dirreccion;
-import views.VentanaBienvenida;
+//import views.VentanaBienvenida;
 
 public class Main {
 	public static void main(String[] args) {

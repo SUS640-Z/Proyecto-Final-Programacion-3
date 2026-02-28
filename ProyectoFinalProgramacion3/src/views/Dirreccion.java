@@ -1,18 +1,17 @@
 package views;
-
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Image;
-
 import javax.swing.border.Border;
 import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
+import components.BtnDirecion;
+import components.LblSubtituloDirreccion;
 import javax.swing.border.LineBorder;
 import java.awt.Toolkit;
-
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -79,8 +78,7 @@ public class Dirreccion extends JFrame {
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridx = 0;
 
-		JLabel lblTitulo = new JLabel("Ingresa tu direccion");
-		lblTitulo.setFont(new Font("Tahoma", Font.BOLD, 22));
+		LblSubtituloDirreccion lblTitulo = new LblSubtituloDirreccion("Ingresa tu direccion");
 		c.gridy = 0;
 		c.insets = new Insets(10, 5, 20, 5);
 		panelFormulario.add(lblTitulo, c);
@@ -91,25 +89,59 @@ public class Dirreccion extends JFrame {
 		c.gridy = 1;
 		panelFormulario.add(new JLabel("País/Región:"), c);
 		JComboBox cboxPaises = new JComboBox();
-		cboxPaises.setModel(new DefaultComboBoxModel(new String[] {"Mexico", "Estados Unidos", "Canada", "Peru"}));
+		cboxPaises.setModel(new DefaultComboBoxModel<>(new String[] {
+			    "Alemania",
+			    "Argentina",
+			    "Australia",
+			    "Brasil",
+			    "Canadá",
+			    "Chile",
+			    "China",
+			    "Colombia",
+			    "Corea del Sur",
+			    "Emiratos Árabes Unidos",
+			    "España",
+			    "Estados Unidos",
+			    "Francia",
+			    "India",
+			    "Indonesia",
+			    "Italia",
+			    "Japón",
+			    "México",
+			    "Noruega",
+			    "Nueva Zelanda",
+			    "Países Bajos",
+			    "Perú",
+			    "Polonia",
+			    "Portugal",
+			    "Reino Unido",
+			    "Singapur",
+			    "Suecia",
+			    "Suiza",
+			    "Tailandia",
+			    "Turquía"
+			}));
 		c.gridy = 2;
 		panelFormulario.add(cboxPaises, c);
 
 		c.gridy = 3;
 		panelFormulario.add(new JLabel("Nombre completo:"), c);
 		txtNombre = new JTextField();
+		txtNombre.putClientProperty("JTextField.placeholderText", "Ingresa tus nombres y apellidos");
 		c.gridy = 4;
 		panelFormulario.add(txtNombre, c);
 
 		c.gridy = 5;
 		panelFormulario.add(new JLabel("Direccion (col, calle, num): "), c);
 		txtCalle = new JTextField();
+		txtCalle.putClientProperty("JTextField.placeholderText", "Ingresa tu colonia y calle");
 		c.gridy = 6;
 		panelFormulario.add(txtCalle, c);
 
 		c.gridy = 7;
 		panelFormulario.add(new JLabel("Codigo Postal:"), c);
 		txtCodigoPostal = new JTextField();
+		txtCodigoPostal.putClientProperty("JTextField.placeholderText", "Ingresa tu C.P");
 		c.gridy = 8;
 		panelFormulario.add(txtCodigoPostal, c);
 
@@ -118,11 +150,7 @@ public class Dirreccion extends JFrame {
 		c.gridy = 9;
 		c.insets = new Insets(5, 5, 10, 5);
 		
-		JButton btnValidarCP = new JButton("Validar Codigo Postal");
-		btnValidarCP.setFont(new Font("Times New Roman", Font.PLAIN, 12)); 
-		btnValidarCP.setBackground(new Color(48, 60, 26)); 
-		btnValidarCP.setForeground(Color.WHITE);
-		btnValidarCP.setBorder(new LineBorder(Color.GRAY, 2, true));
+		BtnDirecion btnValidarCP = new BtnDirecion("Validar Codigo Postal",12,2);
 		panelFormulario.add(btnValidarCP, c);
 
 		c.fill = GridBagConstraints.HORIZONTAL; 
@@ -131,6 +159,7 @@ public class Dirreccion extends JFrame {
 		c.gridy = 10;
 		panelFormulario.add(new JLabel("Numero de telefono:"), c);
 		txtNumeroTelefono = new JTextField();
+		txtNumeroTelefono.putClientProperty("JTextField.placeholderText", "Ingresa tu numero de telefono");
 		c.gridy = 11;
 		panelFormulario.add(txtNumeroTelefono, c);
 
@@ -149,11 +178,7 @@ public class Dirreccion extends JFrame {
 		c.gridy = 14;
 		panelFormulario.add(chckbx, c);
 
-		JButton btnConfirmar = new JButton("Confirmar Direccion");
-		btnConfirmar.setFont(new Font("Times New Roman", Font.PLAIN, 20));
-		btnConfirmar.setBackground(new Color(48, 60, 26));
-		btnConfirmar.setForeground(Color.WHITE);
-		btnConfirmar.setBorder(new LineBorder(Color.GRAY, 3, true));
+		BtnDirecion btnConfirmar = new BtnDirecion("Confirmar Direccion",20,3);
 		c.gridy = 15;
 		c.insets = new Insets(20, 5, 10, 5);
 		panelFormulario.add(btnConfirmar, c);
