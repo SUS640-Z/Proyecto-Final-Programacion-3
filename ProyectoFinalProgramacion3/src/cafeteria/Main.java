@@ -13,7 +13,7 @@ public class Main {
 	FlatLightLaf.setup();
 	Ventana ventana = new Ventana();
 	//VentanaBienvenida bienvenida = new VentanaBienvenida();
-	//Dirreccion direcion = new Dirreccion();
+	Dirreccion direcion = new Dirreccion();
 	}
 }
 
