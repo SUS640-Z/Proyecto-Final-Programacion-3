@@ -24,27 +24,16 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-public class Dirreccion extends JFrame {
+public class Dirreccion extends JPanel {
 
-	private JPanel contentPane;
 	private JTextField txtNombre;
 	private JTextField txtCalle;
 	private JTextField txtCodigoPostal;
 	private JTextField txtNumeroTelefono;
 
 	public Dirreccion() {
-		setTitle("Saturnbucks.direccion");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 600);
-		setResizable(false);
-		setLocationRelativeTo(null);
-		Toolkit tk = Toolkit.getDefaultToolkit();
-		Image icono = tk.getImage("src/img/coffe.png");
-		setIconImage(icono);
-		contentPane = new JPanel();
-		contentPane.setBackground(new Color(210, 180, 140));
+		setBackground(new Color(210, 180, 140));
 		
-
 		Border emptyBorder = BorderFactory.createEmptyBorder(10, 10, 10, 10);
 		Border panelTitledBorder = BorderFactory.createTitledBorder(
 				BorderFactory.createLineBorder(Color.BLACK, 2),
@@ -54,13 +43,12 @@ public class Dirreccion extends JFrame {
 				new Font("Arial", Font.BOLD, 14),
 				Color.BLACK);
 		
-		contentPane.setBorder(BorderFactory.createCompoundBorder(emptyBorder, panelTitledBorder));
-		setContentPane(contentPane);
+		setBorder(BorderFactory.createCompoundBorder(emptyBorder, panelTitledBorder));
 
 		GridBagLayout gbl_contentPane = new GridBagLayout();
 		gbl_contentPane.columnWeights = new double[]{1.0, Double.MIN_VALUE};
 		gbl_contentPane.rowWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-		contentPane.setLayout(gbl_contentPane);
+		setLayout(gbl_contentPane);
 
 		JPanel panelFormulario = new JPanel();
 		panelFormulario.setOpaque(false);
@@ -68,7 +56,7 @@ public class Dirreccion extends JFrame {
 		gbc_panel.fill = GridBagConstraints.BOTH;
 		gbc_panel.gridx = 0;
 		gbc_panel.gridy = 0;
-		contentPane.add(panelFormulario, gbc_panel);
+		add(panelFormulario, gbc_panel);
 
 		GridBagLayout gbl_form = new GridBagLayout();
 		panelFormulario.setLayout(gbl_form);

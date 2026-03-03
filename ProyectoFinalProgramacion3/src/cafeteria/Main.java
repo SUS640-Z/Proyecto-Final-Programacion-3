@@ -4,6 +4,8 @@ import javax.swing.UIManager;
 
 import com.formdev.flatlaf.FlatLightLaf;
 
+import ventanas.VentanaDirrecion;
+import ventanas.VentanaLogIn;
 import views.Dirreccion;
 //import views.VentanaBienvenida;
 
@@ -11,9 +13,9 @@ public class Main {
 	public static void main(String[] args) {
 
 	FlatLightLaf.setup();
-	Ventana ventana = new Ventana();
+	VentanaLogIn ventana = new VentanaLogIn();
 	//VentanaBienvenida bienvenida = new VentanaBienvenida();
-	//Dirreccion direcion = new Dirreccion();
+	VentanaDirrecion direcion = new VentanaDirrecion();
 	}
 }
 

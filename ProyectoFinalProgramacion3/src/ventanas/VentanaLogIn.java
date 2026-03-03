@@ -1,4 +1,4 @@
-package cafeteria;
+package ventanas;
 
 import java.awt.Color;
 import java.awt.Image;
@@ -9,8 +9,8 @@ import javax.swing.JFrame;
 import views.Dirreccion;
 import views.LoginView;
 
-public class Ventana extends JFrame{
-	public Ventana() {
+public class VentanaLogIn extends JFrame{
+	public VentanaLogIn() {
 		//setSize(600,600);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("SaturnBucks");
