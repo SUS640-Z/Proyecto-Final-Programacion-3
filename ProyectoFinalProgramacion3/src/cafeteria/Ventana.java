@@ -19,7 +19,7 @@ public class Ventana extends JFrame{
 		setResizable(false);
 		setLocationRelativeTo(null);// Colocar la ventana el centro
 		Toolkit tk = Toolkit.getDefaultToolkit();
-		Image icono = tk.getImage("src/img/coffe.png");
+		Image icono = tk.getImage("src/img/SATURN_BUCKS_3.png");
 		setIconImage(icono);
 		//Panel panelito = new Panel();
 		//add(panelito);
