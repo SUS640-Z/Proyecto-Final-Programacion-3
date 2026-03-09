@@ -1,5 +1,5 @@
 package views;
-import java.awt.BorderLayout; // Importación añadida para mantener el diseño intacto
+import java.awt.BorderLayout; 
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
@@ -38,7 +38,6 @@ public class Dirreccion extends JFrame {
     private JTextField txtNumeroTelefono;
     BtnDirecion btnConfirmar; 
     GridBagConstraints c;
-    JPanel panelFormulario;
     LblAlertForm lblObs1;
     LblAlertForm lblObs2;
     LblAlertForm lblObs3;
@@ -48,6 +47,7 @@ public class Dirreccion extends JFrame {
     JComboBox cboxPaises;
     JTextArea txtDetalles;
     BtnDirecion btnConfirmar2;
+    JPanel panelFormulario;
     
     public Dirreccion() {
     		setTitle("Saturnbucks.direccion");
@@ -223,20 +223,7 @@ public class Dirreccion extends JFrame {
 		
         btnConfirmar.addActionListener( e -> validarForm());
         
-        btnConfirmar2 = new BtnDirecion("Regresar", 15, 3);
-        c.gridy = 16;
-        c.insets = new Insets(1, 1, 1, 1);
-        panelFormulario.add(btnConfirmar2, c);
-        btnConfirmar2.addActionListener(e -> {
-			
-			int option = JOptionPane.showConfirmDialog(this, "¿Seguro que deseas regresar? Se perderán todos los datos");
-			
-			if(option == JOptionPane.YES_OPTION) {
-				new LoginView();
-				dispose();
-			}
-			
-		});
+
 
 	}
     

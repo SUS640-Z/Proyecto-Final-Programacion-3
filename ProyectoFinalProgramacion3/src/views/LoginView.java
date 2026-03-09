@@ -117,11 +117,11 @@ public class LoginView extends JFrame{
 		add(btnConfimar2);
 		
 		
-		btnConfimar2.addActionListener( e -> reenviarDirrecion());
+		btnConfimar2.addActionListener( e -> reenviarRegistro());
 	}
 	
-	private void reenviarDirrecion() {
-		new Dirreccion();
+	private void reenviarRegistro() {
+		new RegistroView();
 		this.dispose();
 		
 	}

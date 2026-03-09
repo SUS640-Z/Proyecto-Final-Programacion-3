@@ -1,16 +1,17 @@
 package cafeteria;
 import javax.swing.UIManager;
 import com.formdev.flatlaf.FlatLightLaf;
-import views.Dirreccion;
 import views.LoginView;
-//import views.VentanaBienvenida;
+import views.RegistroView;
+import views.Dirreccion;
+
 
 public class Main {
 	public static void main(String[] args) {
 
 	FlatLightLaf.setup();
 	LoginView ventana = new LoginView();
-	//VentanaBienvenida bienvenida = new VentanaBienvenida();
+	//RegistroView bienvenida = new RegistroView();
 	//Dirreccion direcion = new Dirreccion();
 	}
 }
