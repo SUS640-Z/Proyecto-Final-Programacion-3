@@ -7,6 +7,9 @@ import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Image;
 import java.awt.Toolkit;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import javax.swing.border.Border;
 import javax.swing.BorderFactory;
 import javax.swing.border.TitledBorder;
@@ -204,20 +207,27 @@ public class RegistroView extends JFrame {
         
         panel.add(btnRegistrar, c);
         
-        btnConfirmar2 = new BtnDirecion("Regresar", 15, 3);
+        JLabel lblRegresar = new JLabel("<html><u>Regresar</u></html>");
+        lblRegresar.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+        lblRegresar.setForeground(Color.WHITE);
+        lblRegresar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblRegresar.setAlignmentX(JLabel.CENTER);
+        
         c.gridy = 16;
         c.insets = new Insets(1, 1, 1, 1);
-        contentPane.add(btnConfirmar2, c);
-        btnConfirmar2.addActionListener(e -> {
-			
-			int option = JOptionPane.showConfirmDialog(this, "¿Seguro que deseas regresar? Se perderán todos los datos");
-			
-			if(option == JOptionPane.YES_OPTION) {
-				new LoginView();
-				dispose();
-			}
-			
-		});
+        contentPane.add(lblRegresar, c);
+        
+        lblRegresar.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+            	int option = JOptionPane.showConfirmDialog(null, "¿Seguro que deseas regresar? Se perderán todos los datos");
+    			
+    			if(option == JOptionPane.YES_OPTION) {
+    				new LoginView();
+    				dispose();
+    			} 
+            }
+        });
+
     }
 
 

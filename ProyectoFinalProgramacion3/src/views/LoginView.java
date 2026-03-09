@@ -9,6 +9,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 import javax.swing.JPasswordField;
@@ -38,7 +40,7 @@ public class LoginView extends JFrame{
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setTitle("SaturnBucks");
 		//setLocation(100,100);
-		setBounds(200,100,640,640); // cordenadas y tamaño
+		setBounds(200,100,600,640); // cordenadas y tamaño
 		setResizable(false);
 		setLocationRelativeTo(null);// Colocar la ventana el centro
 		Toolkit tk = Toolkit.getDefaultToolkit();
@@ -108,16 +110,20 @@ public class LoginView extends JFrame{
 		
 		btnConfimar.addActionListener( e -> validarForm());
 		
-		JButton btnConfimar2 = new JButton("Crea una cuenta");
-		btnConfimar2.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-		btnConfimar2.setBackground(new Color(48, 60, 26));
-		btnConfimar2.setForeground(Color.WHITE);
-		btnConfimar2.setBounds(220,350, 160, 30);
-		btnConfimar2.setBorder(new LineBorder(Color.GRAY, 3, true));	
-		add(btnConfimar2);
+		JLabel lblCrearCuenta = new JLabel("<html><u>Crea una cuenta</u></html>");
+		lblCrearCuenta.setFont(new Font("Times New Roman", Font.PLAIN, 19));
+		lblCrearCuenta.setForeground(Color.WHITE);
+		lblCrearCuenta.setBounds(240,350, 180, 30);
+		lblCrearCuenta.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+		lblCrearCuenta.setAlignmentX(JLabel.CENTER);
+		add(lblCrearCuenta);
+
 		
-		
-		btnConfimar2.addActionListener( e -> reenviarRegistro());
+		lblCrearCuenta.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+                reenviarRegistro();
+            }
+        });
 	}
 	
 	private void reenviarRegistro() {
@@ -144,7 +150,7 @@ public class LoginView extends JFrame{
 		lblIniciarSesion = new JLabel("Iniciar Sesion");
 		lblIniciarSesion.setFont(new Font("Tahoma", Font.BOLD, 40));
 		lblIniciarSesion.setForeground(new Color(255, 255, 255));
-		lblIniciarSesion.setBounds(169, 41, 350, 62);
+		lblIniciarSesion.setBounds(130, 41, 350, 62);
 		lblIniciarSesion.setForeground(Color.WHITE);
 		lblIniciarSesion.setHorizontalAlignment(SwingConstants.CENTER);
 		add(lblIniciarSesion);
