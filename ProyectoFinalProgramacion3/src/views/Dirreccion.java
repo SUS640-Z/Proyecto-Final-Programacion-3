@@ -51,8 +51,8 @@ public class Dirreccion extends JFrame {
     
     public Dirreccion() {
     		setTitle("Saturnbucks.direccion");
-    		//setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-    		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+    		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //setBounds(100, 100, 450, 650); //Juan pablo tamaño
         setBounds(100, 100, 450, 720);//Ivan tamaño 
         setResizable(false);
