@@ -1,6 +1,7 @@
 package views;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -204,6 +205,17 @@ public class RegistroView extends JFrame {
         btnRegistrar.setBackground(new Color(48, 60, 26)); 
         btnRegistrar.setForeground(Color.WHITE);
         btnRegistrar.setBorder(new LineBorder(Color.GRAY, 3, true));
+        btnRegistrar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
+        btnRegistrar.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e){
+            		btnRegistrar.setBackground(new Color(152, 158, 141));
+            }
+            
+            	public void mouseExited(MouseEvent e){
+            		btnRegistrar.setBackground(new Color(48, 60, 26));
+            }
+        });
         
 
         btnRegistrar.addActionListener(e -> validarForm());
@@ -213,7 +225,7 @@ public class RegistroView extends JFrame {
         JLabel lblRegresar = new JLabel("<html><u>Regresar</u></html>");
         lblRegresar.setFont(new Font("Times New Roman", Font.PLAIN, 16));
         lblRegresar.setForeground(Color.WHITE);
-        lblRegresar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        lblRegresar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         lblRegresar.setAlignmentX(JLabel.CENTER);
         
         c.gridy = 16;
@@ -222,13 +234,21 @@ public class RegistroView extends JFrame {
         
         lblRegresar.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) {
-            	int option = JOptionPane.showConfirmDialog(null, "¿Seguro que deseas regresar? Se perderán todos los datos");
-    			
-    			if(option == JOptionPane.YES_OPTION) {
-    				new LoginView();
-    				dispose();
-    			} 
+	            	int option = JOptionPane.showConfirmDialog(null, "¿Seguro que deseas regresar? Se perderán todos los datos");
+	    			
+	    			if(option == JOptionPane.YES_OPTION) {
+	    				new LoginView();
+	    				dispose();
+	    			} 
             }
+            
+            public void mouseEntered(MouseEvent e){
+            		lblRegresar.setForeground(new Color(204, 207, 198));
+            }
+        
+        		public void mouseExited(MouseEvent e){
+        			lblRegresar.setForeground(Color.WHITE);
+        		}
         });
 
     }
@@ -401,6 +421,7 @@ public class RegistroView extends JFrame {
     private void verificarInstaPassword() {
     		boolean mayuscula=false;
     		boolean numeros=false;
+    		boolean longitud=false;
 	    	lblAvisoContra.setText(" ");
 	    	if(new String(txtContrasena.getPassword()).trim().equals("")) {
 	            lblAvisoContra.setText("Contrasena requerida");
@@ -416,6 +437,9 @@ public class RegistroView extends JFrame {
 			   if(new String(txtContrasena.getPassword()).matches(".*\\d.*")) {
 				   numeros=true;
 			   }
+			   if(new String(txtContrasena.getPassword()).trim().length() >= 8 ) {
+				   longitud=true;
+      		}
 		   }
 		   
 		   if(!mayuscula) {
@@ -424,6 +448,10 @@ public class RegistroView extends JFrame {
 		   
 		   if(!numeros) {
 			   lblAvisoContra.setText("Se necesita al menos un numero");
+		   }
+		   
+		   if(!longitud) {
+			   lblAvisoContra.setText("Debe contener almenos 8 caracteres");
 		   }
 	    }
     }

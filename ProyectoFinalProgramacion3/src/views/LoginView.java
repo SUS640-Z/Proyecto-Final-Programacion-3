@@ -1,6 +1,7 @@
 package views;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -107,16 +108,27 @@ public class LoginView extends JFrame{
 		btnConfimar.setBackground(new Color(48, 60, 26));
 		btnConfimar.setForeground(Color.WHITE);
 		btnConfimar.setBounds(143,300, 316, 40);
-		btnConfimar.setBorder(new LineBorder(Color.GRAY, 3, true));	
+		btnConfimar.setBorder(new LineBorder(Color.GRAY, 3, true));
+		btnConfimar.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		add(btnConfimar);
 		
 		btnConfimar.addActionListener( e -> validarForm());
+		
+		btnConfimar.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e){
+            		btnConfimar.setBackground(new Color(152, 158, 141));
+            }
+            
+            	public void mouseExited(MouseEvent e){
+            		btnConfimar.setBackground(new Color(48, 60, 26));
+            }
+        });
 		
 		JLabel lblCrearCuenta = new JLabel("<html><u>Crea una cuenta</u></html>");
 		lblCrearCuenta.setFont(new Font("Times New Roman", Font.PLAIN, 19));
 		lblCrearCuenta.setForeground(Color.WHITE);
 		lblCrearCuenta.setBounds(240,350, 180, 30);
-		lblCrearCuenta.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+		lblCrearCuenta.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		lblCrearCuenta.setAlignmentX(JLabel.CENTER);
 		add(lblCrearCuenta);
 
@@ -125,6 +137,14 @@ public class LoginView extends JFrame{
             public void mouseClicked(MouseEvent e) {
                 reenviarRegistro();
             }
+            
+            public void mouseEntered(MouseEvent e){
+            		lblCrearCuenta.setForeground(new Color(204, 207, 198));
+            }
+    
+    		public void mouseExited(MouseEvent e){
+    				lblCrearCuenta.setForeground(Color.WHITE);
+    			}
         });
 	}
 	
