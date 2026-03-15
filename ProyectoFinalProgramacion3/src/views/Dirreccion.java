@@ -1,6 +1,7 @@
 package views;
 import java.awt.BorderLayout; 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -19,6 +20,10 @@ import javax.swing.border.LineBorder;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -51,7 +56,7 @@ public class Dirreccion extends JFrame {
     JTextArea txtDetalles;
     BtnDirecion btnConfirmar2;
     JPanel panelFormulario;
-    
+
     public Dirreccion() {
     	setTitle("Saturnbucks.direccion");
     		//setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -126,6 +131,19 @@ public class Dirreccion extends JFrame {
         
         txtNombre = new JTextField();
         txtNombre.putClientProperty("JTextField.placeholderText", "Ingresa tus nombres y apellidos");
+
+        txtNombre.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+
+                if (!Character.isLetter(caracter) && !Character.isWhitespace(caracter)) {
+                    e.consume();
+                }
+            }
+        });
+
+
         JPanel pnlNombre = new JPanel(new BorderLayout());
         pnlNombre.setOpaque(false);
         pnlNombre.add(txtNombre, BorderLayout.CENTER);
@@ -158,6 +176,18 @@ public class Dirreccion extends JFrame {
         
         txtCodigoPostal = new JTextField();
         txtCodigoPostal.putClientProperty("JTextField.placeholderText", "Ingresa tu C.P");
+        
+        txtCodigoPostal.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+
+                if (!Character.isDigit(caracter) && !Character.isWhitespace(caracter)) {
+                    e.consume();
+                }
+            }
+        });
+
         JPanel pnlCP = new JPanel(new BorderLayout());
         pnlCP.setOpaque(false);
         pnlCP.add(txtCodigoPostal, BorderLayout.CENTER);
@@ -180,6 +210,16 @@ public class Dirreccion extends JFrame {
         
         txtNumeroTelefono = new JTextField();
         txtNumeroTelefono.putClientProperty("JTextField.placeholderText", "Ingresa tu numero de telefono");
+        txtNumeroTelefono.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyTyped(KeyEvent e) {
+                char caracter = e.getKeyChar();
+
+                if (!Character.isDigit(caracter) && !Character.isWhitespace(caracter)) {
+                    e.consume();
+                }
+            }
+        });
         JPanel pnlTel = new JPanel(new BorderLayout());
         pnlTel.setOpaque(false);
         pnlTel.add(txtNumeroTelefono, BorderLayout.CENTER);
@@ -219,14 +259,33 @@ public class Dirreccion extends JFrame {
     }
     
     private void generarBotones() {
-    	    btnConfirmar = new BtnDirecion("Confirmar Direccion", 20, 3);
+    	btnConfirmar = new BtnDirecion("Confirmar Direccion", 20, 3);
+    	btnConfirmar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         c.gridy = 15;
         c.insets = new Insets(10, 5, 10, 5);
         panelFormulario.add(btnConfirmar, c);
 		
         btnConfirmar.addActionListener( e -> validarForm());
         
-
+        JLabel lblRegresar = new JLabel("<html><u>Regresar</u></html>");
+        lblRegresar.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+        lblRegresar.setForeground(Color.BLACK);
+        lblRegresar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        lblRegresar.setAlignmentX(JLabel.CENTER);
+        
+        c.gridy = 15;
+        c.insets = new Insets(5, 90, 5, 5);
+        contentPane.add(lblRegresar, c);
+        lblRegresar.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) {
+	            	int option = JOptionPane.showConfirmDialog(null, "¿Seguro que deseas regresar? Se perderán todos los datos");
+	    			
+	    			if(option == JOptionPane.YES_OPTION) {
+	    				new InicioView();
+	    				dispose();
+	    			} 
+            }
+        });
 
 
 	}

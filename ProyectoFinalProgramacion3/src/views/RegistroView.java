@@ -322,7 +322,7 @@ public class RegistroView extends JFrame {
 
     }
 
-
+    
 
     private void validarForm() {
         resetearAvisos();
@@ -525,6 +525,7 @@ public class RegistroView extends JFrame {
         		});
         		
         }
+
     }
     
     private void verificarInstaLastName() {

@@ -1,6 +1,7 @@
 package views;
 
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -19,6 +20,7 @@ import javax.swing.JTextArea;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+
 
 public class InicioView extends JFrame {
 
@@ -69,12 +71,15 @@ public class InicioView extends JFrame {
         barraMenu.setBackground(new Color(48, 60, 26)); 
 
         JMenu menuNavegacion = new JMenu("= = =");
+        menuNavegacion.setCursor(new Cursor(Cursor.HAND_CURSOR));
         menuNavegacion.setFont(new Font("Times New Roman", Font.BOLD, 14));
         menuNavegacion.setForeground(Color.WHITE);
         menuNavegacion.setBorder(new LineBorder(Color.GRAY, 3, true));
 
         JMenuItem itemLogin = new JMenuItem("Iniciar Sesión");
+        itemLogin.setCursor(new Cursor(Cursor.HAND_CURSOR));
         JMenuItem itemDireccion = new JMenuItem("Ordena aqui");
+        itemDireccion.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         itemLogin.addActionListener(e -> {
             new LoginView().setVisible(true); 
