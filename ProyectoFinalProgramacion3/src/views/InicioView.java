@@ -1,5 +1,6 @@
 package views;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
@@ -8,19 +9,12 @@ import java.awt.GridBagLayout;
 import java.awt.Image;
 import java.awt.Insets;
 import java.awt.Toolkit;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.BorderFactory;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
-import javax.swing.border.Border;
-import javax.swing.border.LineBorder;
-import javax.swing.border.TitledBorder;
-
 
 public class InicioView extends JFrame {
 
@@ -31,9 +25,9 @@ public class InicioView extends JFrame {
     }
 
     public InicioView() {
-        setTitle("Saturnbucks.inicio");
+        setTitle("Saturnbucks - Inicio");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 600, 500);
+        setBounds(100, 100, 500, 650);
         setResizable(false);
         setLocationRelativeTo(null);
         
@@ -43,95 +37,142 @@ public class InicioView extends JFrame {
             setIconImage(icono);
         } catch (Exception e) {}
 
-        contentPane = new JPanel();
-        contentPane.setBackground(new Color(15, 19, 9)); 
-
-        Border emptyBorder = BorderFactory.createEmptyBorder(10, 10, 10, 10);
-        Border panelTitledBorder = BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(new Color(210, 180, 140), 2), 
-                "BIENVENIDO A SATURNBUCKS", 
-                TitledBorder.CENTER,
-                TitledBorder.TOP,
-                new Font("Arial", Font.BOLD, 16),
-                new Color(210, 180, 140)); 
-
-        contentPane.setBorder(BorderFactory.createCompoundBorder(emptyBorder, panelTitledBorder));
+        contentPane = new JPanel(new BorderLayout());
+        contentPane.setBackground(new Color(15, 19, 9));
         setContentPane(contentPane);
-        contentPane.setLayout(new GridBagLayout());
 
-        generarMenu();
-        generarHistoria();
+        generarMenuPersonalizado();
+        generarContenidoPagina();
+        generarFooter(); 
         
         setVisible(true);
     }
 
-    private void generarMenu() {
+    private void generarMenuPersonalizado() {
+        JPanel panelMenu = new JPanel();
+        panelMenu.setBackground(new Color(15, 19, 9)); 
+        panelMenu.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(48, 60, 26))); 
+        
+        JLabel lblLogin = crearItemMenu("Iniciar Sesión");
+        JLabel lblDireccion = crearItemMenu("Ordena Aquí");
+        
+        JLabel lblSeparador1 = new JLabel("  |  ");
+        lblSeparador1.setForeground(Color.DARK_GRAY);
+        JLabel lblSeparador2 = new JLabel("  |  ");
+        lblSeparador2.setForeground(Color.DARK_GRAY);
 
-        JMenuBar barraMenu = new JMenuBar();
-        barraMenu.setBackground(new Color(48, 60, 26)); 
-
-        JMenu menuNavegacion = new JMenu("= = =");
-        menuNavegacion.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        menuNavegacion.setFont(new Font("Times New Roman", Font.BOLD, 14));
-        menuNavegacion.setForeground(Color.WHITE);
-        menuNavegacion.setBorder(new LineBorder(Color.GRAY, 3, true));
-
-        JMenuItem itemLogin = new JMenuItem("Iniciar Sesión");
-        itemLogin.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        JMenuItem itemDireccion = new JMenuItem("Ordena aqui");
-        itemDireccion.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        itemLogin.addActionListener(e -> {
-            new LoginView().setVisible(true); 
-            dispose(); 
+        lblLogin.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) { new LoginView().setVisible(true); dispose(); }
+        });
+        lblDireccion.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) { new Dirreccion().setVisible(true); dispose(); }
         });
 
-        itemDireccion.addActionListener(e -> {
-            new Dirreccion().setVisible(true);
-            dispose();
-        });
+        panelMenu.add(lblLogin);
+        panelMenu.add(lblSeparador1);
+        panelMenu.add(lblSeparador2);
+        panelMenu.add(lblDireccion);
 
-        menuNavegacion.add(itemLogin);
-        menuNavegacion.addSeparator(); 
-        menuNavegacion.add(itemDireccion);
-
-        barraMenu.add(menuNavegacion);
-        setJMenuBar(barraMenu);
+        contentPane.add(panelMenu, BorderLayout.NORTH);
     }
 
-    private void generarHistoria() {
+    private JLabel crearItemMenu(String texto) {
+        JLabel label = new JLabel(texto);
+        label.setFont(new Font("Arial", Font.BOLD, 14));
+        label.setForeground(new Color(210, 180, 140)); 
+        label.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        
+        label.addMouseListener(new MouseAdapter() {
+            public void mouseEntered(MouseEvent e) { label.setForeground(Color.WHITE); } 
+            public void mouseExited(MouseEvent e) { label.setForeground(new Color(210, 180, 140)); } 
+        });
+        return label;
+    }
+
+    private void generarContenidoPagina() {
+        JPanel panelCentral = new JPanel(new GridBagLayout());
+        panelCentral.setBackground(new Color(15, 19, 9)); 
+
         GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.BOTH;
+        c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
 
         c.gridy = 0;
-        c.insets = new Insets(10, 20, 10, 20);
-        JLabel lblTitulo = new JLabel("Nuestra Historia");
-        lblTitulo.setFont(new Font("Times New Roman", Font.BOLD, 30));
-        lblTitulo.setForeground(Color.WHITE);
-        lblTitulo.setHorizontalAlignment(JLabel.CENTER);
-        contentPane.add(lblTitulo, c);
+        c.insets = new Insets(30, 20, 10, 20); // Ajusté un pelín el margen superior
+        JLabel lblBienvenida = new JLabel("BIENVENIDO A SATURNBUCKS");
+        lblBienvenida.setFont(new Font("Times New Roman", Font.BOLD, 26));
+        lblBienvenida.setForeground(new Color(210, 180, 140)); 
+        lblBienvenida.setHorizontalAlignment(JLabel.CENTER);
+        panelCentral.add(lblBienvenida, c);
 
         c.gridy = 1;
-        c.weightx = 1.0;
-        c.weighty = 1.0; 
-        c.insets = new Insets(10, 30, 30, 30);
-        
-        JTextArea txtHistoria = new JTextArea();
-        txtHistoria.setText(
-            "Saturnbucks nació de una idea sencilla: llevar el mejor café de la galaxia a tus manos.\n\n" +
-            "Fundada desde La Paz B.C.S con pasión por el grano perfecto cafe. Cada taza es una órbita de sabor, y " +
-            "cada cliente es el centro de nuestro universo.\n\n" +
-            "¡Únete a nuestra tripulación y descubre el sabor del cosmos!"
+        c.insets = new Insets(0, 20, 30, 20);
+        JLabel lblSlogan = new JLabel("El mejor café de la galaxia.");
+        lblSlogan.setFont(new Font("Arial", Font.ITALIC, 16));
+        lblSlogan.setForeground(Color.LIGHT_GRAY);
+        lblSlogan.setHorizontalAlignment(JLabel.CENTER);
+        panelCentral.add(lblSlogan, c);
+
+        c.gridy = 2;
+        c.insets = new Insets(10, 20, 10, 20);
+        JLabel lblTituloHistoria = new JLabel("Nuestra Historia");
+        lblTituloHistoria.setFont(new Font("Times New Roman", Font.BOLD, 22));
+        lblTituloHistoria.setForeground(Color.WHITE);
+        lblTituloHistoria.setHorizontalAlignment(JLabel.CENTER);
+        panelCentral.add(lblTituloHistoria, c);
+
+        c.gridy = 3;
+        c.insets = new Insets(10, 40, 30, 40); 
+        JLabel txtHistoria = new JLabel(
+            "<html><div style='text-align: center;'>" +
+            "Fundada desde La Paz B.C.S con pasión por el grano perfecto.<br>" +
+            "Cada taza es una órbita de sabor, y cada cliente es el centro de nuestro universo.<br><br>" +
+            "¡Únete a nuestra tripulación y descubre el sabor del cosmos!<br>" +
+            "Preparamos cada bebida cuidando la temperatura, el tueste y la esencia de las estrellas." +
+            "</div></html>"
         );
-
-        txtHistoria.setEditable(false);
-        txtHistoria.setOpaque(false);
         txtHistoria.setForeground(Color.WHITE);
-        txtHistoria.setFont(new Font("Arial", Font.PLAIN, 16));
-        txtHistoria.setLineWrap(true);       
-        txtHistoria.setWrapStyleWord(true);  
+        txtHistoria.setFont(new Font("Arial", Font.PLAIN, 15));
+        txtHistoria.setHorizontalAlignment(JLabel.CENTER);
+        panelCentral.add(txtHistoria, c);
 
-        contentPane.add(txtHistoria, c);
+        c.gridy = 4;
+        c.insets = new Insets(10, 20, 10, 20);
+        JLabel lblMenuEstelar = new JLabel("★ Nuestro Menú Estelar ★");
+        lblMenuEstelar.setFont(new Font("Times New Roman", Font.BOLD, 22));
+        lblMenuEstelar.setForeground(new Color(210, 180, 140));
+        lblMenuEstelar.setHorizontalAlignment(JLabel.CENTER);
+        panelCentral.add(lblMenuEstelar, c);
+
+        c.gridy = 5;
+        c.insets = new Insets(10, 40, 20, 40);
+        JLabel txtMenu = new JLabel(
+            "<html><div style='text-align: center;'>" +
+            "1. Frappe Vía Láctea - Dulce y cremoso.<br>" +
+            "2. Espresso Agujero Negro - Fuerte y concentrado.<br>" +
+            "3. Latte Anillos de Saturno - Suave con caramelo." +
+            "</div></html>"
+        );
+        txtMenu.setForeground(Color.LIGHT_GRAY);
+        txtMenu.setFont(new Font("Arial", Font.PLAIN, 15));
+        txtMenu.setHorizontalAlignment(JLabel.CENTER);
+        panelCentral.add(txtMenu, c);
+
+        contentPane.add(panelCentral, BorderLayout.CENTER);
+    }
+
+    private void generarFooter() {
+        JPanel panelFooter = new JPanel();
+        panelFooter.setBackground(new Color(15, 19, 9));
+        panelFooter.setBorder(BorderFactory.createEmptyBorder(10, 10, 20, 10));
+
+        JLabel lblFooter = new JLabel("© 2026 Saturnbucks Co. | La Paz, B.C.S.");
+        lblFooter.setFont(new Font("Arial", Font.PLAIN, 12));
+        lblFooter.setForeground(Color.GRAY);
+        lblFooter.setHorizontalAlignment(JLabel.CENTER);
+
+        panelFooter.add(lblFooter);
+
+        contentPane.add(panelFooter, BorderLayout.SOUTH);
     }
 }
