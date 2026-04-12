@@ -16,6 +16,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import controllers.LoginController;
+
 public class InicioView extends JFrame {
 
     private JPanel contentPane;
@@ -62,7 +64,14 @@ public class InicioView extends JFrame {
         lblSeparador2.setForeground(Color.DARK_GRAY);
 
         lblLogin.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) { new LoginView().setVisible(true); dispose(); }
+            public void mouseClicked(MouseEvent e) { 
+ 
+                LoginView ventanaLogin = new LoginView();
+ 
+                new LoginController(ventanaLogin);
+
+                dispose(); 
+            }
         });
         lblDireccion.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) { new Dirreccion().setVisible(true); dispose(); }
@@ -98,7 +107,7 @@ public class InicioView extends JFrame {
         c.gridx = 0;
 
         c.gridy = 0;
-        c.insets = new Insets(30, 20, 10, 20); // Ajusté un pelín el margen superior
+        c.insets = new Insets(30, 20, 10, 20); 
         JLabel lblBienvenida = new JLabel("BIENVENIDO A SATURNBUCKS");
         lblBienvenida.setFont(new Font("Times New Roman", Font.BOLD, 26));
         lblBienvenida.setForeground(new Color(210, 180, 140)); 

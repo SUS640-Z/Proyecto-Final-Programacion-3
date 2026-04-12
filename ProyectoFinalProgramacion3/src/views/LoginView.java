@@ -27,8 +27,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import components.BordePanel;
 import components.LblAviso;
@@ -38,19 +36,15 @@ public class LoginView extends JFrame {
 	
 	JTextField txtUsuario;
 	JPasswordField txtContrasena;
-	
 	LblAviso lblErrorIngresarDatos;
 	LblAviso lblUsuarioRequerido;
 	LblAviso lblContraseaRequerida;
-	
 	JLabel lblIniciarSesion;
 	LblSubtitulo lblUsuario;
 	LblSubtitulo lblContasena;
-	
 	JLabel lblCafeImg;
-
-    private final String USUARIO_VALIDO = "pepe@gmail.com";
-    private final String PASSWORD_VALIDA = "12345";
+	JButton btnConfimar;
+	JLabel lblCrearCuenta;
 	
 	public LoginView() {
 		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -113,9 +107,8 @@ public class LoginView extends JFrame {
 		try {
 			fondo=ImageIO.read(new File(""));
 			g2.drawImage(fondo, 0, 0,getWidth(),getHeight(),null);
-			
 		}catch (IOException ex) {
-			System.out.println("La imagen no existe");
+			// System.out.println("La imagen no existe");
 		}
 	}
 	
@@ -125,21 +118,17 @@ public class LoginView extends JFrame {
 
         @Override
         public void focusGained(FocusEvent e) {
-            ((JComponent) e.getSource()).setBorder(
-                BorderFactory.createLineBorder(bordeActivo, 2)
-            );
+            ((JComponent) e.getSource()).setBorder(BorderFactory.createLineBorder(bordeActivo, 2));
         }
 
         @Override
         public void focusLost(FocusEvent e) {
-            ((JComponent) e.getSource()).setBorder(
-                BorderFactory.createLineBorder(bordeInactivo, 1)
-            );
+            ((JComponent) e.getSource()).setBorder(BorderFactory.createLineBorder(bordeInactivo, 1));
         }
     };
     
 	private void generarBotones() {
-		JButton btnConfimar = new JButton("Ingresar");
+		btnConfimar = new JButton("Ingresar");
 		btnConfimar.setFont(new Font("Times New Roman", Font.PLAIN, 23));
 		btnConfimar.setBackground(new Color(48, 60, 26));
 		btnConfimar.setForeground(Color.WHITE);
@@ -148,19 +137,12 @@ public class LoginView extends JFrame {
 		btnConfimar.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		add(btnConfimar);
 		
-		btnConfimar.addActionListener( e -> procesarLogin());
-		
 		btnConfimar.addMouseListener(new MouseAdapter() {
-            public void mouseEntered(MouseEvent e){
-            		btnConfimar.setBackground(new Color(152, 158, 141));
-            }
-            
-            public void mouseExited(MouseEvent e){
-            		btnConfimar.setBackground(new Color(48, 60, 26));
-            }
+            public void mouseEntered(MouseEvent e){ btnConfimar.setBackground(new Color(152, 158, 141)); }
+            public void mouseExited(MouseEvent e){ btnConfimar.setBackground(new Color(48, 60, 26)); }
         });
 		
-		JLabel lblCrearCuenta = new JLabel("<html><u>Crea una cuenta</u></html>");
+		lblCrearCuenta = new JLabel("<html><u>Crea una cuenta</u></html>");
 		lblCrearCuenta.setFont(new Font("Times New Roman", Font.PLAIN, 19));
 		lblCrearCuenta.setForeground(Color.WHITE);
 		lblCrearCuenta.setBounds(240,350, 180, 30);
@@ -169,28 +151,14 @@ public class LoginView extends JFrame {
 		add(lblCrearCuenta);
 
 		lblCrearCuenta.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-                reenviarRegistro();
-            }
-            
-            public void mouseEntered(MouseEvent e){
-            		lblCrearCuenta.setForeground(new Color(204, 207, 198));
-            }
-    
-    		public void mouseExited(MouseEvent e){
-    				lblCrearCuenta.setForeground(Color.WHITE);
-    		}
+            public void mouseEntered(MouseEvent e){ lblCrearCuenta.setForeground(new Color(204, 207, 198)); }
+    		public void mouseExited(MouseEvent e){ lblCrearCuenta.setForeground(Color.WHITE); }
         });
-	}
-	
-	private void reenviarRegistro() {
-		new RegistroView();
-		this.dispose();
 	}
 
 	private void generarAvisos() {
 		lblErrorIngresarDatos = new LblAviso("");
-		lblErrorIngresarDatos.setBounds(357, 253, 316, 57);
+		lblErrorIngresarDatos.setBounds(143, 272, 316, 25);
 		add(lblErrorIngresarDatos);
 		
 		lblContraseaRequerida = new LblAviso("");
@@ -207,7 +175,6 @@ public class LoginView extends JFrame {
 		lblIniciarSesion.setFont(new Font("Times New Roman", Font.BOLD, 40));
 		lblIniciarSesion.setForeground(new Color(255, 255, 255));
 		lblIniciarSesion.setBounds(130, 41, 350, 62);
-		lblIniciarSesion.setForeground(Color.WHITE);
 		lblIniciarSesion.setHorizontalAlignment(SwingConstants.CENTER);
 		add(lblIniciarSesion);
 		
@@ -232,8 +199,6 @@ public class LoginView extends JFrame {
 		txtContrasena.putClientProperty("JTextField.placeholderText", "Ingresa tu contrasena");
 		txtContrasena.setBounds(143, 246, 316, 25);
 		add(txtContrasena);
-		
-		eventosTextField();
 	}
 	
 	private void generarImagen() {
@@ -249,113 +214,34 @@ public class LoginView extends JFrame {
 		generarAvisos();
 		generarImagen();
 	}
+	//
+	public JButton getBtnLogin() { return btnConfimar; }
+	public JLabel getLblRegister() { return lblCrearCuenta; }
+	public JTextField getTxtUsuario() { return txtUsuario; }
+	public JPasswordField getTxtContrasena() { return txtContrasena; }
 	
-
-	private void procesarLogin() {
-		resetearAvisos();
-		lblErrorIngresarDatos.setText(""); 
-		
-		boolean valido = true;
-
-		if(!verificarUsuario()) {
-			valido = false;
-		}
-		
-		if(!verificarPassword()) {
-			valido = false;
-		}
-
-		if (!valido) {
-			return; 
-		}
-		
-		try {
-			if (validateCredentials(txtUsuario.getText().trim(), new String(txtContrasena.getPassword()))) {
-				JOptionPane.showMessageDialog(this, "Se inició la sesión", "Sesión iniciada", JOptionPane.INFORMATION_MESSAGE);
-				new InicioView(); 
-				this.dispose();
-			}
-		} catch (InvalidUserException ex) {
-			lblErrorIngresarDatos.setText("Credenciales Incorrectas");
-			lblErrorIngresarDatos.setFont(new Font("Times New Roman", Font.BOLD, 16));
-			lblErrorIngresarDatos.setForeground(Color.RED);
-		} catch (InvalidPasswordException ex) {
-			lblErrorIngresarDatos.setText("Credenciales Incorrectas");
-			lblErrorIngresarDatos.setFont(new Font("Times New Roman", Font.BOLD, 16));
-			lblErrorIngresarDatos.setForeground(Color.RED);
-		}
-	}
-
-
-	private boolean validateCredentials(String email, String password) throws InvalidUserException, InvalidPasswordException {
-		if (!email.equals(USUARIO_VALIDO)) {
-			throw new InvalidUserException();
-		}
-		if (!password.equals(PASSWORD_VALIDA)) {
-			throw new InvalidPasswordException();
-		}
-		return true; 
+	public String getEmail() { return txtUsuario.getText().trim(); }
+	public String getPassword() { return new String(txtContrasena.getPassword()); }
+	
+	public void showEmailError(String msg) {
+		lblUsuarioRequerido.setText(msg);
+		lblUsuarioRequerido.setFont(new Font("Times New Roman", Font.PLAIN, 14));
 	}
 	
-	private void resetearAvisos() {
+	public void PasswordError(String msg) {
+		lblContraseaRequerida.setText(msg);
+		lblContraseaRequerida.setFont(new Font("Times New Roman", Font.PLAIN, 14));
+	}
+	
+	public void ErrorGeneral(String msg) {
+		lblErrorIngresarDatos.setText(msg);
+		lblErrorIngresarDatos.setFont(new Font("Times New Roman", Font.BOLD, 16));
+		lblErrorIngresarDatos.setForeground(Color.RED);
+	}
+	
+	public void reiniciarErrorMessages() {
 		lblUsuarioRequerido.setText("");
 		lblContraseaRequerida.setText("");
-	}
-	
-	private boolean verificarUsuario() {
-        String input = txtUsuario.getText().trim();
-		if(input.equals("")) {
-			lblUsuarioRequerido.setText("Usuario Requerido");
-			lblUsuarioRequerido.setFont(new Font("Times New Roman", Font.PLAIN, 14));
-			return false;
-		}
-		return true;
-	}
-	
-	private boolean verificarPassword() {
-		if(new String(txtContrasena.getPassword()).trim().equals("")) {
-			lblContraseaRequerida.setText("Contraseña Requerida");
-			lblContraseaRequerida.setFont(new Font("Times New Roman", Font.PLAIN, 14));
-			return false;
-		}
-		return true;
-	}
-	
-	private void eventosTextField() {
-		txtUsuario.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void removeUpdate(DocumentEvent e) { verificacionInstaUsuario(); }
-			@Override
-			public void insertUpdate(DocumentEvent e) { verificacionInstaUsuario(); }
-			@Override
-			public void changedUpdate(DocumentEvent e) { verificacionInstaUsuario(); }
-		});
-
-		txtContrasena.getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void removeUpdate(DocumentEvent e) { verificarInstaPass(); }
-			@Override
-			public void insertUpdate(DocumentEvent e) { verificarInstaPass(); }
-			@Override
-			public void changedUpdate(DocumentEvent e) { verificarInstaPass(); }
-		});
-	}
-	
-	private void verificacionInstaUsuario(){
-		lblUsuarioRequerido.setText("");
-		lblErrorIngresarDatos.setText(""); 
-		if(txtUsuario.getText().trim().equals("")) {
-			lblUsuarioRequerido.setText("Usuario Requerido");
-			lblUsuarioRequerido.setFont(new Font("Times New Roman", Font.PLAIN, 14));
-		}
-	}
-	
-	private void verificarInstaPass() {
-		lblContraseaRequerida.setText("");
-		lblErrorIngresarDatos.setText(""); 
-		if(new String(txtContrasena.getPassword()).trim().equals("")) {
-			lblContraseaRequerida.setText("Contraseña Requerida");
-			lblContraseaRequerida.setFont(new Font("Times New Roman", Font.PLAIN, 14));
-		}
+		lblErrorIngresarDatos.setText("");
 	}
 }
