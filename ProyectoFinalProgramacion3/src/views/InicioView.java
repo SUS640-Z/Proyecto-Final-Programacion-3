@@ -17,6 +17,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import controllers.LoginController;
+import controllers.RegistroController;
 
 public class InicioView extends JFrame {
 
@@ -54,8 +55,9 @@ public class InicioView extends JFrame {
         JPanel panelMenu = new JPanel();
         panelMenu.setBackground(new Color(15, 19, 9)); 
         panelMenu.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(48, 60, 26))); 
-        
+
         JLabel lblLogin = crearItemMenu("Iniciar Sesión");
+        JLabel lblRegistro = crearItemMenu("Crear Cuenta");
         JLabel lblDireccion = crearItemMenu("Ordena Aquí");
         
         JLabel lblSeparador1 = new JLabel("  |  ");
@@ -65,20 +67,30 @@ public class InicioView extends JFrame {
 
         lblLogin.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) { 
- 
                 LoginView ventanaLogin = new LoginView();
- 
-                new LoginController(ventanaLogin);
-
+                new controllers.LoginController(ventanaLogin); 
                 dispose(); 
             }
         });
+
+        lblRegistro.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) { 
+                RegistroView ventanaRegistro = new RegistroView();
+                new controllers.RegistroController(ventanaRegistro); 
+                dispose(); 
+            }
+        });
+
         lblDireccion.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) { new Dirreccion().setVisible(true); dispose(); }
+            public void mouseClicked(MouseEvent e) { 
+                new Dirreccion().setVisible(true); 
+                dispose(); 
+            }
         });
 
         panelMenu.add(lblLogin);
         panelMenu.add(lblSeparador1);
+        panelMenu.add(lblRegistro);
         panelMenu.add(lblSeparador2);
         panelMenu.add(lblDireccion);
 

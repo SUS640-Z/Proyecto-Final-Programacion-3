@@ -3,6 +3,7 @@ import javax.swing.UIManager;
 import com.formdev.flatlaf.FlatLightLaf;
 
 import controllers.LoginController;
+import controllers.RegistroController;
 import views.LoginView;
 import views.RegistroView;
 import views.Dirreccion;
@@ -18,6 +19,8 @@ public class Main {
 		new InicioView ();
 		//LoginView ventana = new LoginView();
 		//new LoginController(ventana);
+
+
 
 	}
 }

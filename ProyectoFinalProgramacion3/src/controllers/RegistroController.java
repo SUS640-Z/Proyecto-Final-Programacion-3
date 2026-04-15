@@ -5,19 +5,25 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 
 import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import models.User;
+import repository.UserRepository;
+import views.LoginView;
 import views.RegistroView;
 
 public class RegistroController{
 	
 	private RegistroView view;
+	private UserRepository repository;
 
 	public RegistroController(RegistroView view) {
 		this.view = view;
+		this.repository = new UserRepository(); 
 		registerListeners();
 		eventoCerradoVentana();
 	}
@@ -44,11 +50,8 @@ public class RegistroController{
 		});
 	}
 
-
-	
 	  private void validarForm() {
 	        view.resetearAvisos();
-	        
 	        boolean valido = true;
 	        
 	        if (!verificarName()) valido = false; 
@@ -56,9 +59,27 @@ public class RegistroController{
 	        if (!verificarCorreo()) valido = false;
 	        if (!verificarPassword()) valido = false;
 	        if (!verificarConfirmarPassword()) valido = false;
-	        
+
 	        if (valido) {
-	            JOptionPane.showMessageDialog(null, "Cuenta registrada");
+	            User nuevoUsuario = new User(
+	            	view.getTxtName().getText().trim(),
+	            	view.getTxtLastName().getText().trim(),
+	            	view.getTxtCorreo().getText().trim(),
+	            	new String(view.getTxtContrasena().getPassword())
+	            );
+
+	            try {
+					repository.save(nuevoUsuario);
+
+					JOptionPane.showMessageDialog(null, "Cuenta registrada");
+					view.dispose();
+
+					LoginView ventanaLogin = new LoginView();
+					new LoginController(ventanaLogin); 
+					
+				} catch (IOException e) {
+					JOptionPane.showMessageDialog(null, "Error al guardar el usuario: " + e.getMessage(), "error", JOptionPane.ERROR_MESSAGE);
+				}
 	        }
 	    }
 	   
