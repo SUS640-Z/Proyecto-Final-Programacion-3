@@ -2,117 +2,102 @@ package views;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.FlowLayout;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-
+import java.awt.Font;
+import java.awt.Image;
+import java.awt.Toolkit;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 public class DataView extends JFrame {
 	public static final String HOME = "HOME";
 	public static final String USERS = "USERS";
 	
-	public JMenuItem mItemExit;
 	public JButton btnUsers;
-
 	public JButton btnHome;
-	public UserView usersPanel;
+	public JButton btnSalir; 
 	
+	public UserView usersPanel;
 	private CardLayout cardLayout;
 	private JPanel container;
 	
 	public DataView() {
-		setSize(500, 500);
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setMenu();
+		setTitle("Saturnbucks - Panel de Administración");
+		setSize(600, 500);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); 
+        setLocationRelativeTo(null);
+        setResizable(false);
+        
+        try {
+            Toolkit tk = Toolkit.getDefaultToolkit();
+            Image icono = tk.getImage("src/assets/img/SATURN_BUCKS_51.png");
+            setIconImage(icono);
+        } catch (Exception e) {}
+        
 		createNavbar();
 		createViews();
 		setVisible(true);
 	}
 	
 	public void createNavbar() {
-		JPanel navbar = new JPanel(new FlowLayout(FlowLayout.LEFT));
+		JPanel navbar = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+		navbar.setBackground(new Color(15, 19, 9));
 		
-		btnHome = new JButton("Inicio");
-		btnUsers = new JButton("Usuarios");
+		btnHome = crearBoton("Inicio");
+		btnUsers = crearBoton("Ver Usuarios");
+		btnSalir = crearBoton("Cerrar Sesión");
 		
 		navbar.add(btnHome);
 		navbar.add(btnUsers);
+		navbar.add(btnSalir);
 		
 		add(navbar, BorderLayout.NORTH);
+	}
+	
+	private JButton crearBoton(String texto) {
+		JButton btn = new JButton(texto);
+		btn.setFont(new Font("Arial", Font.BOLD, 14));
+		btn.setBackground(new Color(48, 60, 26));
+		btn.setForeground(Color.WHITE);
+		btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		btn.setFocusPainted(false);
+		return btn;
 	}
 	
 	private void createViews() {
 		cardLayout = new CardLayout();
 		container = new JPanel(cardLayout);
 		
-		JPanel homePanel = new JPanel();
-		homePanel.add(new JLabel("Bienvenido al Sistema"));
+		JPanel homePanel = new JPanel(new BorderLayout());
+		homePanel.setBackground(new Color(15, 19, 9));
+		JLabel lblBienvenida = new JLabel("Panel de Control Saturnbucks", SwingConstants.CENTER);
+		lblBienvenida.setForeground(new Color(210, 180, 140));
+		lblBienvenida.setFont(new Font("Times New Roman", Font.BOLD, 26));
+		homePanel.add(lblBienvenida, BorderLayout.CENTER);
 		
-		usersPanel = new UserView();
+		usersPanel = new UserView(); 
 		
 		container.add(homePanel, HOME);
 		container.add(usersPanel, USERS);
 		
 		add(container, BorderLayout.CENTER);
-		
 	}
 	
 	public void showView(String view) {
 		cardLayout.show(container, view);
 	}
-	
-	public void setMenu() {
-
-	    JMenuBar mb = new JMenuBar();
-	    setJMenuBar(mb);
-
-	    JMenu menuFile = new JMenu("File");
-	    menuFile.setMnemonic(KeyEvent.VK_F);
-	    mb.add(menuFile);
-
-	    JMenuItem mItemOpen = new JMenuItem("Open");
-	    mItemOpen.setMnemonic(KeyEvent.VK_O);
-	    menuFile.add(mItemOpen);
-
-	    JMenuItem mItemSave = new JMenuItem("Save");
-	    mItemSave.setMnemonic(KeyEvent.VK_S);
-	    menuFile.add(mItemSave);
-
-	    menuFile.addSeparator();
-
-	    mItemExit = new JMenuItem("Exit");
-	    mItemExit.setMnemonic(KeyEvent.VK_E);
-	    menuFile.add(mItemExit);
-
-	    JMenu menuOtherOption = new JMenu("Other Option");
-	    menuOtherOption.setMnemonic(KeyEvent.VK_O);
-	    mb.add(menuOtherOption);
-
-	    JMenu menuOption1 = new JMenu("Option 1");
-	    menuOtherOption.add(menuOption1);
-
-	    JMenuItem mItemOption3 = new JMenuItem("Option 3");
-	    menuOption1.add(mItemOption3);
-
-	    JMenuItem mItemOption2 = new JMenuItem("Option 2");
-	    menuOtherOption.add(mItemOption2);
-
-	}
 
 	public int confirmExit() {
 	    return JOptionPane.showConfirmDialog(
 	        this,
-	        "¿Seguro que deseas regresar? Se perderán todos los datos",
-	        "¿Seguro?",
+	        "¿Seguro que deseas cerrar la sesión?",
+	        "Cerrar Sesión",
 	        JOptionPane.YES_NO_OPTION
 	    );
 	}

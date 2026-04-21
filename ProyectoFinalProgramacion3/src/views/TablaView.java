@@ -19,7 +19,7 @@ public class TablaView  extends JFrame {
 		setResizable(false);
 		setLocationRelativeTo(null);
 		Toolkit tk = Toolkit.getDefaultToolkit();
-		Image icono = tk.getImage("src/assets/img/SATURN_BUCKS_3.png");
+		Image icono = tk.getImage("src/assets/img/SATURN_BUCKS_51.png");
 		setIconImage(icono);
 		
 		BordePanel login = new BordePanel("LOG IN",Color.white);
