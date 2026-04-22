@@ -1,8 +1,6 @@
 package main;
-import javax.swing.UIManager;
 import com.formdev.flatlaf.FlatLightLaf;
 
-import views.DataView;
 import views.InicioView;
 
 public class Main {

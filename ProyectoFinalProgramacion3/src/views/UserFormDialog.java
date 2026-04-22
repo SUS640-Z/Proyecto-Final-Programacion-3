@@ -5,40 +5,32 @@ import java.awt.Cursor;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.Insets;
 import java.awt.Image;
+import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-
-import javax.swing.border.Border;
 import javax.swing.BorderFactory;
-import javax.swing.border.TitledBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
-import javax.swing.border.LineBorder;
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.JFrame;
-
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
 import components.BtnDirecion;
 import components.LblAviso;
 import components.LblSubtitulo;
 import controllers.RegistroController;
+import models.User;
 
-public class RegistroView extends JFrame {
-
+public class UserFormDialog extends JDialog{
     JPanel contentPane;
     JTextField txtName;
     JTextField txtLastName;
@@ -54,13 +46,15 @@ public class RegistroView extends JFrame {
     JPanel panelFormulario;
     JButton btnRegistrar;
     JLabel lblRegresar;
+    
+    private User user;
+    private boolean saved = false;
 
-    public static void main(String[] args) {
-    	RegistroView vista = new RegistroView();
-    	new RegistroController(vista);
-    }
 
-    public RegistroView() {
+    public UserFormDialog(JFrame parent, User user) {
+    	
+    	super(parent, true);
+    	this.user = user;
         setTitle("Saturnbucks.registro");
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setBounds(100, 100, 350, 645);
@@ -311,5 +305,4 @@ public class RegistroView extends JFrame {
 	public LblAviso getLblAvisoContra() {return lblAvisoContra;}
 	public LblAviso getLblAvisoConfirmar() {return lblAvisoConfirmar;}
 	public JLabel getLblRegresar() {return lblRegresar;}
-	
 }

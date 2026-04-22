@@ -9,7 +9,6 @@ import exceptions.InvalidPasswordException;
 import exceptions.InvalidUserException;
 import models.User;
 import views.DataView;
-import views.InicioView;
 import views.LoginView;
 import views.RegistroView;
 

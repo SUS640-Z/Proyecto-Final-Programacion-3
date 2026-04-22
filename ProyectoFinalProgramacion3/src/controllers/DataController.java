@@ -11,6 +11,7 @@ import tableModels.UserTableModel;
 import views.DataView;
 import views.LoginView;
 import views.RegistroView;
+import views.UserFormDialog;
 
 public class DataController {
 	private DataView view;
@@ -32,12 +33,13 @@ public class DataController {
 		view.btnHome.addActionListener(e -> view.showView(DataView.HOME));
 		view.btnSalir.addActionListener(e -> handleClose());
 		view.usersPanel.getBtnAdd().addActionListener(e -> {
-			RegistroView ventanaRegistro = new RegistroView();
-			new RegistroController(ventanaRegistro);
-			view.dispose(); 
+			UserFormDialog form = new UserFormDialog(null, null);
+			form.setVisible(true);
 		});
 
 		view.usersPanel.getBtnEdit().addActionListener(e -> {
+			UserFormDialog form = new UserFormDialog(null, null);
+			form.setVisible(true);
 		});
 		
 		view.usersPanel.getBtnDelete().addActionListener(e -> {
