@@ -7,12 +7,16 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.io.File;
+
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingConstants;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 
@@ -24,6 +28,7 @@ public class UserView extends JPanel {
 	private JButton btnAdd;
 	private JButton btnEdit;
 	private JButton btnDelete;
+	private JButton btnPdf;
 	
 	public UserView() {
 		setLayout(new BorderLayout());
@@ -35,10 +40,12 @@ public class UserView extends JPanel {
 		btnAdd = crearBotonCRUD("Agregar");
 		btnEdit = crearBotonCRUD("Editar");
 		btnDelete = crearBotonCRUD("Eliminar");
+		btnPdf = crearBotonCRUD("Exportar a PDF");
 		
 		panelButtons.add(btnAdd);
 		panelButtons.add(btnEdit);
 		panelButtons.add(btnDelete);
+		panelButtons.add(btnPdf);
 		
 		add(panelButtons, BorderLayout.NORTH);
 		
@@ -112,9 +119,38 @@ public class UserView extends JPanel {
 			table.getColumnModel().getColumn(2).setPreferredWidth(250);
 		}
 	}
+	
+	public File selectPdfFile() {
+		String path = System.getProperty("user.home");
+		JFileChooser chooser = new JFileChooser(path);
+		
+		chooser.setSelectedFile(new File("reporte-usuarios.pdf"));
+		
+		chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		chooser.setAcceptAllFileFilterUsed(false);
+		
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Documentos PDF",  "pdf");
+		chooser.addChoosableFileFilter(filter);
+		chooser.setFileFilter(filter);
+		
+		int option = chooser.showDialog(this, "Exportar PDF de usuarios");
+		
+		if(option != JFileChooser.APPROVE_OPTION) {
+			return null;
+		}
+		
+		File file = chooser.getSelectedFile();
+		
+		if(!file.getName().toLowerCase().endsWith(".pdf")) {
+			file = new File(file.getAbsolutePath() + ".pdf");
+		}
+		
+		return file;
+	}
 	public JTable getTable() { return table; }
 	public JButton getBtnAdd() { return btnAdd; }
 	public JButton getBtnEdit() { return btnEdit; }
 	public JButton getBtnDelete() { return btnDelete; }
+	public JButton getBtnPdf() { return btnPdf; }
 	public int getSelectedRow() { return table.getSelectedRow(); }
 }
