@@ -2,30 +2,42 @@
   "email" : "Pablo@gmail.com",
   "password" : "J1234567",
   "name" : "Juan Pablo",
-  "lastName" : "Zamora"
+  "lastName" : "Zamora",
+  "imagePath" : null
 }, {
   "email" : "green@gmail.com",
   "password" : "12345678A",
   "name" : "Guillermo Gre",
-  "lastName" : "Aviles"
+  "lastName" : "Aviles",
+  "imagePath" : null
 }, {
   "email" : "jose@gmail.com",
   "password" : "12345",
   "name" : "Jose Mariano",
-  "lastName" : "Ramirez"
+  "lastName" : "Ramirez",
+  "imagePath" : null
 }, {
   "email" : "jesusivan@gmail.com",
   "password" : "123456",
   "name" : "Jesus Ivan",
-  "lastName" : "Jimenez"
+  "lastName" : "Jimenez",
+  "imagePath" : null
 }, {
   "email" : "isaac@gmail.com",
   "password" : "123",
   "name" : "Isaac",
-  "lastName" : "Ramirez"
+  "lastName" : "Ramirez",
+  "imagePath" : null
 }, {
   "email" : "diaz@hotmail.com",
   "password" : "24567",
   "name" : "Mason",
-  "lastName" : "Diaz"
+  "lastName" : "Diaz",
+  "imagePath" : null
+}, {
+  "email" : "PECAS@GMAIL.COM",
+  "password" : "A1234567",
+  "name" : "PEPE",
+  "lastName" : "PECAS",
+  "imagePath" : ".\\images\\4df18554-69a1-43ae-a5a5-34378a749136.jpg"
 } ]

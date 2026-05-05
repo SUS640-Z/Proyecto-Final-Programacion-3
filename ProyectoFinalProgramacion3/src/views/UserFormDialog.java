@@ -313,7 +313,7 @@ public class UserFormDialog extends JDialog{
     	String password = new String(txtContrasena.getPassword());
         
         if(user == null) {
-        	user = new User(name, lastName, correo, password);
+        	user = new User(name, lastName, correo, password, null);
         }else {
         	user.setName(name);
         	user.setLastName(lastName);

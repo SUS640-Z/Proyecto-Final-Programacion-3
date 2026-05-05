@@ -5,16 +5,18 @@ public class User {
 	private String password;
 	private String name;
 	private String lastName;
+	private String imagePath; 
 	
 	public User() {
 		
 	}
-	
-	public User(String name, String lastName,String email, String password) {
+
+	public User(String name, String lastName, String email, String password, String imagePath) {
 		this.email = email;
 		this.password = password;
 		this.name = name;
 		this.lastName = lastName;
+		this.imagePath = imagePath;
 	}
 
 	public User(String email, String password) {
@@ -22,10 +24,11 @@ public class User {
 		this.lastName = ""; 
 		this.email = email;
 		this.password = password;
+		this.imagePath = "";
 	}
 
 	public String toCsv() {
-		return name + "," + lastName + "," + email + "," + password;
+		return name + "," + lastName + "," + email + "," + password + "," + (imagePath != null ? imagePath : "");
 	}
 
 	public static User fromCsv(String userData) {
@@ -35,8 +38,9 @@ public class User {
 		String lastName = data[1];
 		String email = data[2];
 		String password = data[3];
+		String imagePath = (data.length > 4) ? data[4] : ""; 
 		
-		return new User(name, lastName, email, password);
+		return new User(name, lastName, email, password, imagePath);
 	}
 	
 	public String getName() { return name; }
@@ -50,4 +54,7 @@ public class User {
 	
 	public String getPassword() { return password; }
 	public void setPassword(String password) { this.password = password; }
+
+	public String getImagePath() { return imagePath; }
+	public void setImagePath(String imagePath) { this.imagePath = imagePath; }
 }

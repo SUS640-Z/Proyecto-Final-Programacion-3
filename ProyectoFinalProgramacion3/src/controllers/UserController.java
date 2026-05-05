@@ -39,36 +39,37 @@ public class UserController {
 			openForm(model.getUserAt(row));
 			
 		});
-			this.view.getBtnDelete().addActionListener(e -> {
-				int row = view.getSelectedRow();
+		
+		this.view.getBtnDelete().addActionListener(e -> {
+			int row = view.getSelectedRow();
 
-				if(row == -1) {
-					JOptionPane.showMessageDialog(view, "Selecciona un usuario para eliminar", "Aviso", JOptionPane.WARNING_MESSAGE);
-					return;
+			if(row == -1) {
+				JOptionPane.showMessageDialog(view, "Selecciona un usuario para eliminar", "Aviso", JOptionPane.WARNING_MESSAGE);
+				return;
+			}
+			String userName = model.getUserAt(row).getName();
+
+			int opcion = JOptionPane.showConfirmDialog(
+					view, 
+					"¿Estás seguro de que deseas eliminar al usuario " + userName + "?\nEsta acción no se puede deshacer.", 
+					"Confirmar Eliminación", 
+					JOptionPane.YES_NO_OPTION,
+					JOptionPane.ERROR_MESSAGE
+			);
+
+			if(opcion == JOptionPane.YES_OPTION) {
+				try {
+					repo.delete(row); 
+					loadUsers();      
+					JOptionPane.showMessageDialog(view, "Usuario eliminado", "Exito", JOptionPane.INFORMATION_MESSAGE);
+				} catch (IOException ex) {
+					JOptionPane.showMessageDialog(view, "Error al eliminar el usuario: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}
-				String userName = model.getUserAt(row).getName();
-
-				int opcion = JOptionPane.showConfirmDialog(
-						view, 
-						"¿Estás seguro de que deseas eliminar al usuario " + userName + "?\nEsta acción no se puede deshacer.", 
-						"Confirmar Eliminación", 
-						JOptionPane.YES_NO_OPTION,
-						JOptionPane.ERROR_MESSAGE
-				);
-
-				if(opcion == JOptionPane.YES_OPTION) {
-					try {
-						repo.delete(row); 
-						loadUsers();      
-						JOptionPane.showMessageDialog(view, "Usuario eliminado", "Exito", JOptionPane.INFORMATION_MESSAGE);
-					} catch (IOException ex) {
-						JOptionPane.showMessageDialog(view, "Error al eliminar el usuario: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-					}
-				}
-			});
-			this.view.getBtnPdf().addActionListener(e -> generatePdf());
+			}
+		});
+		
+		this.view.getBtnPdf().addActionListener(e -> generatePdf());
 	}
-	
 	
 	public void loadUsers() {	
 		System.out.println("Carga usuarios");

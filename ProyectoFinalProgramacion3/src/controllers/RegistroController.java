@@ -7,7 +7,13 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.util.UUID;
 
 import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
@@ -32,6 +38,9 @@ public class RegistroController{
 	
 	private void registerListeners() {
 		   view.getBtnRegistrar().addActionListener(e -> validarForm());
+
+		   view.getBtnSelectImage().addActionListener(e -> view.chooseImage());
+		   
 		   eventosCampos();
 		   regresarVentana();
 	}
@@ -62,13 +71,18 @@ public class RegistroController{
 	        if (!verificarCorreo()) valido = false;
 	        if (!verificarPassword()) valido = false;
 	        if (!verificarConfirmarPassword()) valido = false;
+	        if (!verificarImage()) valido = false; 
 
 	        if (valido) {
+
+	        	String imagePathString = saveImage();
+	        	
 	            User nuevoUsuario = new User(
 	            	view.getTxtName().getText().trim(),
 	            	view.getTxtLastName().getText().trim(),
 	            	view.getTxtCorreo().getText().trim(),
-	            	new String(view.getTxtContrasena().getPassword())
+	            	new String(view.getTxtContrasena().getPassword()),
+	            	imagePathString 
 	            );
 
 	            try {
@@ -85,6 +99,43 @@ public class RegistroController{
 				}
 	        }
 	    }
+
+	   private String saveImage() {
+		   try {
+			   String original = view.getSelectedImagePath();
+			   
+			   if(original == null)
+				   return null;
+			   
+			   File source = new File(original);
+			   String extension = original.substring(original.lastIndexOf("."));
+			   String newName = UUID.randomUUID() + extension;
+			   String folder = "." + File.separator + "images";
+			   File directory = new File(folder);
+			   
+			   if(!directory.exists()) {
+				   directory.mkdir();
+			   }
+			   
+			   Path destination = Paths.get(folder, newName);
+			   Files.copy(source.toPath(), destination, StandardCopyOption.REPLACE_EXISTING);
+			   
+			   return destination.toString();
+			   
+		   } catch(Exception ex) {
+			   ex.printStackTrace();
+			   return null;
+		   }
+	   }
+
+	   private boolean verificarImage() {
+		   if(view.getSelectedImagePath() == null) {
+			   view.getLblAvisoImage().setText("Seleccione una foto de perfil");
+			   return false;
+		   }
+		   view.getLblAvisoImage().setText("");
+		   return true;
+	   }
 	   
 	   private boolean verificarName() {
 	        if(view.getTxtName().getText().trim().equals("")) {

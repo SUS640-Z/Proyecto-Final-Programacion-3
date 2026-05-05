@@ -21,6 +21,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 
 import tableModels.UserTableModel;
+import utils.Config; 
 
 public class UserView extends JPanel {
 
@@ -119,9 +120,10 @@ public class UserView extends JPanel {
 			table.getColumnModel().getColumn(2).setPreferredWidth(250);
 		}
 	}
-	
+
 	public File selectPdfFile() {
-		String path = System.getProperty("user.home");
+
+		String path = Config.get("users.export.pdf", System.getProperty("user.home"));
 		JFileChooser chooser = new JFileChooser(path);
 		
 		chooser.setSelectedFile(new File("reporte-usuarios.pdf"));
@@ -140,6 +142,7 @@ public class UserView extends JPanel {
 		}
 		
 		File file = chooser.getSelectedFile();
+		Config.set("users.export.pdf", file.getParent());
 		
 		if(!file.getName().toLowerCase().endsWith(".pdf")) {
 			file = new File(file.getAbsolutePath() + ".pdf");
@@ -147,6 +150,7 @@ public class UserView extends JPanel {
 		
 		return file;
 	}
+	
 	public JTable getTable() { return table; }
 	public JButton getBtnAdd() { return btnAdd; }
 	public JButton getBtnEdit() { return btnEdit; }
