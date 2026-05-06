@@ -319,7 +319,6 @@ public class RegistroView extends JFrame {
 		
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Imágenes", "jpg", "jpeg", "png");
 		chooser.setFileFilter(filter);
-		
 		int option = chooser.showOpenDialog(this);
 		
 		if(option == JFileChooser.APPROVE_OPTION) {
