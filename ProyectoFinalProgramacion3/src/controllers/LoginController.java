@@ -1,6 +1,9 @@
 package controllers;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.util.List;
+
 import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -8,15 +11,17 @@ import javax.swing.event.DocumentListener;
 import exceptions.InvalidPasswordException;
 import exceptions.InvalidUserException;
 import models.User;
+import repository.UserRepository;
 import views.DataView;
 import views.LoginView;
 import views.RegistroView;
 
 public class LoginController {
-
+	private UserRepository repo;
 	private LoginView view;
 
 	public LoginController(LoginView view) {
+		repo = new UserRepository();
 		this.view = view;
 		registerListeners();
 	}
@@ -60,6 +65,9 @@ public class LoginController {
 	
 	private boolean validateCredentials(User user) throws InvalidUserException, InvalidPasswordException {
 		boolean valid = true;
+		boolean validCorreo=false;
+		boolean validPassword=false;
+		
 
 		if(user.getEmail().isEmpty()) {
 			view.showEmailError("Usuario Requerido");
@@ -72,15 +80,31 @@ public class LoginController {
 		}
 		
 		if (!valid) return false;
-
-		if(!user.getEmail().equals("pepe@gmail.com")) {
-			throw new InvalidUserException("El correo no coincide");
+		
+		try {
+		List<User> users = repo.getUsers();
+		
+		for(int i=0;i<users.size() ;i++) {
+			if(user.getEmail().equals(users.get(i).getEmail())) {
+				validCorreo=true;
+				if(user.getPassword().equals(users.get(i).getPassword())) {
+					validPassword=true;
+					break;
+				}
+			}
 		}
 		
-		if(!user.getPassword().equals("12345")) {
+		}catch(IOException ex) {
+			JOptionPane.showMessageDialog(view, ex.getMessage());
+		}
+		
+		if(!validCorreo) {
+			throw new InvalidPasswordException("El correo no coincide");
+		}
+		
+		if(!validPassword) {
 			throw new InvalidPasswordException("La contraseña no coincide");
 		}
-		
 		return true;
 	}
 }

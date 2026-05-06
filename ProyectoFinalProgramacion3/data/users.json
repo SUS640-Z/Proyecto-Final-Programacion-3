@@ -35,15 +35,15 @@
   "lastName" : "Diaz",
   "imagePath" : null
 }, {
-  "email" : "PECAS@GMAIL.COM",
+  "email" : "Pecas@gmail.com",
   "password" : "A1234567",
-  "name" : "PEPE",
-  "lastName" : "PECAS",
+  "name" : "Pepe",
+  "lastName" : "Pecas",
   "imagePath" : ".\\images\\4df18554-69a1-43ae-a5a5-34378a749136.jpg"
 }, {
-    "email" : "ALAMEDA@HOTMAIL.COM",
-    "password" : "1234567S",
-    "name" : "ALAMEDA",
-    "lastName" : "SMITH",
-    "imagePath" : ".\\images\\9f54d0cb-d7c5-4a5b-a6bc-318b98e63459.jpg"
-  } ]
+  "email" : "ALAMEDA@HOTMAIL.COM",
+  "password" : "1234567S",
+  "name" : "ALAMEDA",
+  "lastName" : "SMITH",
+  "imagePath" : ".\\images\\9f54d0cb-d7c5-4a5b-a6bc-318b98e63459.jpg"
+} ]
