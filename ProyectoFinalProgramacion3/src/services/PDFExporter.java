@@ -59,7 +59,7 @@ public class PDFExporter {
 			PdfFont font = PdfFontFactory.createFont(StandardFonts.HELVETICA);
 
 			Cell cell = new Cell(1, 5).add(new Paragraph("Usuarios del sistema")).setFont(font).setFontSize(14)
-					.setFontColor(DeviceGray.WHITE).setBackgroundColor(new DeviceRgb(45, 111, 164))
+					.setFontColor(DeviceGray.WHITE).setBackgroundColor(new DeviceRgb(114, 155, 121))
 					.setTextAlignment(TextAlignment.CENTER);
 
 			table.addHeaderCell(cell);
