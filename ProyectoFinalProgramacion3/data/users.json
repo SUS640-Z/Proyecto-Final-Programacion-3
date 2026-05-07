@@ -35,15 +35,21 @@
   "lastName" : "Diaz",
   "imagePath" : null
 }, {
-  "email" : "Pecas@gmail.com",
-  "password" : "A1234567",
-  "name" : "Pepe",
-  "lastName" : "Pecas",
-  "imagePath" : ".\\images\\4df18554-69a1-43ae-a5a5-34378a749136.jpg"
-}, {
   "email" : "ALAMEDA@HOTMAIL.COM",
   "password" : "1234567S",
   "name" : "ALAMEDA",
   "lastName" : "SMITH",
   "imagePath" : ".\\images\\9f54d0cb-d7c5-4a5b-a6bc-318b98e63459.jpg"
+}, {
+  "email" : "Robe@gmail.com",
+  "password" : "R1234567",
+  "name" : "Roberto",
+  "lastName" : "Martinez",
+  "imagePath" : ".\\images\\b616351a-1a46-42f0-b810-420fc07aae9d.jpg"
+}, {
+  "email" : "Checo@gmail.com",
+  "password" : "S1234567",
+  "name" : "Sergio",
+  "lastName" : "Perez",
+  "imagePath" : null
 } ]

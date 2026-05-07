@@ -11,6 +11,8 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
@@ -34,6 +36,8 @@ import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import components.BtnDirecion;
@@ -102,6 +106,7 @@ public class UserFormDialog extends JDialog{
 
         generarComponentes();
         aplicarEventoFocus();
+        eventosCampos(); 
         resetearAvisos();
         loadData(); 
     }
@@ -143,15 +148,16 @@ public class UserFormDialog extends JDialog{
         generarSeccionImagen(panelFormulario); 
         generarBotones(panelFormulario);
     }
+
     private void generarTitulos(JPanel panel) {
         GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.HORIZONTAL;
+         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.gridy = 0;
         c.insets = new Insets(5, 5, 10, 5); 
         JLabel lblTitulo = new JLabel(user == null ? "Crear Cuenta" : "Editar Cuenta");
         lblTitulo.setFont(new Font("Times New Roman", Font.PLAIN, 26));
-         lblTitulo.setForeground(Color.WHITE);
+        lblTitulo.setForeground(Color.WHITE);
         lblTitulo.setHorizontalAlignment(JLabel.CENTER);
         panel.add(lblTitulo, c);
     }
@@ -166,12 +172,12 @@ public class UserFormDialog extends JDialog{
         LblSubtitulo lblName = new LblSubtitulo("Nombre:");
         panel.add(lblName, c);
         
-         c.insets = new Insets(0, 5, 5, 5);
+        c.insets = new Insets(0, 5, 5, 5);
         c.gridy = 2;
         txtName = new JTextField(20);
         panel.add(txtName, c);
         
-        c.insets = new Insets(2, 5, 0,5);
+        c.insets = new Insets(2, 5, 0, 5);
         c.gridy = 4;
         LblSubtitulo lblLastName = new LblSubtitulo("Apellidos:");
         panel.add(lblLastName, c);
@@ -181,7 +187,7 @@ public class UserFormDialog extends JDialog{
         txtLastName = new JTextField(20);
         panel.add(txtLastName, c);
         
-        c.insets = new Insets(2,5, 0, 5);
+        c.insets = new Insets(2, 5, 0, 5);
         c.gridy = 7;
         LblSubtitulo lblCorreo = new LblSubtitulo("Correo electronico:");
         panel.add(lblCorreo, c);
@@ -201,14 +207,14 @@ public class UserFormDialog extends JDialog{
         txtContrasena = new JPasswordField(20);
         panel.add(txtContrasena, c);
         
-        c.insets = new Insets(2,5, 0, 5);
+        c.insets = new Insets(2, 5, 0, 5);
         c.gridy = 13;
         LblSubtitulo lblConf = new LblSubtitulo("Confirmar contraseña:");
-        panel.add(lblConf, c);
+         panel.add(lblConf, c);
         
-        c.insets = new Insets(0, 5,5, 5);
+        c.insets = new Insets(0, 5, 5, 5);
         c.gridy = 14;
-         txtConfirmarContrasena = new JPasswordField(20);
+        txtConfirmarContrasena = new JPasswordField(20);
         panel.add(txtConfirmarContrasena, c);
     }
 
@@ -217,20 +223,20 @@ public class UserFormDialog extends JDialog{
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.insets = new Insets(0, 5, 2, 4);
-        Font fontAviso = new Font("Arial", Font.ITALIC,10);
+        Font fontAviso = new Font("Arial", Font.ITALIC, 10);
 
         lblAvisoName = new LblAviso("");
-        lblAvisoName.setForeground(Color.RED);  lblAvisoName.setFont(fontAviso);
-        c.gridy = 3; panel.add(lblAvisoName, c);
+         lblAvisoName.setForeground(Color.RED); lblAvisoName.setFont(fontAviso);
+         c.gridy = 3; panel.add(lblAvisoName, c);
 
         lblAvisoLastName = new LblAviso("");
-         lblAvisoLastName.setForeground(Color.RED); lblAvisoLastName.setFont(fontAviso);
+        lblAvisoLastName.setForeground(Color.RED); lblAvisoLastName.setFont(fontAviso);
         c.gridy = 6; panel.add(lblAvisoLastName, c);
         
         lblAvisoCorreo = new LblAviso("");
         lblAvisoCorreo.setForeground(Color.RED); lblAvisoCorreo.setFont(fontAviso);
         c.gridy = 9; panel.add(lblAvisoCorreo, c);
-
+ 
         lblAvisoContra = new LblAviso("");
         lblAvisoContra.setForeground(Color.RED); lblAvisoContra.setFont(fontAviso);
         c.gridy = 12; panel.add(lblAvisoContra, c);
@@ -243,24 +249,24 @@ public class UserFormDialog extends JDialog{
     private void generarSeccionImagen(JPanel panel) {
     	GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
-        c.gridx = 0;
+         c.gridx = 0;
         
         c.insets = new Insets(2, 5, 2, 5);
         c.gridy = 16;
-        LblSubtitulo lblFoto = new LblSubtitulo("Foto de perfil:");
+        LblSubtitulo lblFoto = new LblSubtitulo("Foto de perfil (Opcional):");
         panel.add(lblFoto, c);
         
         c.insets = new Insets(0, 5, 2, 5);
         c.gridy = 17;
         lblImagePreview = new JLabel();
-		 lblImagePreview.setPreferredSize(new Dimension(75,75));
+		lblImagePreview.setPreferredSize(new Dimension(75,75));
 		lblImagePreview.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-		 lblImagePreview.setHorizontalAlignment(JLabel.CENTER);
+		lblImagePreview.setHorizontalAlignment(JLabel.CENTER);
 		panel.add(lblImagePreview, c);
 		
 		c.gridy = 18;
 		btnSelectImage = new JButton("Seleccionar imagen");
-		btnSelectImage.setBackground(new Color(210, 180, 140)); 
+		 btnSelectImage.setBackground(new Color(210, 180, 140)); 
 		btnSelectImage.setForeground(Color.BLACK);
 		btnSelectImage.setFocusPainted(false);
 		btnSelectImage.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -268,10 +274,10 @@ public class UserFormDialog extends JDialog{
 		panel.add(btnSelectImage, c);
 		
 		c.gridy = 19;
-		c.insets = new Insets(0, 5, 0, 5);
+		 c.insets = new Insets(0, 5, 0, 5);
 		lblImageName = new JLabel("Ninguna imagen seleccionada");
 		lblImageName.setForeground(Color.LIGHT_GRAY);
-		 lblImageName.setFont(new Font("Arial", Font.PLAIN, 10));
+		lblImageName.setFont(new Font("Arial", Font.PLAIN, 10));
 		lblImageName.setHorizontalAlignment(JLabel.CENTER);
 		panel.add(lblImageName, c);
 		
@@ -282,14 +288,14 @@ public class UserFormDialog extends JDialog{
 		panel.add(lblAvisoImage, c);
     }
 
-    private void generarBotones(JPanel panel) {
+    private void  generarBotones(JPanel panel) {
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
-        c.gridy = 21; 
-         c.insets = new Insets(10, 5, 5, 5); 
+         c.gridy = 21; 
+        c.insets = new Insets(10, 5, 5, 5); 
 
         btnRegistrar = new JButton("Guardar");
-        btnRegistrar.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+         btnRegistrar.setFont(new Font("Times New Roman", Font.PLAIN, 18));
         btnRegistrar.setBackground(new Color(48, 60, 26)); 
         btnRegistrar.setForeground(Color.WHITE);
         btnRegistrar.setBorder(new LineBorder(Color.GRAY, 3, true));
@@ -302,7 +308,7 @@ public class UserFormDialog extends JDialog{
        
         panel.add(btnRegistrar, c);
         
-        lblRegresar = new JLabel("<html><u>Regresar</u></html>");
+        lblRegresar = new JLabel("<html><u>Cancelar</u></html>");
         lblRegresar.setFont(new Font("Times New Roman", Font.PLAIN, 16));
         lblRegresar.setForeground(Color.WHITE);
         lblRegresar.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -321,11 +327,187 @@ public class UserFormDialog extends JDialog{
         btnRegistrar.addActionListener(e -> save());
     }
 
+    private boolean verificarName() {
+        if(txtName.getText().trim().equals("")) {
+            lblAvisoName.setText("Nombre requerido");
+            lblAvisoName.setFont(new Font("Arial", Font.ITALIC, 10));
+            return false;
+        }
+        return true;
+    }
+    
+    private boolean verificarLastName() {
+        if(txtLastName.getText().trim().equals("")) {
+        	lblAvisoLastName.setText("Apellido requerido");
+        	lblAvisoLastName.setFont(new Font("Arial", Font.ITALIC, 10));
+            return false;
+        }
+        return true;
+    }
+
+    private boolean verificarCorreo() {
+        if(txtCorreo.getText().trim().equals("")) {
+        	lblAvisoCorreo.setText("Correo requerido");
+        	lblAvisoCorreo.setFont(new Font("Arial", Font.ITALIC, 10));
+            return false;
+        }
+        return true;
+    }
+    
+    private boolean verificarPassword() {
+        if(new String(txtContrasena.getPassword()).trim().equals("")) {
+        	lblAvisoContra.setText("Contraseña requerida");
+        	lblAvisoContra.setFont(new Font("Arial", Font.ITALIC, 10));
+            return false;
+        }
+        return true;
+    }
+
+    private boolean verificarConfirmarPassword() {
+        if(new String(txtConfirmarContrasena.getPassword()).trim().equals("") && new String(txtConfirmarContrasena.getPassword()).equals(new String(txtContrasena.getPassword()))){
+        	lblAvisoConfirmar.setText("Confirme su contraseña");
+        	lblAvisoConfirmar.setFont(new Font("Arial", Font.ITALIC, 10));
+            return false;
+        }
+        return true;
+    }
+    
+    private void verificarInstaName() {
+    	lblAvisoName.setText("");
+        if(txtName.getText().trim().equals("")) {
+      	    lblAvisoName.setText("Nombres requerido");
+      	    lblAvisoName.setFont(new Font("Arial", Font.ITALIC, 10));
+        } else {
+        	if(txtName.getText().matches(".*\\d.*")) {
+        		lblAvisoName.setText("No debe contener números");
+      	    }
+        }
+    }
+    
+    private void verificarInstaLastName() {
+  	    lblAvisoLastName.setText("");
+  	    if(txtLastName.getText().trim().equals("")) {
+  	    	lblAvisoLastName.setText("Apellidos requerido");
+  	    	lblAvisoLastName.setFont(new Font("Arial", Font.ITALIC, 10));
+  	    } else {
+    		if(txtLastName.getText().matches(".*\\d.*")) {
+    			lblAvisoLastName.setText("No debe contener números");
+   		    }
+        }
+    }
+    
+    private void verificarInstaCorreo() {
+  	    lblAvisoCorreo.setText(" ");
+  	    if(txtCorreo.getText().trim().equals("") ) {
+  	    	lblAvisoCorreo.setText("Correo requerido");
+  	    	lblAvisoCorreo.setFont(new Font("Arial", Font.ITALIC, 10));
+  	    }
+  	    if(!txtCorreo.getText().isEmpty() && !txtCorreo.getText().contains("@")) {
+  	    	lblAvisoCorreo.setText("Correo Inválido");
+  	    	lblAvisoCorreo.setFont(new Font("Arial", Font.ITALIC, 10));
+  	    }
+    }
+    
+    private void verificarInstaPassword() {
+    	boolean mayuscula=false;
+    	boolean numeros=false;
+    	boolean longitud=false;
+    	lblAvisoContra.setText(" ");
+  	    
+    	if(new String(txtContrasena.getPassword()).trim().equals("")) {
+  	    	lblAvisoContra.setText("Contraseña requerida");
+  	    	lblAvisoContra.setFont(new Font("Arial", Font.ITALIC, 10));
+  	    } else {
+  	    	String pass = new String(txtContrasena.getPassword());
+  		    for(int i = 0; i < pass.length(); i++) {
+  			    if (Character.isUpperCase(pass.charAt(i))) { mayuscula=true; }
+  			    if(pass.matches(".*\\d.*")) { numeros=true; }
+  			    if(pass.trim().length() >= 8 ) { longitud=true; }
+  		    }
+  		   
+  		    if(!mayuscula) { lblAvisoContra.setText("Se necesita al menos una mayúscula"); }
+  		    if(!numeros) { lblAvisoContra.setText("Se necesita al menos un número"); }
+  		    if(!longitud) { lblAvisoContra.setText("Debe contener al menos 8 caracteres"); }
+  	    }
+    }
+    
+    private void verificarInstaConfiPassword() {
+  	    lblAvisoConfirmar.setText(" ");
+  	    String pass = new String(txtContrasena.getPassword());
+  	    String confirm = new String(txtConfirmarContrasena.getPassword());
+  	    
+  	    if(confirm.trim().equals("") || !(confirm.equals(pass))){
+  	    	lblAvisoConfirmar.setText("Las contraseñas no coinciden");
+  	    	lblAvisoConfirmar.setFont(new Font("Arial", Font.ITALIC, 10));  
+  	    }
+    }
+    
+    private void eventosCampos(){
+  	    txtName.getDocument().addDocumentListener(new DocumentListener() {
+  			@Override public void removeUpdate(DocumentEvent e) { verificarInstaName(); }
+  			@Override public void insertUpdate(DocumentEvent e) { verificarInstaName(); }
+  			@Override public void changedUpdate(DocumentEvent e) { verificarInstaName(); }
+  		});
+
+  	    txtName.addKeyListener(new KeyAdapter() {
+			public void keyTyped(KeyEvent e) {
+				if((Character.isDigit(e.getKeyChar()) || !Character.isAlphabetic(e.getKeyChar())) && !(e.getKeyChar() == ' ') ) {
+					e.consume();
+				}
+				if(txtName.getText().length() >= 25) { e.consume(); }
+			}
+		});
+  		
+  		txtLastName.getDocument().addDocumentListener(new DocumentListener() {
+  			@Override public void removeUpdate(DocumentEvent e) { verificarInstaLastName(); }
+  			@Override public void insertUpdate(DocumentEvent e) { verificarInstaLastName(); }
+  			@Override public void changedUpdate(DocumentEvent e) { verificarInstaLastName(); }
+  		});
+  		
+  		txtLastName.addKeyListener(new KeyAdapter() {
+  			public void keyTyped(KeyEvent e) {
+  				if((Character.isDigit(e.getKeyChar()) || !Character.isAlphabetic(e.getKeyChar())) && !(e.getKeyChar() == ' ') ) {
+  					e.consume();
+  				}
+  				if(txtLastName.getText().length() >= 25) { e.consume(); }
+  			}
+  		});
+
+  		txtCorreo.getDocument().addDocumentListener(new DocumentListener() {
+  			@Override public void removeUpdate(DocumentEvent e) { verificarInstaCorreo(); }
+  			@Override public void insertUpdate(DocumentEvent e) { verificarInstaCorreo(); }
+  			@Override public void changedUpdate(DocumentEvent e) { verificarInstaCorreo(); }
+  		});
+  		
+  		txtCorreo.addKeyListener(new KeyAdapter() {
+  			public void keyTyped(KeyEvent e) {
+  				if(e.getKeyChar() == ' ') { e.consume(); }
+  				if(txtCorreo.getText().length() >= 50) { e.consume(); }
+  			}
+  		});
+  	    txtContrasena.getDocument().addDocumentListener(new DocumentListener() {
+  			@Override public void removeUpdate(DocumentEvent e) { verificarInstaPassword(); }
+  			@Override public void insertUpdate(DocumentEvent e) { verificarInstaPassword(); }
+  			@Override public void changedUpdate(DocumentEvent e) { verificarInstaPassword(); }
+  		});
+  	    txtContrasena.addKeyListener(new KeyAdapter() {
+			public void keyTyped(KeyEvent e) {
+				if(e.getKeyChar() == ' ') { e.consume(); }
+				if((new String(txtContrasena.getPassword())).length() >= 20) { e.consume(); }
+			}
+		});
+  	  
+  	    txtConfirmarContrasena.getDocument().addDocumentListener(new DocumentListener() {
+  			@Override public void removeUpdate(DocumentEvent e) { verificarInstaConfiPassword(); }
+  			@Override public void insertUpdate(DocumentEvent e) { verificarInstaConfiPassword(); }
+  			@Override public void changedUpdate(DocumentEvent e) { verificarInstaConfiPassword(); }
+  		});
+  	}
     public void chooseImage() {
 		String lastDirectory = Config.get("registration.image.last.directory", System.getProperty("user.home"));
 		JFileChooser chooser = new JFileChooser(lastDirectory);
 		chooser.setDialogTitle("Seleccionar imagen de perfil");
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("Imágenes","jpg","jpeg","png");
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("Imágenes", "jpg", "jpeg", "png");
 		chooser.setFileFilter(filter);
 		
 		int option = chooser.showOpenDialog(this);
@@ -343,10 +525,11 @@ public class UserFormDialog extends JDialog{
 			lblAvisoImage.setText(""); 
 		}
 	}
-
+    
     private String saveImage() {
-		if (selectedImagePath==null ||selectedImagePath.isEmpty()) return null;
-		if (selectedImagePath.contains("images" + File.separator) ||selectedImagePath.contains("images/")) {
+		if (selectedImagePath == null || selectedImagePath.isEmpty()) return null;
+		
+		if (selectedImagePath.contains("images" + File.separator) || selectedImagePath.contains("images/")) {
 			return selectedImagePath;
 		}
 
@@ -354,24 +537,27 @@ public class UserFormDialog extends JDialog{
 			File source = new File(selectedImagePath);
 			String extension = selectedImagePath.substring(selectedImagePath.lastIndexOf("."));
 			String newName = UUID.randomUUID() + extension;
-			String folder = "." + File.separator +  "images";
+			String folder = "." + File.separator + "images";
 			File directory = new File(folder);
 			
 			if(!directory.exists()) directory.mkdir();
+			
 			Path destination = Paths.get(folder, newName);
 			Files.copy(source.toPath(), destination, StandardCopyOption.REPLACE_EXISTING);
 			return destination.toString();
+			
 		} catch(Exception ex) {
-			 ex.printStackTrace();
+			ex.printStackTrace();
 			return null;
 		}
 	}
-     public void resetearAvisos() {
+    
+    public void resetearAvisos() {
         lblAvisoName.setText("");
         lblAvisoCorreo.setText("");
         lblAvisoContra.setText("");
         lblAvisoConfirmar.setText("");
-         lblAvisoImage.setText("");
+        lblAvisoImage.setText("");
     }
     
     private void loadData() {
@@ -381,23 +567,37 @@ public class UserFormDialog extends JDialog{
             txtCorreo.setText(user.getEmail());
             txtContrasena.setText(user.getPassword());
             txtConfirmarContrasena.setText(user.getPassword());
+            
             selectedImagePath = user.getImagePath();
             if(selectedImagePath != null && !selectedImagePath.isEmpty()) {
             	File file = new File(selectedImagePath);
             	if(file.exists()) {
-            		 lblImageName.setText(file.getName());
+            		lblImageName.setText(file.getName());
             		ImageIcon icon = new ImageIcon(selectedImagePath);
-        			 Image img = icon.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH); 
+        			Image img = icon.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH); 
         			lblImagePreview.setIcon(new ImageIcon(img));
             	}
             }
     	}
     }
-     private void save() {
+    
+    private void save() {
+    	resetearAvisos();
+        boolean valido = true;
+        
+        if (!verificarName()) valido = false; 
+        if (!verificarLastName()) valido = false; 
+        if (!verificarCorreo()) valido = false;
+        if (!verificarPassword()) valido = false;
+        if (!verificarConfirmarPassword()) valido = false;
+        if (!valido) {
+        	return;
+        }
     	String name = txtName.getText().trim();
     	String lastName = txtLastName.getText().trim();
     	String correo = txtCorreo.getText().trim();
     	String password = new String(txtContrasena.getPassword());
+        
     	String finalImagePath = saveImage();
     	
         if(user == null) {
@@ -407,7 +607,7 @@ public class UserFormDialog extends JDialog{
         	user.setLastName(lastName);
         	user.setEmail(correo);
         	user.setPassword(password);
-
+        	
         	if (finalImagePath != null) {
         		user.setImagePath(finalImagePath);
         	}
@@ -421,20 +621,21 @@ public class UserFormDialog extends JDialog{
     	return saved;
     }
     
-     public User getUser() {
+    public User getUser() {
     	return user;
     }
+
 	public JTextField getTxtName() {return txtName;}
 	public JTextField getTxtLastName() {return txtLastName;}
-	public JTextField getTxtCorreo()  {return txtCorreo;}
-	public JPasswordField getTxtContrasena()  {return txtContrasena;}
+	public JTextField getTxtCorreo() {return txtCorreo;}
+	public JPasswordField getTxtContrasena() {return txtContrasena;}
 	public JPasswordField getTxtConfirmarContrasena() {return txtConfirmarContrasena;}
 	public BtnDirecion getBtnConfirmar2() {return btnConfirmar2;}
-	public JButton getBtnRegistrar()  {return btnRegistrar;}
+	public JButton getBtnRegistrar() {return btnRegistrar;}
 	public LblAviso getLblAvisoName() {return lblAvisoName;}
-	public LblAviso getLblAvisoLastName()  {return lblAvisoLastName;}
+	public LblAviso getLblAvisoLastName() {return lblAvisoLastName;}
 	public LblAviso getLblAvisoCorreo() {return lblAvisoCorreo;}
-	public LblAviso getLblAvisoContra()  {return lblAvisoContra;}
+	public LblAviso getLblAvisoContra() {return lblAvisoContra;}
 	public LblAviso getLblAvisoConfirmar() {return lblAvisoConfirmar;}
 	public JLabel getLblRegresar() {return lblRegresar;}
 }
