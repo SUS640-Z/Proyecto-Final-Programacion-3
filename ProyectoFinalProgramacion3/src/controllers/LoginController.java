@@ -49,7 +49,7 @@ public class LoginController {
 
 	private void manejarLogin() {
 		view.reiniciarErrorMessages();
-		User user = new User(view.getEmail(), view.getPassword());
+		User user = new User(view.getEmail().toLowerCase(), view.getPassword());
 		
 		try {
 			if (validateCredentials(user)) {
@@ -85,7 +85,7 @@ public class LoginController {
 		List<User> users = repo.getUsers();
 		
 		for(int i=0;i<users.size() ;i++) {
-			if(user.getEmail().equals(users.get(i).getEmail())) {
+			if(user.getEmail().equals(users.get(i).getEmail().toLowerCase())){
 				validCorreo=true;
 				if(user.getPassword().equals(users.get(i).getPassword())) {
 					validPassword=true;

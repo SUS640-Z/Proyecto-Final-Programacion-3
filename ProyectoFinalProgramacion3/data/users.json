@@ -46,4 +46,23 @@
   "name" : "ALAMEDA",
   "lastName" : "SMITH",
   "imagePath" : ".\\images\\9f54d0cb-d7c5-4a5b-a6bc-318b98e63459.jpg"
+}, {
+  "email" : "MK@GMAIL.COM",
+  "password" : "A2345678",
+  "name" : "MIKE",
+  "lastName" : "SMITH",
+  "imagePath" : ".\\images\\b7fa9936-3e47-46d9-a79c-a69138aa1d8f.png"
+}, {
+  "email" : "dJKBDBJ@Q",
+  "password" : "ey",
+  "name" : "wEUIFEEUR",
+  "lastName" : "bDCIHCR",
+  "imagePath" : ".\\images\\de9f0abf-f583-46d5-8d73-f1824b811719.png"
+},{
+   "email" : "1",
+  "password" : "1",
+  "name" : "Admin",
+  "lastName" : "Pro",
+  "imagePath" : null
+
 } ]
