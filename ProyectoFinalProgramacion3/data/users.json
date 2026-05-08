@@ -3,7 +3,7 @@
   "password" : "J1234567",
   "name" : "Juan Pablo",
   "lastName" : "Zamora",
-  "imagePath" : null
+  "imagePath" : ".\\images\\b6e1e323-e4f8-4595-94d3-be276c4bdd43.jpg"
 }, {
   "email" : "green@gmail.com",
   "password" : "12345678A",
@@ -47,13 +47,7 @@
   "lastName" : "SMITH",
   "imagePath" : ".\\images\\b7fa9936-3e47-46d9-a79c-a69138aa1d8f.png"
 }, {
-  "email" : "dJKBDBJ@Q",
-  "password" : "ey",
-  "name" : "wEUIFEEUR",
-  "lastName" : "bDCIHCR",
-  "imagePath" : ".\\images\\de9f0abf-f583-46d5-8d73-f1824b811719.png"
-},{
-   "email" : "1",
+  "email" : "1",
   "password" : "1",
   "name" : "Admin",
   "lastName" : "Pro",

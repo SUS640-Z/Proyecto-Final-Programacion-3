@@ -1,6 +1,15 @@
 package tableModels;
 
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.table.AbstractTableModel;
 import models.User;
 
@@ -12,6 +21,7 @@ public class UserTableModel extends AbstractTableModel{
 		"Nombre",
 		"Apellido",
 		"Correo",
+		"Imagen"
 	};
 	
 	public UserTableModel(List<User> users) {
@@ -33,6 +43,13 @@ public class UserTableModel extends AbstractTableModel{
 		return columns[column];
 	}
 	
+	public Class<?> getColumnClass(int columnIndex) {
+	    if (columnIndex == 3) {
+	        return ImageIcon.class; 
+	    }
+	    return String.class;
+	}
+	
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		
@@ -45,7 +62,10 @@ public class UserTableModel extends AbstractTableModel{
 			return user.getLastName();
 		case 2:
 			return user.getEmail();
+		case 3: 
+			return cargarIcono(user.getImagePath(), 40, 40);
 		}
+		
 		
 		return null;
 	}
@@ -58,4 +78,19 @@ public class UserTableModel extends AbstractTableModel{
 		this.users = users;
 		fireTableDataChanged();
 	}
+	
+	private ImageIcon cargarIcono(String ruta, int ancho, int largo) {
+		try {
+			Image icono = ImageIO.read(new File(ruta));
+			icono = icono.getScaledInstance(ancho, largo, Image.SCALE_SMOOTH);
+			return new ImageIcon(icono);
+		}catch(Exception ex) {
+			System.out.println("No está la imagen del ícono");
+		}
+		return null;
+	}
+	
 }
+
+
+
