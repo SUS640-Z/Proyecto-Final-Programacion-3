@@ -35,12 +35,6 @@
   "lastName" : "Diaz",
   "imagePath" : null
 }, {
-  "email" : "Pecas@gmail.com",
-  "password" : "A1234567",
-  "name" : "Pepe",
-  "lastName" : "Pecas",
-  "imagePath" : ".\\images\\4df18554-69a1-43ae-a5a5-34378a749136.jpg"
-}, {
   "email" : "ALAMEDA@HOTMAIL.COM",
   "password" : "1234567S",
   "name" : "ALAMEDA",
@@ -64,5 +58,4 @@
   "name" : "Admin",
   "lastName" : "Pro",
   "imagePath" : null
-
 } ]
