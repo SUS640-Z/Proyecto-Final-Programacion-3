@@ -1,6 +1,7 @@
 package models;
 
 public class User {
+	private int id;
 	private String email;
 	private String password;
 	private String name;
@@ -11,6 +12,15 @@ public class User {
 		
 	}
 
+	public User(int id,String name, String lastName, String email, String password, String imagePath) {
+		this.id=id;
+		this.email = email;
+		this.password = password;
+		this.name = name;
+		this.lastName = lastName;
+		this.imagePath = imagePath;
+	}
+	
 	public User(String name, String lastName, String email, String password, String imagePath) {
 		this.email = email;
 		this.password = password;
@@ -19,6 +29,15 @@ public class User {
 		this.imagePath = imagePath;
 	}
 
+	public User(int id,String email, String password) {
+		this.id=id;
+		this.name = ""; 
+		this.lastName = ""; 
+		this.email = email;
+		this.password = password;
+		this.imagePath = "";
+	}
+	
 	public User(String email, String password) {
 		this.name = ""; 
 		this.lastName = ""; 
@@ -27,6 +46,7 @@ public class User {
 		this.imagePath = "";
 	}
 
+	/*
 	public String toCsv() {
 		return name + "," + lastName + "," + email + "," + password + "," + (imagePath != null ? imagePath : "");
 	}
@@ -42,6 +62,7 @@ public class User {
 		
 		return new User(name, lastName, email, password, imagePath);
 	}
+	*/
 	
 	public String getName() { return name; }
 	public void setName(String name) { this.name = name; }
@@ -57,4 +78,8 @@ public class User {
 
 	public String getImagePath() { return imagePath; }
 	public void setImagePath(String imagePath) { this.imagePath = imagePath; }
+	
+	public int getId() {return id;}
+	
+	public void setId(int id) {this.id = id;}
 }

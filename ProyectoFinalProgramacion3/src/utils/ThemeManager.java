@@ -7,6 +7,8 @@ import javax.swing.SwingUtilities;
 import com.formdev.flatlaf.FlatDarkLaf;
 import com.formdev.flatlaf.FlatLightLaf;
 
+import config.Config;
+
 public class ThemeManager {
 
 	public static void applySavedTheme() {

@@ -21,7 +21,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.JTableHeader;
 
 import tableModels.UserTableModel;
-import utils.Config; 
+import config.Config;
 
 public class UserView extends JPanel {
 

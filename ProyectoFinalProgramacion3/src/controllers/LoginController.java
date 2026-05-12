@@ -11,16 +11,20 @@ import javax.swing.event.DocumentListener;
 import exceptions.InvalidPasswordException;
 import exceptions.InvalidUserException;
 import models.User;
+
+import repository.LoginRepository;
 import repository.UserRepository;
 import views.DataView;
 import views.LoginView;
 import views.RegistroView;
 
 public class LoginController {
+	private LoginRepository repository;
 	private UserRepository repo;
 	private LoginView view;
 
 	public LoginController(LoginView view) {
+		repository = new LoginRepository();
 		repo = new UserRepository();
 		this.view = view;
 		registerListeners();
@@ -33,7 +37,7 @@ public class LoginController {
 			public void mouseClicked(MouseEvent e) {
 				RegistroView vistaRegistro = new RegistroView();
 				new controllers.RegistroController(vistaRegistro); 
-				view.dispose();
+				view.getWindow().dispose();
 			}
 		});
 
@@ -49,24 +53,25 @@ public class LoginController {
 
 	private void manejarLogin() {
 		view.reiniciarErrorMessages();
-		User user = new User(view.getEmail().toLowerCase(), view.getPassword());
-		
-		try {
-			if (validateCredentials(user)) {
-				JOptionPane.showMessageDialog(view, "Se inicio la sesion", "Sesion iniciada", JOptionPane.INFORMATION_MESSAGE);
-				DataView ventanaDatos = new DataView(); 
-                new controllers.DataController(ventanaDatos); 
-                view.dispose(); 
-			}
-		} catch (InvalidUserException | InvalidPasswordException ex) {
-			view.ErrorGeneral("Credenciales Incorrectas");
+		if(!validateCredentials(new User(view.getEmail(), view.getPassword()))){
+			return;
 		}
+		
+		User user = repository.login(view.getEmail(), view.getPassword());
+		
+		if(user == null) {
+			view.PasswordError("Credenciales incorrectas");
+			return;
+		}
+		
+		JOptionPane.showMessageDialog(view.getWindow(),  "Se inició la sesión", "Sesión iniciada", JOptionPane.INFORMATION_MESSAGE);
+		new DataController(new DataView());
+		
+		view.getWindow().dispose();
 	}
 	
-	private boolean validateCredentials(User user) throws InvalidUserException, InvalidPasswordException {
+	private boolean validateCredentials(User user) {
 		boolean valid = true;
-		boolean validCorreo=false;
-		boolean validPassword=false;
 		
 
 		if(user.getEmail().isEmpty()) {
@@ -79,32 +84,7 @@ public class LoginController {
 			valid = false;
 		}
 		
-		if (!valid) return false;
 		
-		try {
-		List<User> users = repo.getUsers();
-		
-		for(int i=0;i<users.size() ;i++) {
-			if(user.getEmail().equals(users.get(i).getEmail().toLowerCase())){
-				validCorreo=true;
-				if(user.getPassword().equals(users.get(i).getPassword())) {
-					validPassword=true;
-					break;
-				}
-			}
-		}
-		
-		}catch(IOException ex) {
-			JOptionPane.showMessageDialog(view, ex.getMessage());
-		}
-		
-		if(!validCorreo) {
-			throw new InvalidPasswordException("El correo no coincide");
-		}
-		
-		if(!validPassword) {
-			throw new InvalidPasswordException("La contraseña no coincide");
-		}
-		return true;
+		return valid;
 	}
 }

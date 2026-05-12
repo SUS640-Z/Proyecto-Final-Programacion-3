@@ -10,9 +10,10 @@ import javax.swing.JOptionPane;
 import models.User;
 import repository.UserRepository;
 import tableModels.UserTableModel;
-import utils.Config;
+import config.Config;
 import views.DataView;
 import views.LoginView;
+import views.LoginWindow;
 import views.RegistroView;
 import views.UserFormDialog;
 
@@ -75,9 +76,8 @@ public class DataController {
 	private void handleClose() {
 		int option = view.confirmExit();
 		if (option == JOptionPane.YES_OPTION) {
+			new LoginWindow(); 
 			view.dispose(); 
-			LoginView ventanaLogin = new LoginView(); 
-            new controllers.LoginController(ventanaLogin);
 		}
 	}
 	

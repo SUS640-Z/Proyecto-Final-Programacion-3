@@ -24,6 +24,7 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
@@ -32,8 +33,9 @@ import components.BordePanel;
 import components.LblAviso;
 import components.LblSubtitulo;
 
-public class LoginView extends JFrame {
+public class LoginView extends JPanel {
 	
+	LoginWindow window;
 	JTextField txtUsuario;
 	JPasswordField txtContrasena;
 	LblAviso lblErrorIngresarDatos;
@@ -45,24 +47,12 @@ public class LoginView extends JFrame {
 	JLabel lblCafeImg;
 	JButton btnConfimar;
 	JLabel lblCrearCuenta;
+	LoginView loginView;
 	
-	public LoginView() {
-		setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		setTitle("SaturnBucks");
-		setBounds(200,100,600,640); 
-		setResizable(false);
-		setLocationRelativeTo(null);
-		Toolkit tk = Toolkit.getDefaultToolkit();
-		Image icono = tk.getImage("src/assets/img/SATURN_BUCKS_3.png");
-		setIconImage(icono);
-		
-		BordePanel login = new BordePanel("LOG IN",Color.white);
-		login.setBackground(new Color(15, 19, 9));
+	public LoginView(LoginWindow window) {
+		this.window = window;
 		generarComponentes();
 		aplicarEventoFocus();
-		add(login);
-		
-		setVisible(true);
 		eventoCerradoVentana();
 	}
 	
@@ -72,7 +62,7 @@ public class LoginView extends JFrame {
 	}
 
 	private void eventoCerradoVentana() {
- 		addWindowListener(new WindowAdapter() {
+ 		window.addWindowListener(new WindowAdapter() {
  			public void windowClosing(WindowEvent e) {
  				int opcion = JOptionPane.showConfirmDialog(
  		                 null,
@@ -82,7 +72,7 @@ public class LoginView extends JFrame {
  		         );
 
  		         if(opcion == JOptionPane.YES_OPTION){
- 		             dispose(); 
+ 		             window.dispose(); 
  		         }
  	        }
  		});
@@ -243,6 +233,10 @@ public class LoginView extends JFrame {
 		lblUsuarioRequerido.setText("");
 		lblContraseaRequerida.setText("");
 		lblErrorIngresarDatos.setText("");
+	}
+	
+	public LoginWindow getWindow() {
+		return window;
 	}
 	
 	

@@ -328,7 +328,7 @@ public class Dirreccion extends JFrame {
 	
 	
 	private void reenviarLoginView() {
-		new LoginView();
+		new LoginWindow();
 		this.dispose();
 	}
 

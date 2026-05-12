@@ -22,6 +22,7 @@ import javax.swing.event.DocumentListener;
 import models.User;
 import repository.UserRepository;
 import views.LoginView;
+import views.LoginWindow;
 import views.RegistroView;
 
 public class RegistroController{
@@ -89,10 +90,8 @@ public class RegistroController{
 					repository.save(nuevoUsuario);
 
 					JOptionPane.showMessageDialog(null, "Cuenta registrada");
-					view.dispose();
-
-					LoginView ventanaLogin = new LoginView();
-					new LoginController(ventanaLogin); 
+					new LoginWindow();
+					view.dispose();; 
 					
 				} catch (IOException e) {
 					JOptionPane.showMessageDialog(null, "Error al guardar el usuario: " + e.getMessage(), "error", JOptionPane.ERROR_MESSAGE);

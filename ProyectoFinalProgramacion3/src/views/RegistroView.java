@@ -34,7 +34,7 @@ import components.BtnDirecion;
 import components.LblAviso;
 import components.LblSubtitulo;
 import controllers.RegistroController;
-import utils.Config;
+import config.Config;
 
 public class RegistroView extends JFrame {
 
