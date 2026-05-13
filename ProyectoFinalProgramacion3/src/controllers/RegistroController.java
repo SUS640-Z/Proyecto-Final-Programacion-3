@@ -90,7 +90,7 @@ public class RegistroController{
 					repository.save(nuevoUsuario);
 
 					JOptionPane.showMessageDialog(null, "Cuenta registrada");
-					new LoginWindow();
+					new LoginController(new LoginWindow().getLoginView());
 					view.dispose();; 
 					
 				} catch (IOException e) {
@@ -444,8 +444,7 @@ public class RegistroController{
               );
 
               if(opcion == JOptionPane.YES_OPTION){ 
-            	  LoginView ventanaLogin = new LoginView();
-                  new controllers.LoginController(ventanaLogin); 
+				  new LoginController(new LoginWindow().getLoginView());
                   view.dispose(); 
               }
           }

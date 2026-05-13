@@ -67,7 +67,7 @@ public class InicioView extends JFrame {
 
         lblLogin.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) { 
-                new LoginWindow();
+            	new LoginController(new LoginWindow().getLoginView());
                 dispose(); 
             }
         });

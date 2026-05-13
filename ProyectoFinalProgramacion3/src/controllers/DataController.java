@@ -17,6 +17,7 @@ import views.LoginWindow;
 import views.RegistroView;
 import views.UserFormDialog;
 
+
 public class DataController {
 	private DataView view;
 	private UserController userController;
@@ -76,7 +77,7 @@ public class DataController {
 	private void handleClose() {
 		int option = view.confirmExit();
 		if (option == JOptionPane.YES_OPTION) {
-			new LoginWindow(); 
+			new LoginController(new LoginWindow().getLoginView());
 			view.dispose(); 
 		}
 	}

@@ -50,7 +50,9 @@ public class LoginView extends JPanel {
 	LoginView loginView;
 	
 	public LoginView(LoginWindow window) {
+		this.setLayout(null);
 		this.window = window;
+		this.setBackground(new Color(15, 19, 9));
 		generarComponentes();
 		aplicarEventoFocus();
 		eventoCerradoVentana();
@@ -90,7 +92,7 @@ public class LoginView extends JPanel {
 	}
 	
 	public void paintComponent(Graphics g) {
-		super.paintComponents(g); 
+		super.paintComponent(g); 
 		Graphics2D g2 = (Graphics2D) g;
 		
 		Image fondo = null;

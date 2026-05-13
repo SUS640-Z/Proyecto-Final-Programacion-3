@@ -66,7 +66,6 @@ public class LoginController {
 		
 		JOptionPane.showMessageDialog(view.getWindow(),  "Se inició la sesión", "Sesión iniciada", JOptionPane.INFORMATION_MESSAGE);
 		new DataController(new DataView());
-		
 		view.getWindow().dispose();
 	}
 	
