@@ -6,8 +6,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import org.mindrot.jbcrypt.BCrypt;
+
 import config.DataBaseConnection;
 import models.User;
+import utils.PasswordUtils;
 
 public class LoginRepository {
 
@@ -16,7 +19,7 @@ public class LoginRepository {
 		/*String sql = "SELECT id, email, password FROM users WHERE email = '" 
 				+ email + "' AND password = '" + password + "'";*/
 		
-		String sql = "SELECT id_cliente, correo, password FROM Cliente WHERE correo = ? AND password = ?";
+		String sql = "SELECT id_cliente, correo, password, nombres FROM Cliente WHERE correo = ?";
 		
 		try (
 			Connection conn = DataBaseConnection.getConnection();
@@ -24,13 +27,26 @@ public class LoginRepository {
 		){
 			
 			stmt.setString(1, email);
-			stmt.setString(2, password);
 			ResultSet rs = stmt.executeQuery();
 			
 			if(rs.next()) {
+				String hashedPassword = rs.getString("password");
+			    System.out.println("Hash almacenado: " + hashedPassword);
+			    System.out.println("Contraseña ingresada: " + password);
+			    
+			    boolean correctPassword = PasswordUtils.checkPassword(password, hashedPassword);
+			    System.out.println("Contraseña correcta? " + correctPassword);
+			    
+				if(!correctPassword) 
+					return null;
+				
 				User user = new User();
 				user.setId(rs.getInt("id_cliente"));
 				user.setEmail(rs.getString("correo"));
+				user.setName(rs.getString("nombres"));
+				/*
+				user.setRole(rs.getString("role"));
+				*/
 				
 				return user;
 			}

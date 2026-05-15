@@ -14,6 +14,7 @@ import models.User;
 
 import repository.LoginRepository;
 import repository.UserRepository;
+import utils.Session;
 import views.DataView;
 import views.LoginView;
 import views.RegistroView;
@@ -53,19 +54,30 @@ public class LoginController {
 
 	private void manejarLogin() {
 		view.reiniciarErrorMessages();
+		
 		if(!validateCredentials(new User(view.getEmail(), view.getPassword()))){
 			return;
 		}
 		
 		User user = repository.login(view.getEmail(), view.getPassword());
-		
+				
 		if(user == null) {
 			view.PasswordError("Credenciales incorrectas");
 			return;
 		}
 		
-		JOptionPane.showMessageDialog(view.getWindow(),  "Se inició la sesión", "Sesión iniciada", JOptionPane.INFORMATION_MESSAGE);
+		Session.login(user);
 		new DataController(new DataView());
+		System.out.println("Hola");
+		/*
+		if(Session.getRole().equals("ADMIN")) {
+			new HomeController(new MainWindow());			
+			
+		}else {
+			JOptionPane.showMessageDialog(view.getWindow(), "No tienes permisos");
+		}
+		*/
+		
 		view.getWindow().dispose();
 	}
 	
