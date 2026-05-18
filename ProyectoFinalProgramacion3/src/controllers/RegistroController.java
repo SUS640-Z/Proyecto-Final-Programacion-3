@@ -21,6 +21,7 @@ import javax.swing.event.DocumentListener;
 
 import models.User;
 import repository.UserRepository;
+import utils.PasswordUtils; 
 import views.LoginView;
 import views.LoginWindow;
 import views.RegistroView;
@@ -39,9 +40,7 @@ public class RegistroController{
 	
 	private void registerListeners() {
 		   view.getBtnRegistrar().addActionListener(e -> validarForm());
-
 		   view.getBtnSelectImage().addActionListener(e -> view.chooseImage());
-		   
 		   eventosCampos();
 		   regresarVentana();
 	}
@@ -75,25 +74,25 @@ public class RegistroController{
 	        if (!verificarImage()) valido = false; 
 
 	        if (valido) {
-
 	        	String imagePathString = saveImage();
+	        	String plainPassword = new String(view.getTxtContrasena().getPassword());
+	        	String hashedPassword = PasswordUtils.hashPassword(plainPassword);
 	        	
 	            User nuevoUsuario = new User(
 	            	view.getTxtName().getText().trim(),
 	            	view.getTxtLastName().getText().trim(),
 	            	view.getTxtCorreo().getText().trim(),
-	            	new String(view.getTxtContrasena().getPassword()),
+	            	hashedPassword, 
 	            	imagePathString 
 	            );
 
 	            try {
 					repository.save(nuevoUsuario);
-
 					JOptionPane.showMessageDialog(null, "Cuenta registrada");
 					new LoginController(new LoginWindow().getLoginView());
-					view.dispose();; 
+					view.dispose();
 					
-				} catch (IOException e) {
+				} catch (Exception e) {
 					JOptionPane.showMessageDialog(null, "Error al guardar el usuario: " + e.getMessage(), "error", JOptionPane.ERROR_MESSAGE);
 				}
 	        }
@@ -102,9 +101,7 @@ public class RegistroController{
 	   private String saveImage() {
 		   try {
 			   String original = view.getSelectedImagePath();
-			   
-			   if(original == null)
-				   return null;
+			   if(original == null) return null;
 			   
 			   File source = new File(original);
 			   String extension = original.substring(original.lastIndexOf("."));
@@ -118,7 +115,6 @@ public class RegistroController{
 			   
 			   Path destination = Paths.get(folder, newName);
 			   Files.copy(source.toPath(), destination, StandardCopyOption.REPLACE_EXISTING);
-			   
 			   return destination.toString();
 			   
 		   } catch(Exception ex) {
@@ -165,7 +161,7 @@ public class RegistroController{
 	    
 	    private boolean verificarPassword() {
 	        if(new String(view.getTxtContrasena().getPassword()).trim().equals("")) {
-	        	view.getLblAvisoContra().setText("Contrasena requerida");
+	        	view.getLblAvisoContra().setText("Contraseña requerida");
 	        	view.getLblAvisoContra().setFont(new Font("Arial", Font.ITALIC, 10));
 	            return false;
 	        }
@@ -174,7 +170,7 @@ public class RegistroController{
 
 	    private boolean verificarConfirmarPassword() {
 	        if(new String(view.getTxtConfirmarContrasena().getPassword()).trim().equals("") && new String(view.getTxtConfirmarContrasena().getPassword()).equals(new String(view.getTxtContrasena().getPassword()))){
-	        	view.getLblAvisoConfirmar().setText("Confirme su contrasena");
+	        	view.getLblAvisoConfirmar().setText("Confirme su contraseña");
 	        	view.getLblAvisoConfirmar().setFont(new Font("Arial", Font.ITALIC, 10));
 	            return false;
 	        }
@@ -183,266 +179,138 @@ public class RegistroController{
 	    
 	    private void verificarInstaName() {
 	    	view.getLblAvisoName().setText("");
-      if(view.getTxtName().getText().trim().equals("")) {
-    	  view.getLblAvisoName().setText("Nombres requerido");
-    	  view.getLblAvisoName().setFont(new Font("Arial", Font.ITALIC, 10));
-      }else {
-      	if(view.getTxtName().getText().matches(".*\\d.*")) {
-      		view.getLblAvisoName().setText("No debe contener numeros");
-    	}
-     		
-      	view.getTxtName().addKeyListener(new KeyAdapter() {
-      			public void keyTyped(KeyEvent e) {
-      				if((Character.isDigit(e.getKeyChar()) || !Character.isAlphabetic(e.getKeyChar())) && !(e.getKeyChar() == ' ') ) {
-      					e.consume();
-      				}
-      				
-      				if(view.getTxtName().getText().length() > 25) {
-      					view.getLblAvisoName().setText("No puedes tener mas 25 caractereres");
-      					e.consume();
-      				}
-      				
-      				char c = e.getKeyChar();
-      				
-      				if(Character.isLowerCase(c)) {
-      					e.setKeyChar(Character.toUpperCase(c));
-      				}
-      			}
-      		
-      		});
-      		
-      }
-
-  }
-  
-  private void verificarInstaLastName() {
-	  view.getLblAvisoLastName().setText("");
-	    if(view.getTxtLastName().getText().trim().equals("")) {
-	    	view.getLblAvisoLastName().setText("Apellidos requerido");
-	    	view.getLblAvisoLastName().setFont(new Font("Arial", Font.ITALIC, 10));
-	    }else {
-  		
-  		if(view.getTxtLastName().getText().matches(".*\\d.*")) {
-  			view.getLblAvisoLastName().setText("No debe contener numeros");
- 		}
-  		
-  		view.getTxtLastName().addKeyListener(new KeyAdapter() {
-  			public void keyTyped(KeyEvent e) {
-  				if((Character.isDigit(e.getKeyChar()) || !Character.isAlphabetic(e.getKeyChar())) && !(e.getKeyChar() == ' ') ) {
-  					e.consume();
-  				}
-  				
-  				if(view.getTxtLastName().getText().length() > 25) {
-  					view.getLblAvisoLastName().setText("No puedes tener mas 25 caractereres");
-  					e.consume();
-  				}
-  				
-  				char c = e.getKeyChar();
-  				
-  				if(Character.isLowerCase(c)) {
-  					e.setKeyChar(Character.toUpperCase(c));
-  				}
-  			}
-  		});
-  		
-  }
-}
-  
-  private void verificarInstaCorreo() {
-	  view.getLblAvisoCorreo().setText(" ");
-	    	if(view.getTxtCorreo().getText().trim().equals("") ) {
-	    		view.getLblAvisoCorreo().setText("Correo requerido");
-	    		view.getLblAvisoCorreo().setFont(new Font("Arial", Font.ITALIC, 10));
+	    	if(view.getTxtName().getText().trim().equals("")) {
+	    		view.getLblAvisoName().setText("Nombres requerido");
+	    		view.getLblAvisoName().setFont(new Font("Arial", Font.ITALIC, 10));
+	    	} else {
+	    		if(view.getTxtName().getText().matches(".*\\d.*")) {
+	    			view.getLblAvisoName().setText("No debe contener números");
+	    		}
+	    		view.getTxtName().addKeyListener(new KeyAdapter() {
+	    			public void keyTyped(KeyEvent e) {
+	    				if((Character.isDigit(e.getKeyChar()) || !Character.isAlphabetic(e.getKeyChar())) && !(e.getKeyChar() == ' ') ) {
+	    					e.consume();
+	    				}
+	    				if(view.getTxtName().getText().length() >= 25) { e.consume(); }
+	    			}
+	    		});
 	    	}
-	    	if(!view.getTxtCorreo().getText().contains("@")) {
-	    		view.getLblAvisoCorreo().setText("Correo Invalido");
-	    		view.getLblAvisoCorreo().setFont(new Font("Arial", Font.ITALIC, 10));
-	    	}
-	    	
-	    	view.getTxtCorreo().addKeyListener(new KeyAdapter() {
-  			public void keyTyped(KeyEvent e) {
-  				if(e.getKeyChar() == ' ') {
-  					e.consume();
-  				}
-  				
-  				if(view.getTxtCorreo().getText().length() > 50) {
-  					view.getLblAvisoCorreo().setText("No puedes tener mas 50 caractereres");
-  					e.consume();
-  				}
-  				
-  				char c = e.getKeyChar();
-  				
-  				if(Character.isLowerCase(c)) {
-  					e.setKeyChar(Character.toUpperCase(c));
-  				}
-  			}
-  		
-  		});
-  }
-  
-  private void verificarInstaPassword() {
-  		boolean mayuscula=false;
-  		boolean numeros=false;
-  		boolean longitud=false;
-  		view.getLblAvisoContra().setText(" ");
-	    	if(new String(view.getTxtContrasena().getPassword()).trim().equals("")) {
-	    		view.getLblAvisoContra().setText("Contrasena requerida");
-	    		view.getLblAvisoContra().setFont(new Font("Arial", Font.ITALIC, 10));
-	    }else {
-		   for(int i = 0; i < new String(view.getTxtContrasena().getPassword()).length(); i++) {
-			   if (Character.isUpperCase(new String(view.getTxtContrasena().getPassword()).charAt(i))) {
-		            mayuscula=true; 
-		        }
-			   
-			   if(new String(view.getTxtContrasena().getPassword()).matches(".*\\d.*")) {
-				   numeros=true;
-			   }
-			   if(new String(view.getTxtContrasena().getPassword()).trim().length() >= 8 ) {
-				   longitud=true;
-    		}
-		   }
-		   
-		   if(!mayuscula) {
-			   view.getLblAvisoContra().setText("Se necesita al menos una mayuscula");
-		   }
-		   
-		   if(!numeros) {
-			   view.getLblAvisoContra().setText("Se necesita al menos un numero");
-		   }
-		   
-		   if(!longitud) {
-			   view.getLblAvisoContra().setText("Debe contener almenos 8 caracteres");
-		   }
 	    }
-	    	
-	    	view.getTxtContrasena().addKeyListener(new KeyAdapter() {
-  			public void keyTyped(KeyEvent e) {
-  				if(e.getKeyChar() == ' ') {
-  					e.consume();
-  				}
-  				
-  				if((new String(view.getTxtContrasena().getPassword())).length() > 20) {
-  					view.getLblAvisoContra().setText("No puedes tener mas 20 caractereres");
-  					e.consume();
-  				}
-  				
-  				char c = e.getKeyChar();
-  				
-  				if(Character.isLowerCase(c)) {
-  					e.setKeyChar(Character.toUpperCase(c));
-  				}
-  			}
-  		
-  		});
-	    	
-  }
   
-  private void verificarInstaConfiPassword() {
-	  view.getLblAvisoConfirmar().setText(" ");
-	    	if(new String(view.getTxtConfirmarContrasena().getPassword()).trim().equals("") || !(new String(view.getTxtConfirmarContrasena().getPassword()).equals(new String(view.getTxtContrasena().getPassword())))){
-	    		view.getLblAvisoConfirmar().setText("Las contraseñas no son iguales");
-	    		view.getLblAvisoConfirmar().setFont(new Font("Arial", Font.ITALIC, 10));  
-	     }
-  }
+	  private void verificarInstaLastName() {
+		  view.getLblAvisoLastName().setText("");
+		  if(view.getTxtLastName().getText().trim().equals("")) {
+			  view.getLblAvisoLastName().setText("Apellidos requerido");
+			  view.getLblAvisoLastName().setFont(new Font("Arial", Font.ITALIC, 10));
+		  } else {
+			  if(view.getTxtLastName().getText().matches(".*\\d.*")) {
+				  view.getLblAvisoLastName().setText("No debe contener números");
+			  }
+			  view.getTxtLastName().addKeyListener(new KeyAdapter() {
+				  public void keyTyped(KeyEvent e) {
+					  if((Character.isDigit(e.getKeyChar()) || !Character.isAlphabetic(e.getKeyChar())) && !(e.getKeyChar() == ' ') ) {
+						  e.consume();
+					  }
+					  if(view.getTxtLastName().getText().length() >= 25) { e.consume(); }
+				  }
+			  });
+		  }
+	  }
+  
+	  private void verificarInstaCorreo() {
+		  view.getLblAvisoCorreo().setText(" ");
+		  if(view.getTxtCorreo().getText().trim().equals("") ) {
+			  view.getLblAvisoCorreo().setText("Correo requerido");
+			  view.getLblAvisoCorreo().setFont(new Font("Arial", Font.ITALIC, 10));
+		  }
+		  if(!view.getTxtCorreo().getText().isEmpty() && !view.getTxtCorreo().getText().contains("@")) {
+			  view.getLblAvisoCorreo().setText("Correo Inválido");
+			  view.getLblAvisoCorreo().setFont(new Font("Arial", Font.ITALIC, 10));
+		  }
+		  view.getTxtCorreo().addKeyListener(new KeyAdapter() {
+			  public void keyTyped(KeyEvent e) {
+				  if(e.getKeyChar() == ' ') { e.consume(); }
+				  if(view.getTxtCorreo().getText().length() >= 50) { e.consume(); }
+			  }
+		  });
+	  }
+  
+	  private void verificarInstaPassword() {
+		  boolean mayuscula=false;
+		  boolean numeros=false;
+		  boolean longitud=false;
+		  view.getLblAvisoContra().setText(" ");
+		  
+		  if(new String(view.getTxtContrasena().getPassword()).trim().equals("")) {
+			  view.getLblAvisoContra().setText("Contraseña requerida");
+			  view.getLblAvisoContra().setFont(new Font("Arial", Font.ITALIC, 10));
+		  } else {
+			  String pass = new String(view.getTxtContrasena().getPassword());
+			  for(int i = 0; i < pass.length(); i++) {
+				  if (Character.isUpperCase(pass.charAt(i))) { mayuscula=true; }
+				  if(pass.matches(".*\\d.*")) { numeros=true; }
+				  if(pass.trim().length() >= 8 ) { longitud=true; }
+			  }
+			  if(!mayuscula) { view.getLblAvisoContra().setText("Se necesita al menos una mayúscula"); }
+			  if(!numeros) { view.getLblAvisoContra().setText("Se necesita al menos un número"); }
+			  if(!longitud) { view.getLblAvisoContra().setText("Debe contener al menos 8 caracteres"); }
+		  }
+		  
+		  view.getTxtContrasena().addKeyListener(new KeyAdapter() {
+			  public void keyTyped(KeyEvent e) {
+				  if(e.getKeyChar() == ' ') { e.consume(); }
+				  if((new String(view.getTxtContrasena().getPassword())).length() >= 20) { e.consume(); }
+			  }
+		  });
+	  }
+  
+	  private void verificarInstaConfiPassword() {
+		  view.getLblAvisoConfirmar().setText(" ");
+		  String pass = new String(view.getTxtContrasena().getPassword());
+		  String confirm = new String(view.getTxtConfirmarContrasena().getPassword());
+		  
+		  if(confirm.trim().equals("") || !(confirm.equals(pass))){
+			  view.getLblAvisoConfirmar().setText("Las contraseñas no coinciden");
+			  view.getLblAvisoConfirmar().setFont(new Font("Arial", Font.ITALIC, 10));  
+		  }
+	  }
   
   private void eventosCampos(){
 	  view.getTxtName().getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				verificarInstaName();
-			}
-			
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				verificarInstaName();
-			}
-			
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				verificarInstaName();
-			}
+			@Override public void removeUpdate(DocumentEvent e) { verificarInstaName(); }
+			@Override public void insertUpdate(DocumentEvent e) { verificarInstaName(); }
+			@Override public void changedUpdate(DocumentEvent e) { verificarInstaName(); }
 		});
 		
 		view.getTxtLastName().getDocument().addDocumentListener(new DocumentListener() {
-			@Override
-			public void removeUpdate(DocumentEvent e) {
-				verificarInstaLastName();
-			}
-			
-			@Override
-			public void insertUpdate(DocumentEvent e) {
-				verificarInstaLastName();
-			}
-			
-			@Override
-			public void changedUpdate(DocumentEvent e) {
-				verificarInstaLastName();
-			}
+			@Override public void removeUpdate(DocumentEvent e) { verificarInstaLastName(); }
+			@Override public void insertUpdate(DocumentEvent e) { verificarInstaLastName(); }
+			@Override public void changedUpdate(DocumentEvent e) { verificarInstaLastName(); }
 		});
 
-		
 		view.getTxtCorreo().getDocument().addDocumentListener(new DocumentListener() {
-		@Override
-		public void removeUpdate(DocumentEvent e) {
-			verificarInstaCorreo();
-		}
-		
-		@Override
-		public void insertUpdate(DocumentEvent e) {
-			verificarInstaCorreo();
-		}
-		
-		@Override
-		public void changedUpdate(DocumentEvent e) {
-			verificarInstaCorreo();
-		}
-	});
+			@Override public void removeUpdate(DocumentEvent e) { verificarInstaCorreo(); }
+			@Override public void insertUpdate(DocumentEvent e) { verificarInstaCorreo(); }
+			@Override public void changedUpdate(DocumentEvent e) { verificarInstaCorreo(); }
+		});
   
-  view.getTxtContrasena().getDocument().addDocumentListener(new DocumentListener() {
-		@Override
-		public void removeUpdate(DocumentEvent e) {
-			verificarInstaPassword();
-		}
-		
-		@Override
-		public void insertUpdate(DocumentEvent e) {
-			verificarInstaPassword();
-		}
-		
-		@Override
-		public void changedUpdate(DocumentEvent e) {
-			verificarInstaPassword();
-		}
-	});
-  
-  view.getTxtConfirmarContrasena().getDocument().addDocumentListener(new DocumentListener() {
-		@Override
-		public void removeUpdate(DocumentEvent e) {
-			verificarInstaConfiPassword();
-		}
-		
-		@Override
-		public void insertUpdate(DocumentEvent e) {
-			verificarInstaConfiPassword();
-		}
-		
-		@Override
-		public void changedUpdate(DocumentEvent e) {
-			verificarInstaConfiPassword();
-		}
-	});
-}
+	  view.getTxtContrasena().getDocument().addDocumentListener(new DocumentListener() {
+			@Override public void removeUpdate(DocumentEvent e) { verificarInstaPassword(); }
+			@Override public void insertUpdate(DocumentEvent e) { verificarInstaPassword(); }
+			@Override public void changedUpdate(DocumentEvent e) { verificarInstaPassword(); }
+		});
+	  
+	  view.getTxtConfirmarContrasena().getDocument().addDocumentListener(new DocumentListener() {
+			@Override public void removeUpdate(DocumentEvent e) { verificarInstaConfiPassword(); }
+			@Override public void insertUpdate(DocumentEvent e) { verificarInstaConfiPassword(); }
+			@Override public void changedUpdate(DocumentEvent e) { verificarInstaConfiPassword(); }
+		});
+	}
   
   public void regresarVentana() {
 	  view.getLblRegresar().addMouseListener(new MouseAdapter() {
           public void mouseClicked(MouseEvent e) {
-          	int opcion = JOptionPane.showConfirmDialog(
-                      null,
-                      "¿Seguro que deseas regresar?",
-                      "Confirmar salida",
-                      JOptionPane.YES_NO_OPTION
-              );
-
+          	int opcion = JOptionPane.showConfirmDialog(null, "¿Seguro que deseas regresar?", "Confirmar salida", JOptionPane.YES_NO_OPTION);
               if(opcion == JOptionPane.YES_OPTION){ 
 				  new LoginController(new LoginWindow().getLoginView());
                   view.dispose(); 

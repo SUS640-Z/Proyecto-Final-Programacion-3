@@ -45,6 +45,7 @@ import components.LblAviso;
 import components.LblSubtitulo;
 import models.User;
 import utils.Config;
+import utils.PasswordUtils; 
 
 public class UserFormDialog extends JDialog{
     JPanel contentPane;
@@ -64,7 +65,7 @@ public class UserFormDialog extends JDialog{
     JPanel panelFormulario;
     JButton btnRegistrar;
     JLabel lblRegresar;
-
+    
     private JButton btnSelectImage;
 	private JLabel lblImagePreview;
 	private JLabel lblImageName;
@@ -106,7 +107,7 @@ public class UserFormDialog extends JDialog{
 
         generarComponentes();
         aplicarEventoFocus();
-        eventosCampos(); 
+        eventosCampos();
         resetearAvisos();
         loadData(); 
     }
@@ -151,7 +152,7 @@ public class UserFormDialog extends JDialog{
 
     private void generarTitulos(JPanel panel) {
         GridBagConstraints c = new GridBagConstraints();
-         c.fill = GridBagConstraints.HORIZONTAL;
+        c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
         c.gridy = 0;
         c.insets = new Insets(5, 5, 10, 5); 
@@ -210,7 +211,7 @@ public class UserFormDialog extends JDialog{
         c.insets = new Insets(2, 5, 0, 5);
         c.gridy = 13;
         LblSubtitulo lblConf = new LblSubtitulo("Confirmar contraseña:");
-         panel.add(lblConf, c);
+        panel.add(lblConf, c);
         
         c.insets = new Insets(0, 5, 5, 5);
         c.gridy = 14;
@@ -226,8 +227,8 @@ public class UserFormDialog extends JDialog{
         Font fontAviso = new Font("Arial", Font.ITALIC, 10);
 
         lblAvisoName = new LblAviso("");
-         lblAvisoName.setForeground(Color.RED); lblAvisoName.setFont(fontAviso);
-         c.gridy = 3; panel.add(lblAvisoName, c);
+        lblAvisoName.setForeground(Color.RED); lblAvisoName.setFont(fontAviso);
+        c.gridy = 3; panel.add(lblAvisoName, c);
 
         lblAvisoLastName = new LblAviso("");
         lblAvisoLastName.setForeground(Color.RED); lblAvisoLastName.setFont(fontAviso);
@@ -236,7 +237,7 @@ public class UserFormDialog extends JDialog{
         lblAvisoCorreo = new LblAviso("");
         lblAvisoCorreo.setForeground(Color.RED); lblAvisoCorreo.setFont(fontAviso);
         c.gridy = 9; panel.add(lblAvisoCorreo, c);
- 
+
         lblAvisoContra = new LblAviso("");
         lblAvisoContra.setForeground(Color.RED); lblAvisoContra.setFont(fontAviso);
         c.gridy = 12; panel.add(lblAvisoContra, c);
@@ -249,7 +250,7 @@ public class UserFormDialog extends JDialog{
     private void generarSeccionImagen(JPanel panel) {
     	GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
-         c.gridx = 0;
+        c.gridx = 0;
         
         c.insets = new Insets(2, 5, 2, 5);
         c.gridy = 16;
@@ -266,7 +267,7 @@ public class UserFormDialog extends JDialog{
 		
 		c.gridy = 18;
 		btnSelectImage = new JButton("Seleccionar imagen");
-		 btnSelectImage.setBackground(new Color(210, 180, 140)); 
+		btnSelectImage.setBackground(new Color(210, 180, 140)); 
 		btnSelectImage.setForeground(Color.BLACK);
 		btnSelectImage.setFocusPainted(false);
 		btnSelectImage.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -274,7 +275,7 @@ public class UserFormDialog extends JDialog{
 		panel.add(btnSelectImage, c);
 		
 		c.gridy = 19;
-		 c.insets = new Insets(0, 5, 0, 5);
+		c.insets = new Insets(0, 5, 0, 5);
 		lblImageName = new JLabel("Ninguna imagen seleccionada");
 		lblImageName.setForeground(Color.LIGHT_GRAY);
 		lblImageName.setFont(new Font("Arial", Font.PLAIN, 10));
@@ -288,14 +289,14 @@ public class UserFormDialog extends JDialog{
 		panel.add(lblAvisoImage, c);
     }
 
-    private void  generarBotones(JPanel panel) {
+    private void generarBotones(JPanel panel) {
         GridBagConstraints c = new GridBagConstraints();
         c.gridx = 0;
-         c.gridy = 21; 
+        c.gridy = 21; 
         c.insets = new Insets(10, 5, 5, 5); 
 
         btnRegistrar = new JButton("Guardar");
-         btnRegistrar.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+        btnRegistrar.setFont(new Font("Times New Roman", Font.PLAIN, 18));
         btnRegistrar.setBackground(new Color(48, 60, 26)); 
         btnRegistrar.setForeground(Color.WHITE);
         btnRegistrar.setBorder(new LineBorder(Color.GRAY, 3, true));
@@ -326,7 +327,8 @@ public class UserFormDialog extends JDialog{
         
         btnRegistrar.addActionListener(e -> save());
     }
-
+    
+    // --- VALIDACIONES ---
     private boolean verificarName() {
         if(txtName.getText().trim().equals("")) {
             lblAvisoName.setText("Nombre requerido");
@@ -414,11 +416,14 @@ public class UserFormDialog extends JDialog{
     	boolean longitud=false;
     	lblAvisoContra.setText(" ");
   	    
-    	if(new String(txtContrasena.getPassword()).trim().equals("")) {
+    	String pass = new String(txtContrasena.getPassword());
+    	
+    	if(pass.trim().equals("")) {
   	    	lblAvisoContra.setText("Contraseña requerida");
   	    	lblAvisoContra.setFont(new Font("Arial", Font.ITALIC, 10));
   	    } else {
-  	    	String pass = new String(txtContrasena.getPassword());
+  	    	if(pass.startsWith("$2a$")) { return; }
+  	    	
   		    for(int i = 0; i < pass.length(); i++) {
   			    if (Character.isUpperCase(pass.charAt(i))) { mayuscula=true; }
   			    if(pass.matches(".*\\d.*")) { numeros=true; }
@@ -448,7 +453,7 @@ public class UserFormDialog extends JDialog{
   			@Override public void insertUpdate(DocumentEvent e) { verificarInstaName(); }
   			@Override public void changedUpdate(DocumentEvent e) { verificarInstaName(); }
   		});
-
+  		
   	    txtName.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) {
 				if((Character.isDigit(e.getKeyChar()) || !Character.isAlphabetic(e.getKeyChar())) && !(e.getKeyChar() == ' ') ) {
@@ -485,15 +490,17 @@ public class UserFormDialog extends JDialog{
   				if(txtCorreo.getText().length() >= 50) { e.consume(); }
   			}
   		});
+    
   	    txtContrasena.getDocument().addDocumentListener(new DocumentListener() {
   			@Override public void removeUpdate(DocumentEvent e) { verificarInstaPassword(); }
   			@Override public void insertUpdate(DocumentEvent e) { verificarInstaPassword(); }
   			@Override public void changedUpdate(DocumentEvent e) { verificarInstaPassword(); }
   		});
+  	    
   	    txtContrasena.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) {
 				if(e.getKeyChar() == ' ') { e.consume(); }
-				if((new String(txtContrasena.getPassword())).length() >= 20) { e.consume(); }
+				if((new String(txtContrasena.getPassword())).length() >= 70) { e.consume(); } 
 			}
 		});
   	  
@@ -503,6 +510,7 @@ public class UserFormDialog extends JDialog{
   			@Override public void changedUpdate(DocumentEvent e) { verificarInstaConfiPassword(); }
   		});
   	}
+
     public void chooseImage() {
 		String lastDirectory = Config.get("registration.image.last.directory", System.getProperty("user.home"));
 		JFileChooser chooser = new JFileChooser(lastDirectory);
@@ -590,13 +598,18 @@ public class UserFormDialog extends JDialog{
         if (!verificarCorreo()) valido = false;
         if (!verificarPassword()) valido = false;
         if (!verificarConfirmarPassword()) valido = false;
+        
         if (!valido) {
         	return;
         }
+    	
     	String name = txtName.getText().trim();
     	String lastName = txtLastName.getText().trim();
     	String correo = txtCorreo.getText().trim();
     	String password = new String(txtContrasena.getPassword());
+    	if (!password.startsWith("$2a$")) { 
+    		password = PasswordUtils.hashPassword(password);
+    	}
         
     	String finalImagePath = saveImage();
     	
@@ -617,25 +630,6 @@ public class UserFormDialog extends JDialog{
         dispose();
     }
 
-    public boolean isSaved() {
-    	return saved;
-    }
-    
-    public User getUser() {
-    	return user;
-    }
-
-	public JTextField getTxtName() {return txtName;}
-	public JTextField getTxtLastName() {return txtLastName;}
-	public JTextField getTxtCorreo() {return txtCorreo;}
-	public JPasswordField getTxtContrasena() {return txtContrasena;}
-	public JPasswordField getTxtConfirmarContrasena() {return txtConfirmarContrasena;}
-	public BtnDirecion getBtnConfirmar2() {return btnConfirmar2;}
-	public JButton getBtnRegistrar() {return btnRegistrar;}
-	public LblAviso getLblAvisoName() {return lblAvisoName;}
-	public LblAviso getLblAvisoLastName() {return lblAvisoLastName;}
-	public LblAviso getLblAvisoCorreo() {return lblAvisoCorreo;}
-	public LblAviso getLblAvisoContra() {return lblAvisoContra;}
-	public LblAviso getLblAvisoConfirmar() {return lblAvisoConfirmar;}
-	public JLabel getLblRegresar() {return lblRegresar;}
+    public boolean isSaved() { return saved; }
+    public User getUser() { return user; }
 }
