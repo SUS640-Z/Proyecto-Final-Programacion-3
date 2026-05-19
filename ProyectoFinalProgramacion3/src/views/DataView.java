@@ -32,7 +32,7 @@ public class DataView extends JFrame {
 	
 	public DataView() {
 		setTitle("Saturnbucks - Panel de Administración");
-		setSize(900, 800);
+		setSize(1000, 600);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); 
         setLocationRelativeTo(null);
         setResizable(false);

@@ -4,7 +4,6 @@ import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.io.IOException;
 import java.util.List;
 import javax.swing.JOptionPane;
 import models.User;
@@ -16,7 +15,6 @@ import views.LoginView;
 import views.LoginWindow;
 import views.RegistroView;
 import views.UserFormDialog;
-
 
 public class DataController {
 	private DataView view;
@@ -38,7 +36,6 @@ public class DataController {
 			}
 		});
 
-
 		view.btnUsers.addActionListener(e -> {
 			showUsers();
 		});
@@ -48,9 +45,7 @@ public class DataController {
 			updateMenuState(DataView.HOME);
 		});
 		
-
 		view.btnSalir.addActionListener(e -> handleClose());
-	
 	}
 	
 	private void showUsers() {
@@ -62,7 +57,7 @@ public class DataController {
 			view.usersPanel.setTableModel(model); 
 			view.showView(DataView.USERS); 
 			
-		} catch (IOException ex) {
+		} catch (Exception ex) { 
 			JOptionPane.showMessageDialog(view, "Error al cargar los usuarios: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
 		
@@ -71,7 +66,6 @@ public class DataController {
 		}
 			
 		userController.loadUsers();
-	
 	}
 	
 	private void handleClose() {
@@ -91,35 +85,17 @@ public class DataController {
 		Dimension size = view.getSize();
 		Point point = view.getLocation();
 		
-		Config.set("registration.window.width", 
-				String.valueOf(size.width));
-		
-		Config.set("registration.window.height", 
-				String.valueOf(size.height));
-		
-		Config.set("registration.window.x", 
-				String.valueOf(point.x));
-		
-		Config.set("registration.window.y", 
-				String.valueOf(point.y));
-		
+		Config.set("registration.window.width", String.valueOf(size.width));
+		Config.set("registration.window.height", String.valueOf(size.height));
+		Config.set("registration.window.x", String.valueOf(point.x));
+		Config.set("registration.window.y", String.valueOf(point.y));
 	}
 	
-	private void loadWindowPreferences()
-	{
-		int width = Integer.parseInt(
-				Config.get("registration.window.width"
-						, "500"));
-		
-		int height = Integer.parseInt(
-				Config.get("registration.window.height"
-						, "500"));
-		
-		String xValue = Config.get("registration.window.x"
-						, "");
-		
-		String yValue = Config.get("registration.window.y"
-				, "");
+	private void loadWindowPreferences() {
+		int width = Integer.parseInt(Config.get("registration.window.width", "500"));
+		int height = Integer.parseInt(Config.get("registration.window.height", "500"));
+		String xValue = Config.get("registration.window.x", "");
+		String yValue = Config.get("registration.window.y", "");
 		
 		if(!xValue.isBlank() && !yValue.isBlank()) {
 			view.setWindowLocation(Integer.parseInt(xValue), Integer.parseInt(yValue));
@@ -129,5 +105,4 @@ public class DataController {
 		
 		view.setWindowSize(width, height);
 	}
-
 }

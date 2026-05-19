@@ -2,7 +2,6 @@ package controllers;
 
 import java.awt.Desktop;
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import javax.swing.JOptionPane;
@@ -25,29 +24,26 @@ public class UserController {
 		repo = new UserRepository();
 		pdfExporter = new PDFExporter();
 
-		this.view.getBtnAdd().addActionListener(e -> {
-			openForm(null);
-		});
+		this.view.getBtnAdd().addActionListener(e -> openForm(null));
 		
 		this.view.getBtnEdit().addActionListener(e -> {
 			int row = view.getSelectedRow();
 			if(row == -1) {
-				JOptionPane.showMessageDialog(view, "Selecciona un usuario");
+				JOptionPane.showMessageDialog(view, "Selecciona un usuario", "Aviso", JOptionPane.WARNING_MESSAGE);
 				return;
 			}
-			
 			openForm(model.getUserAt(row));
-			
 		});
 		
 		this.view.getBtnDelete().addActionListener(e -> {
 			int row = view.getSelectedRow();
-
 			if(row == -1) {
 				JOptionPane.showMessageDialog(view, "Selecciona un usuario para eliminar", "Aviso", JOptionPane.WARNING_MESSAGE);
 				return;
 			}
-			String userName = model.getUserAt(row).getName();
+			
+			User userToDelete = model.getUserAt(row);
+			String userName = userToDelete.getName();
 
 			int opcion = JOptionPane.showConfirmDialog(
 					view, 
@@ -59,10 +55,13 @@ public class UserController {
 
 			if(opcion == JOptionPane.YES_OPTION) {
 				try {
-					repo.delete(row); 
-					loadUsers();      
-					JOptionPane.showMessageDialog(view, "Usuario eliminado", "Exito", JOptionPane.INFORMATION_MESSAGE);
-				} catch (IOException ex) {
+					boolean deleted = repo.delete(userToDelete.getId()); 
+					if(deleted) {
+
+						model.removeRow(row); 
+						JOptionPane.showMessageDialog(view, "Usuario eliminado", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+					}
+				} catch (Exception ex) {
 					JOptionPane.showMessageDialog(view, "Error al eliminar el usuario: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -72,35 +71,26 @@ public class UserController {
 	}
 	
 	public void loadUsers() {	
-		System.out.println("Carga usuarios");
 		try {
 			List<User> users = repo.getUsers();
-			
 			if(model == null) {
 				model = new UserTableModel(users);
 				view.setTableModel(model);
-			}else {
+			} else {
 				model.setUsers(users);
 			}
-			
-		}catch (IOException ex) {
-			JOptionPane.showMessageDialog(view, ex.getMessage());
+		} catch (Exception ex) {
+			JOptionPane.showMessageDialog(view, "Error al cargar desde base de datos: " + ex.getMessage());
 		}
 	}
 	
 	public void generatePdf() {
 		File file = view.selectPdfFile();
-		
-		if(file == null) {
-			return;
-		}
-		
+		if(file == null) return;
 		try {
 			pdfExporter.exportUsers(repo.getUsers(), file);
-			if(Desktop.isDesktopSupported()) {
-				Desktop.getDesktop().open(file);
-			}
-		}catch(Exception ex) {
+			if(Desktop.isDesktopSupported()) Desktop.getDesktop().open(file);
+		} catch(Exception ex) {
 			ex.printStackTrace();
 			JOptionPane.showMessageDialog(view, "Error al exportar");
 		}
@@ -112,22 +102,24 @@ public class UserController {
 		
 		if(dialog.isSaved()) {
 			User savedUser = dialog.getUser();
-			
 			try {
 				if(user == null) {
-					repo.save(savedUser);
-				}else {
+
+					repo.save(savedUser); 
+					model.addRow(savedUser); 
+				} else {
 					int row = view.getSelectedRow();
-					repo.update(row, savedUser);
+					savedUser.setId(user.getId()); 
+
+					boolean updated = repo.update(row, savedUser);
+					if(updated) {
+						model.updateRow(row, savedUser); 
+					}
 				}
-				
-				loadUsers();
-			}catch(Exception e) {
+			} catch(Exception e) {
 				e.printStackTrace();
 				JOptionPane.showMessageDialog(view, e.getMessage());
 			}
-			
 		}
-		
 	}
 }

@@ -1,73 +1,100 @@
 package repository;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.nio.charset.StandardCharsets;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JDialog;
-
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-
+import config.DataBaseConnection; 
 import models.User;
 
-public class UserRepository extends JDialog{
-	
-	private final String FILE = "."
-			+ File.separator 
-			+ "data"
-			+ File.separator
-			+ "users.json";
-	
-	private final ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-	
-	public void save(User user) throws IOException {
-		List<User> users = getUsers();
-		users.add(user);
-		updateAll(users);
+public class UserRepository {
 
-	}
-	
-	public List<User> getUsers() throws IOException {
-		File file = new File(FILE);
+	public void save(User user) throws SQLException {
+		String sql = "INSERT INTO cliente (nombres, apellidos, correo, password, imagePath, telefono, genero, fechaNacimiento) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		
-		file.getParentFile().mkdirs();
-		
-		if(!file.exists() || file.length() == 0) {
-			return new ArrayList<>();
+		try(Connection connection = DataBaseConnection.getConnection();
+			PreparedStatement pst = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+			
+			pst.setString(1, user.getName());
+			pst.setString(2, user.getLastName());
+			pst.setString(3, user.getEmail());
+			pst.setString(4, user.getPassword()); 
+			pst.setString(5, user.getImagePath());
+			pst.setString(6, user.getTelefono());
+			pst.setString(7, user.getGenero());
+			pst.setString(8, user.getFechaNacimiento());
+			
+			pst.executeUpdate();
+
+			ResultSet rs = pst.getGeneratedKeys();
+			if(rs.next()) {
+				user.setId(rs.getInt(1)); 
+			}
 		}
-		
-		return mapper.readValue(
-				file, 
-				new TypeReference<List<User>>() {}
-			);
 	}
 
-	
-	public void updateAll(List<User> users) throws IOException {
-		File file = new File(FILE);
-		file.getParentFile().mkdir();
+	public List<User> getUsers() throws SQLException {
+		List<User> users = new ArrayList<>();
+		String sql = "SELECT * FROM cliente";
 		
-	    mapper.writeValue(file, users);
+		try(Connection connection = DataBaseConnection.getConnection();
+			Statement st = connection.createStatement();
+			ResultSet rs = st.executeQuery(sql)) {
+			
+			while(rs.next()) {
+				User user = new User(
+					rs.getInt("id_cliente"), 
+					rs.getString("nombres"), 
+					rs.getString("apellidos"),
+					rs.getString("correo"),
+					rs.getString("password"),
+					rs.getString("imagePath"),
+					rs.getString("telefono"),
+					rs.getString("genero"),
+					rs.getString("fechaNacimiento")
+				);
+				users.add(user);
+			}
+		}
+		return users;		
 	}
-	
-	public void delete(int index) throws IOException {
-		List<User> users = getUsers();
-		users.remove(index);
-		updateAll(users); 
+
+	public boolean delete(int id) {
+		String sql = "DELETE FROM cliente WHERE id_cliente = ?";
+		try(Connection connection = DataBaseConnection.getConnection();
+			PreparedStatement pst = connection.prepareStatement(sql)) {
+			pst.setInt(1, id);
+			return pst.executeUpdate() > 0;
+		} catch(SQLException ex) {
+			ex.printStackTrace();
+		}
+		return false;
 	}
-	
-	public void update(int index, User updatedUser) throws IOException {
-		List<User> users = getUsers();
-		users.set(index, updatedUser);
-		updateAll(users); 
+
+	public boolean update(int index, User updatedUser) {
+		String sql = "UPDATE cliente SET nombres = ?, apellidos = ?, correo = ?, password = ?, imagePath = ?, telefono = ?, genero = ?, fechaNacimiento = ? WHERE id_cliente = ?";
+		
+		try (Connection connection = DataBaseConnection.getConnection();
+			 PreparedStatement pst = connection.prepareStatement(sql)) {
+			
+			pst.setString(1, updatedUser.getName());
+			pst.setString(2, updatedUser.getLastName());
+			pst.setString(3, updatedUser.getEmail());
+			pst.setString(4, updatedUser.getPassword());
+			pst.setString(5, updatedUser.getImagePath());
+			pst.setString(6, updatedUser.getTelefono());
+			pst.setString(7, updatedUser.getGenero());
+			pst.setString(8, updatedUser.getFechaNacimiento());
+			pst.setInt(9, updatedUser.getId());
+			
+			return pst.executeUpdate() > 0;
+		} catch(SQLException ex) {
+			ex.printStackTrace();
+		}
+		return false;
 	}
 }
