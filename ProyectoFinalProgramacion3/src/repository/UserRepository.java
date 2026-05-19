@@ -14,8 +14,7 @@ import models.User;
 public class UserRepository {
 
 	public void save(User user) throws SQLException {
-
-		String sql = "INSERT INTO cliente (nombres, apellidos, correo, password, imagePath) VALUES (?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO cliente (nombres, apellidos, correo, password, imagePath, telefono, genero, fechaNacimiento) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
 		
 		try(Connection connection = DataBaseConnection.getConnection();
 			PreparedStatement pst = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -25,6 +24,9 @@ public class UserRepository {
 			pst.setString(3, user.getEmail());
 			pst.setString(4, user.getPassword()); 
 			pst.setString(5, user.getImagePath());
+			pst.setString(6, user.getTelefono());
+			pst.setString(7, user.getGenero());
+			pst.setString(8, user.getFechaNacimiento());
 			
 			pst.executeUpdate();
 
@@ -50,7 +52,10 @@ public class UserRepository {
 					rs.getString("apellidos"),
 					rs.getString("correo"),
 					rs.getString("password"),
-					rs.getString("imagePath") 
+					rs.getString("imagePath"),
+					rs.getString("telefono"),
+					rs.getString("genero"),
+					rs.getString("fechaNacimiento")
 				);
 				users.add(user);
 			}
@@ -62,11 +67,8 @@ public class UserRepository {
 		String sql = "DELETE FROM cliente WHERE id_cliente = ?";
 		try(Connection connection = DataBaseConnection.getConnection();
 			PreparedStatement pst = connection.prepareStatement(sql)) {
-			
 			pst.setInt(1, id);
-			int affectedRows = pst.executeUpdate();
-			return affectedRows > 0;
-			
+			return pst.executeUpdate() > 0;
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -74,7 +76,7 @@ public class UserRepository {
 	}
 
 	public boolean update(int index, User updatedUser) {
-		String sql = "UPDATE cliente SET nombres = ?, apellidos = ?, correo = ?, password = ?, imagePath = ? WHERE id_cliente = ?";
+		String sql = "UPDATE cliente SET nombres = ?, apellidos = ?, correo = ?, password = ?, imagePath = ?, telefono = ?, genero = ?, fechaNacimiento = ? WHERE id_cliente = ?";
 		
 		try (Connection connection = DataBaseConnection.getConnection();
 			 PreparedStatement pst = connection.prepareStatement(sql)) {
@@ -84,11 +86,12 @@ public class UserRepository {
 			pst.setString(3, updatedUser.getEmail());
 			pst.setString(4, updatedUser.getPassword());
 			pst.setString(5, updatedUser.getImagePath());
-			pst.setInt(6, updatedUser.getId());
+			pst.setString(6, updatedUser.getTelefono());
+			pst.setString(7, updatedUser.getGenero());
+			pst.setString(8, updatedUser.getFechaNacimiento());
+			pst.setInt(9, updatedUser.getId());
 			
-			int affectedRows = pst.executeUpdate();
-			return affectedRows > 0;
-			
+			return pst.executeUpdate() > 0;
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 		}

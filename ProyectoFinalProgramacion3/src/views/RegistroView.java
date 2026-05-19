@@ -1,5 +1,6 @@
 package views;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
@@ -21,12 +22,15 @@ import javax.swing.border.TitledBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
+import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.JFrame;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -44,12 +48,19 @@ public class RegistroView extends JFrame {
     JTextField txtCorreo;
     JPasswordField txtContrasena;
     JPasswordField txtConfirmarContrasena;
+    
+    JTextField txtTelefono;
+    JTextField txtFechaNac;
+    JComboBox<String> cmbGenero;
+    
     LblAviso lblAvisoName;
     LblAviso lblAvisoLastName;
     LblAviso lblAvisoCorreo;
     LblAviso lblAvisoContra;
     LblAviso lblAvisoConfirmar;
     LblAviso lblAvisoImage; 
+    LblAviso lblAvisoTelefono;
+    LblAviso lblAvisoFechaNac;
     
     BtnDirecion btnConfirmar2;
     JPanel panelFormulario;
@@ -67,10 +78,10 @@ public class RegistroView extends JFrame {
     }
 
     public RegistroView() {
-        setTitle("Saturnbucks.registro");
+        setTitle("Saturnbucks - Registro");
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setBounds(100, 100, 350, 740); 
-        setResizable(false);
+        setBounds(100, 100, 400, 600); 
+        setResizable(true);
         setLocationRelativeTo(null);
         
         try {
@@ -81,6 +92,7 @@ public class RegistroView extends JFrame {
 
         contentPane = new JPanel();
         contentPane.setBackground(new Color(15, 19, 9)); 
+        contentPane.setLayout(new BorderLayout()); 
 
         Border emptyBorder = BorderFactory.createEmptyBorder(5, 5, 5, 5);
         Border panelTitledBorder = BorderFactory.createTitledBorder(
@@ -93,7 +105,6 @@ public class RegistroView extends JFrame {
 
         contentPane.setBorder(BorderFactory.createCompoundBorder(emptyBorder, panelTitledBorder));
         setContentPane(contentPane);
-        contentPane.setLayout(new GridBagLayout());
 
         generarComponentes();
         aplicarEventoFocus();
@@ -106,181 +117,126 @@ public class RegistroView extends JFrame {
         Color bordeInactivo = Color.BLACK; 
 
         @Override
-        public void focusGained(FocusEvent e) {
-            ((JComponent) e.getSource()).setBorder(BorderFactory.createLineBorder(bordeActivo, 2));
-        }
-
+        public void focusGained(FocusEvent e) { ((JComponent) e.getSource()).setBorder(BorderFactory.createLineBorder(bordeActivo, 2)); }
         @Override
-        public void focusLost(FocusEvent e) {
-            ((JComponent) e.getSource()).setBorder(BorderFactory.createLineBorder(bordeInactivo, 1));
-        }
+        public void focusLost(FocusEvent e) { ((JComponent) e.getSource()).setBorder(BorderFactory.createLineBorder(bordeInactivo, 1)); }
     };
     
     private void aplicarEventoFocus(){
     		txtName.addFocusListener(efectoFocus);
     		txtLastName.addFocusListener(efectoFocus);
     		txtCorreo.addFocusListener(efectoFocus);
+    		txtTelefono.addFocusListener(efectoFocus);
+    		txtFechaNac.addFocusListener(efectoFocus);
     		txtContrasena.addFocusListener(efectoFocus);
     		txtConfirmarContrasena.addFocusListener(efectoFocus);
     }
     
 	private void generarComponentes() {
-        JPanel panelFormulario = new JPanel(new GridBagLayout());
+        panelFormulario = new JPanel(new GridBagLayout());
         panelFormulario.setOpaque(false); 
         
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.gridx = 0; gbc.gridy = 0;
-        contentPane.add(panelFormulario, gbc);
-
         generarTitulos(panelFormulario);
         generarCampos(panelFormulario);
         generarAvisos(panelFormulario);
         generarSeccionImagen(panelFormulario); 
         generarBotones(panelFormulario);
+        
+        JPanel wrapper = new JPanel(new BorderLayout());
+        wrapper.setOpaque(false);
+        wrapper.add(panelFormulario, BorderLayout.NORTH); 
+        
+        JScrollPane scrollPane = new JScrollPane(wrapper);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setBorder(null); 
+        scrollPane.setOpaque(false);
+        scrollPane.getViewport().setOpaque(false);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16); 
+        
+        contentPane.add(scrollPane, BorderLayout.CENTER);
     }
 
     private void generarTitulos(JPanel panel) {
         GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.gridx = 0;
-        c.gridy = 0;
-        c.insets = new Insets(5, 5, 10, 5); 
+        c.fill = GridBagConstraints.HORIZONTAL; c.gridx = 0; c.gridy = 0; c.insets = new Insets(5, 5, 10, 5); 
         JLabel lblTitulo = new JLabel("Crear Cuenta");
         lblTitulo.setFont(new Font("Times New Roman", Font.PLAIN, 26));
-        lblTitulo.setForeground(Color.WHITE);
-        lblTitulo.setHorizontalAlignment(JLabel.CENTER);
-        panel.add(lblTitulo, c);
+        lblTitulo.setForeground(Color.WHITE); lblTitulo.setHorizontalAlignment(JLabel.CENTER); panel.add(lblTitulo, c);
     }
 
     private void generarCampos(JPanel panel) {
         GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.gridx = 0;
-        c.insets = new Insets(2, 5, 0, 5);
-        c.gridy = 1;
-        LblSubtitulo lblName = new LblSubtitulo("Nombre:");
-        panel.add(lblName, c);
+        c.fill = GridBagConstraints.HORIZONTAL; c.gridx = 0;
         
-        c.insets = new Insets(0, 5, 5, 5);
-        c.gridy = 2;
-        txtName = new JTextField(20);
-        panel.add(txtName, c);
+        c.insets = new Insets(2, 5, 0, 5); c.gridy = 1; panel.add(new LblSubtitulo("Nombre:"), c);
+        c.insets = new Insets(0, 5, 5, 5); c.gridy = 2; txtName = new JTextField(20); panel.add(txtName, c);
         
-        c.insets = new Insets(2, 5, 0, 5);
-        c.gridy = 4;
-        LblSubtitulo lblLastName = new LblSubtitulo("Apellidos:");
-        panel.add(lblLastName, c);
-        
-        c.insets = new Insets(0, 5, 5, 5);
-        c.gridy = 5;
-        txtLastName = new JTextField(20);
-        panel.add(txtLastName, c);
+        c.insets = new Insets(2, 5, 0, 5); c.gridy = 4; panel.add(new LblSubtitulo("Apellidos:"), c);
+        c.insets = new Insets(0, 5, 5, 5); c.gridy = 5; txtLastName = new JTextField(20); panel.add(txtLastName, c);
 
-        c.insets = new Insets(2, 5, 0, 5);
-        c.gridy = 7;
-        LblSubtitulo lblCorreo = new LblSubtitulo("Correo electronico:");
-        panel.add(lblCorreo, c);
+        c.insets = new Insets(2, 5, 0, 5); c.gridy = 7; panel.add(new LblSubtitulo("Teléfono:"), c);
+        c.insets = new Insets(0, 5, 5, 5); c.gridy = 8; txtTelefono = new JTextField(20); panel.add(txtTelefono, c);
         
-        c.insets = new Insets(0, 5, 5, 5);
-        c.gridy = 8;
-        txtCorreo = new JTextField(20);
-        panel.add(txtCorreo, c);
+        c.insets = new Insets(2, 5, 0, 5); c.gridy = 10; panel.add(new LblSubtitulo("Fecha de Nac. (AAAA-MM-DD):"), c);
+        c.insets = new Insets(0, 5, 5, 5); c.gridy = 11; txtFechaNac = new JTextField(20); panel.add(txtFechaNac, c);
+        
+        c.insets = new Insets(2, 5, 0, 5); c.gridy = 13; panel.add(new LblSubtitulo("Género:"), c);
+        c.insets = new Insets(0, 5, 5, 5); c.gridy = 14; 
+        String[] opcionesGenero = {"Seleccionar", "Femenino", "Masculino"};
+        cmbGenero = new JComboBox<>(opcionesGenero); panel.add(cmbGenero, c);
 
-        c.insets = new Insets(2, 5, 0, 5);
-        c.gridy = 10;
-        LblSubtitulo lblContra = new LblSubtitulo("Contraseña:");
-        panel.add(lblContra, c);
-        
-        c.insets = new Insets(0, 5, 5, 5);
-        c.gridy = 11;
-        txtContrasena = new JPasswordField(20);
-        panel.add(txtContrasena, c);
+        c.insets = new Insets(2, 5, 0, 5); c.gridy = 16; panel.add(new LblSubtitulo("Correo electrónico:"), c);
+        c.insets = new Insets(0, 5, 5, 5); c.gridy = 17; txtCorreo = new JTextField(20); panel.add(txtCorreo, c);
 
-        c.insets = new Insets(2, 5, 0, 5);
-        c.gridy = 13;
-        LblSubtitulo lblConf = new LblSubtitulo("Confirmar contraseña:");
-        panel.add(lblConf, c);
-        
-        c.insets = new Insets(0, 5, 5, 5);
-        c.gridy = 14;
-        txtConfirmarContrasena = new JPasswordField(20);
-        panel.add(txtConfirmarContrasena, c);
+        c.insets = new Insets(2, 5, 0, 5); c.gridy = 19; panel.add(new LblSubtitulo("Contraseña:"), c);
+        c.insets = new Insets(0, 5, 5, 5); c.gridy = 20; txtContrasena = new JPasswordField(20); panel.add(txtContrasena, c);
+
+        c.insets = new Insets(2, 5, 0, 5); c.gridy = 22; panel.add(new LblSubtitulo("Confirmar contraseña:"), c);
+        c.insets = new Insets(0, 5, 5, 5); c.gridy = 23; txtConfirmarContrasena = new JPasswordField(20); panel.add(txtConfirmarContrasena, c);
     }
 
     private void generarAvisos(JPanel panel) {
         GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.gridx = 0;
-        c.insets = new Insets(0, 5, 2, 4);
+        c.fill = GridBagConstraints.HORIZONTAL; c.gridx = 0; c.insets = new Insets(0, 5, 2, 4);
         Font fontAviso = new Font("Arial", Font.ITALIC, 10);
 
-        lblAvisoName = new LblAviso("");
-        lblAvisoName.setForeground(Color.RED); lblAvisoName.setFont(fontAviso);
-        c.gridy = 3; panel.add(lblAvisoName, c);
-
-        lblAvisoLastName = new LblAviso("");
-        lblAvisoLastName.setForeground(Color.RED); lblAvisoLastName.setFont(fontAviso);
-        c.gridy = 6; panel.add(lblAvisoLastName, c);
-        
-        lblAvisoCorreo = new LblAviso("");
-        lblAvisoCorreo.setForeground(Color.RED); lblAvisoCorreo.setFont(fontAviso);
-        c.gridy = 9; panel.add(lblAvisoCorreo, c);
-
-        lblAvisoContra = new LblAviso("");
-        lblAvisoContra.setForeground(Color.RED); lblAvisoContra.setFont(fontAviso);
-        c.gridy = 12; panel.add(lblAvisoContra, c);
-        
-        lblAvisoConfirmar = new LblAviso("");
-        lblAvisoConfirmar.setForeground(Color.RED); lblAvisoConfirmar.setFont(fontAviso);
-        c.gridy = 15; panel.add(lblAvisoConfirmar, c);
+        lblAvisoName = new LblAviso(""); lblAvisoName.setForeground(Color.RED); lblAvisoName.setFont(fontAviso); c.gridy = 3; panel.add(lblAvisoName, c);
+        lblAvisoLastName = new LblAviso(""); lblAvisoLastName.setForeground(Color.RED); lblAvisoLastName.setFont(fontAviso); c.gridy = 6; panel.add(lblAvisoLastName, c);
+        lblAvisoTelefono = new LblAviso(""); lblAvisoTelefono.setForeground(Color.RED); lblAvisoTelefono.setFont(fontAviso); c.gridy = 9; panel.add(lblAvisoTelefono, c);
+        lblAvisoFechaNac = new LblAviso(""); lblAvisoFechaNac.setForeground(Color.RED); lblAvisoFechaNac.setFont(fontAviso); c.gridy = 12; panel.add(lblAvisoFechaNac, c);
+        c.gridy = 15; panel.add(new JLabel(" "), c); 
+        lblAvisoCorreo = new LblAviso(""); lblAvisoCorreo.setForeground(Color.RED); lblAvisoCorreo.setFont(fontAviso); c.gridy = 18; panel.add(lblAvisoCorreo, c);
+        lblAvisoContra = new LblAviso(""); lblAvisoContra.setForeground(Color.RED); lblAvisoContra.setFont(fontAviso); c.gridy = 21; panel.add(lblAvisoContra, c);
+        lblAvisoConfirmar = new LblAviso(""); lblAvisoConfirmar.setForeground(Color.RED); lblAvisoConfirmar.setFont(fontAviso); c.gridy = 24; panel.add(lblAvisoConfirmar, c);
     }
     
     private void generarSeccionImagen(JPanel panel) {
     	GridBagConstraints c = new GridBagConstraints();
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.gridx = 0;
+        c.fill = GridBagConstraints.HORIZONTAL; c.gridx = 0;
         
-        c.insets = new Insets(2, 5, 2, 5);
-        c.gridy = 16;
-        LblSubtitulo lblFoto = new LblSubtitulo("Foto de perfil:");
-        panel.add(lblFoto, c);
-        
-        c.insets = new Insets(0, 5, 2, 5);
-        c.gridy = 17;
-        lblImagePreview = new JLabel();
-		lblImagePreview.setPreferredSize(new Dimension(75,75));
+        c.insets = new Insets(2, 5, 2, 5); c.gridy = 25; panel.add(new LblSubtitulo("Foto de perfil:"), c);
+        c.insets = new Insets(0, 5, 2, 5); c.gridy = 26;
+        lblImagePreview = new JLabel(); lblImagePreview.setPreferredSize(new Dimension(75,75));
 		lblImagePreview.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-		lblImagePreview.setHorizontalAlignment(JLabel.CENTER);
-		panel.add(lblImagePreview, c);
+		lblImagePreview.setHorizontalAlignment(JLabel.CENTER); panel.add(lblImagePreview, c);
 		
-		c.gridy = 18;
-		btnSelectImage = new JButton("Seleccionar imagen");
-		btnSelectImage.setBackground(new Color(210, 180, 140)); 
-		btnSelectImage.setForeground(Color.BLACK);
-		btnSelectImage.setFocusPainted(false);
-		btnSelectImage.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		c.gridy = 27; btnSelectImage = new JButton("Seleccionar imagen");
+		btnSelectImage.setBackground(new Color(210, 180, 140)); btnSelectImage.setForeground(Color.BLACK);
+		btnSelectImage.setFocusPainted(false); btnSelectImage.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		panel.add(btnSelectImage, c);
 		
-		c.gridy = 19;
-		c.insets = new Insets(0, 5, 0, 5);
-		lblImageName = new JLabel("Ninguna imagen seleccionada");
-		lblImageName.setForeground(Color.LIGHT_GRAY);
-		lblImageName.setFont(new Font("Arial", Font.PLAIN, 10));
-		lblImageName.setHorizontalAlignment(JLabel.CENTER);
-		panel.add(lblImageName, c);
+		c.gridy = 28; c.insets = new Insets(0, 5, 0, 5);
+		lblImageName = new JLabel("Ninguna imagen seleccionada"); lblImageName.setForeground(Color.LIGHT_GRAY);
+		lblImageName.setFont(new Font("Arial", Font.PLAIN, 10)); lblImageName.setHorizontalAlignment(JLabel.CENTER); panel.add(lblImageName, c);
 		
-		c.gridy = 20;
-		lblAvisoImage = new LblAviso("");
-		lblAvisoImage.setForeground(Color.RED);
-		lblAvisoImage.setFont(new Font("Arial", Font.ITALIC, 10));
+		c.gridy = 29; lblAvisoImage = new LblAviso(""); lblAvisoImage.setForeground(Color.RED); lblAvisoImage.setFont(new Font("Arial", Font.ITALIC, 10));
 		panel.add(lblAvisoImage, c);
     }
 
     private void generarBotones(JPanel panel) {
         GridBagConstraints c = new GridBagConstraints();
-        c.gridx = 0;
-        c.gridy = 21; 
-        c.insets = new Insets(10, 5, 5, 5); 
+        c.gridx = 0; c.gridy = 30; c.insets = new Insets(10, 5, 5, 5); 
 
         btnRegistrar = new JButton("Registrarme");
         btnRegistrar.setFont(new Font("Times New Roman", Font.PLAIN, 18));
@@ -293,7 +249,6 @@ public class RegistroView extends JFrame {
             public void mouseEntered(MouseEvent e){ btnRegistrar.setBackground(new Color(152, 158, 141)); }
             public void mouseExited(MouseEvent e){ btnRegistrar.setBackground(new Color(48, 60, 26)); }
         });
-       
         panel.add(btnRegistrar, c);
         
         lblRegresar = new JLabel("<html><u>Regresar</u></html>");
@@ -302,9 +257,8 @@ public class RegistroView extends JFrame {
         lblRegresar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         lblRegresar.setAlignmentX(JLabel.CENTER);
         
-        c.gridy = 22; 
-        c.insets = new Insets(0, 1, 1, 1);
-        contentPane.add(lblRegresar, c);
+        c.gridy = 31; c.insets = new Insets(0, 1, 15, 1);
+        panel.add(lblRegresar, c);
         
         lblRegresar.addMouseListener(new MouseAdapter() {  
             public void mouseEntered(MouseEvent e){ lblRegresar.setForeground(new Color(204, 207, 198)); }
@@ -316,7 +270,6 @@ public class RegistroView extends JFrame {
 		String lastDirectory = Config.get("registration.image.last.directory", System.getProperty("user.home"));
 		JFileChooser chooser = new JFileChooser(lastDirectory);
 		chooser.setDialogTitle("Seleccionar imagen de perfil");
-		
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("Imágenes", "jpg", "jpeg", "png");
 		chooser.setFileFilter(filter);
 		int option = chooser.showOpenDialog(this);
@@ -326,23 +279,18 @@ public class RegistroView extends JFrame {
 			selectedImagePath = file.getAbsolutePath();
 			lastDirectory = file.getParent();
 			Config.set("registration.image.last.directory", lastDirectory);
-			
 			lblImageName.setText(file.getName());
-			
 			ImageIcon icon = new ImageIcon(selectedImagePath);
 			Image img = icon.getImage().getScaledInstance(75, 75, Image.SCALE_SMOOTH); 
-			
 			lblImagePreview.setIcon(new ImageIcon(img));
 			lblAvisoImage.setText(""); 
 		}
 	}
     
     public void resetearAvisos() {
-        lblAvisoName.setText("");
-        lblAvisoCorreo.setText("");
-        lblAvisoContra.setText("");
-        lblAvisoConfirmar.setText("");
-        lblAvisoImage.setText(""); 
+        lblAvisoName.setText(""); lblAvisoLastName.setText(""); lblAvisoTelefono.setText("");
+        lblAvisoFechaNac.setText(""); lblAvisoCorreo.setText(""); lblAvisoContra.setText("");
+        lblAvisoConfirmar.setText(""); lblAvisoImage.setText(""); 
     }
  
 	public JTextField getTxtName() {return txtName;}
@@ -361,4 +309,10 @@ public class RegistroView extends JFrame {
 	public JButton getBtnSelectImage() { return btnSelectImage; }
 	public String getSelectedImagePath() { return selectedImagePath; }
 	public LblAviso getLblAvisoImage() { return lblAvisoImage; }
+	
+	public JTextField getTxtTelefono() { return txtTelefono; }
+	public JTextField getTxtFechaNac() { return txtFechaNac; }
+	public JComboBox<String> getCmbGenero() { return cmbGenero; }
+	public LblAviso getLblAvisoTelefono() { return lblAvisoTelefono; }
+	public LblAviso getLblAvisoFechaNac() { return lblAvisoFechaNac; }
 }

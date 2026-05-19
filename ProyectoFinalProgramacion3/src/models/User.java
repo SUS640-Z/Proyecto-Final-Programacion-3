@@ -7,26 +7,35 @@ public class User {
 	private String name;
 	private String lastName;
 	private String imagePath; 
+	private String telefono;
+	private String genero;
+	private String fechaNacimiento;
 	
 	public User() {
 		
 	}
 
-	public User(int id,String name, String lastName, String email, String password, String imagePath) {
-		this.id=id;
-		this.email = email;
-		this.password = password;
+	public User(int id, String name, String lastName, String email, String password, String imagePath, String telefono, String genero, String fechaNacimiento) {
+		this.id = id;
 		this.name = name;
 		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
 		this.imagePath = imagePath;
+		this.telefono = telefono;
+		this.genero = genero;
+		this.fechaNacimiento = fechaNacimiento;
 	}
-	
-	public User(String name, String lastName, String email, String password, String imagePath) {
-		this.email = email;
-		this.password = password;
+
+	public User(String name, String lastName, String email, String password, String imagePath, String telefono, String genero, String fechaNacimiento) {
 		this.name = name;
 		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
 		this.imagePath = imagePath;
+		this.telefono = telefono;
+		this.genero = genero;
+		this.fechaNacimiento = fechaNacimiento;
 	}
 
 	public User(int id,String email, String password) {
@@ -46,24 +55,6 @@ public class User {
 		this.imagePath = "";
 	}
 
-	/*
-	public String toCsv() {
-		return name + "," + lastName + "," + email + "," + password + "," + (imagePath != null ? imagePath : "");
-	}
-
-	public static User fromCsv(String userData) {
-		String[] data = userData.split(",");
-		
-		String name = data[0];
-		String lastName = data[1];
-		String email = data[2];
-		String password = data[3];
-		String imagePath = (data.length > 4) ? data[4] : ""; 
-		
-		return new User(name, lastName, email, password, imagePath);
-	}
-	*/
-	
 	public String getName() { return name; }
 	public void setName(String name) { this.name = name; }
 
@@ -79,7 +70,15 @@ public class User {
 	public String getImagePath() { return imagePath; }
 	public void setImagePath(String imagePath) { this.imagePath = imagePath; }
 	
-	public int getId() {return id;}
-	
-	public void setId(int id) {this.id = id;}
+	public int getId() { return id; }
+	public void setId(int id) { this.id = id; }
+
+	public String getTelefono() { return telefono; }
+	public void setTelefono(String telefono) { this.telefono = telefono; }
+
+	public String getGenero() { return genero; }
+	public void setGenero(String genero) { this.genero = genero; }
+
+	public String getFechaNacimiento() { return fechaNacimiento; }
+	public void setFechaNacimiento(String fechaNacimiento) { this.fechaNacimiento = fechaNacimiento; }
 }
