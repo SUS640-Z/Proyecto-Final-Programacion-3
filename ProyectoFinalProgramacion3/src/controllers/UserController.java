@@ -4,6 +4,7 @@ import java.awt.Desktop;
 import java.io.File;
 import java.util.List;
 
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 import models.User;
@@ -98,6 +99,26 @@ public class UserController {
 	
 	private void openForm(User user) {
 		UserFormDialog dialog = new UserFormDialog(null, user);
+		
+		try {
+	        JComboBox<String> comboRoles = dialog.getCmbRol(); // Usamos tu getter público
+	        comboRoles.removeAllItems();
+	        comboRoles.addItem("Seleccionar");
+	        
+	        List<String> rolesDeBD = repo.obtenerRoles();
+	        for (String rol : rolesDeBD) {
+	            comboRoles.addItem(rol);
+	        }
+	        
+	        // Si vas a editar un usuario existente, pre-seleccionamos su rol actual
+	        if (user != null && user.getRol() != null) {
+	            comboRoles.setSelectedItem(user.getRol());
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        JOptionPane.showMessageDialog(view, "Error al cargar los roles en el formulario: " + e.getMessage());
+	    }
+		
 		dialog.setVisible(true);
 		
 		if(dialog.isSaved()) {
@@ -109,12 +130,13 @@ public class UserController {
 					model.addRow(savedUser); 
 				} else {
 					int row = view.getSelectedRow();
-					savedUser.setId(user.getId()); 
+		            savedUser.setId(user.getId()); 
 
-					boolean updated = repo.update(row, savedUser);
-					if(updated) {
-						model.updateRow(row, savedUser); 
-					}
+		            boolean updated = repo.update(user.getId(), savedUser);
+		            
+		            if(updated) {
+		                model.updateRow(row, savedUser); 
+		            }
 				}
 			} catch(Exception e) {
 				e.printStackTrace();

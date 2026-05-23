@@ -12,7 +12,7 @@ import models.User;
 public class UserTableModel extends AbstractTableModel{
 	
 	private List<User> users;
-	private final String[] columns = {"Nombre", "Apellido", "Correo", "Teléfono", "Género", "Fecha Nac.", "Imagen"};
+	private final String[] columns = {"Nombre", "Apellido","Rol", "Correo", "Teléfono", "Género", "Fecha Nac.", "Imagen"};
 	
 	public UserTableModel(List<User> users) {
 		this.users = users;
@@ -28,7 +28,7 @@ public class UserTableModel extends AbstractTableModel{
 	public String getColumnName(int column) { return columns[column]; }
 	
 	public Class<?> getColumnClass(int columnIndex) {
-	    if (columnIndex == 6) return ImageIcon.class; 
+	    if (columnIndex == 7) return ImageIcon.class; 
 	    return String.class;
 	}
 	
@@ -38,11 +38,12 @@ public class UserTableModel extends AbstractTableModel{
 		switch(columnIndex) {
 			case 0: return user.getName();
 			case 1: return user.getLastName();
-			case 2: return user.getEmail();
-			case 3: return user.getTelefono();
-			case 4: return user.getGenero();
-			case 5: return user.getFechaNacimiento();
-			case 6: return cargarIcono(user.getImagePath(), 40, 40);
+			case 2: return user.getRol();
+			case 3: return user.getEmail();
+			case 4: return user.getTelefono();
+			case 5: return user.getGenero();
+			case 6: return user.getFechaNacimiento();
+			case 7: return cargarIcono(user.getImagePath(), 40, 40);
 		}
 		return null;
 	}

@@ -62,6 +62,7 @@ public class UserFormDialog extends JDialog{
     JTextField txtTelefono;
     JTextField txtFechaNac;
     JComboBox<String> cmbGenero;
+    JComboBox<String> cmbRol;
     
     LblAviso lblAvisoName;
     LblAviso lblAvisoLastName;
@@ -185,17 +186,23 @@ public class UserFormDialog extends JDialog{
         
         c.insets = new Insets(2, 5, 0, 5); c.gridy = 13; panel.add(new LblSubtitulo("Género:"), c);
         c.insets = new Insets(0, 5, 5, 5); c.gridy = 14; 
-        String[] opciones = {"Seleccionar","Femenino", "Masculino"};
+        String[] opciones = {"Seleccionar","Feminine", "Masculine"};
         cmbGenero = new JComboBox<>(opciones); panel.add(cmbGenero, c);
         
-        c.insets = new Insets(2, 5, 0, 5); c.gridy = 16; panel.add(new LblSubtitulo("Correo electrónico:"), c);
-        c.insets = new Insets(0, 5, 5, 5); c.gridy = 17; txtCorreo = new JTextField(20); panel.add(txtCorreo, c);
-
-        c.insets = new Insets(2, 5, 0, 5); c.gridy = 19; panel.add(new LblSubtitulo("Contraseña:"), c);
-        c.insets = new Insets(0, 5, 5, 5); c.gridy = 20; txtContrasena = new JPasswordField(20); panel.add(txtContrasena, c);
+        c.insets = new Insets(2, 5, 0, 5); c.gridy = 15; panel.add(new LblSubtitulo("Rol:"), c);
+        c.insets = new Insets(0, 5, 5, 5); c.gridy = 17; 
+        String[] roles = {"Seleccionar"}; 
+        cmbRol = new JComboBox<>(roles); 
+        panel.add(cmbRol, c);
         
-        c.insets = new Insets(2, 5, 0, 5); c.gridy = 22; panel.add(new LblSubtitulo("Confirmar contraseña:"), c);
-        c.insets = new Insets(0, 5, 5, 5); c.gridy = 23; txtConfirmarContrasena = new JPasswordField(20); panel.add(txtConfirmarContrasena, c);
+        c.insets = new Insets(2, 5, 0, 5); c.gridy = 18; panel.add(new LblSubtitulo("Correo electrónico:"), c);
+        c.insets = new Insets(0, 5, 5, 5); c.gridy = 19; txtCorreo = new JTextField(20); panel.add(txtCorreo, c);
+
+        c.insets = new Insets(2, 5, 0, 5); c.gridy = 21; panel.add(new LblSubtitulo("Contraseña:"), c);
+        c.insets = new Insets(0, 5, 5, 5); c.gridy = 22; txtContrasena = new JPasswordField(20); panel.add(txtContrasena, c);
+        
+        c.insets = new Insets(2, 5, 0, 5); c.gridy = 23; panel.add(new LblSubtitulo("Confirmar contraseña:"), c);
+        c.insets = new Insets(0, 5, 5, 5); c.gridy = 24; txtConfirmarContrasena = new JPasswordField(20); panel.add(txtConfirmarContrasena, c);
     }
 
     private void generarAvisos(JPanel panel) {
@@ -467,8 +474,13 @@ public class UserFormDialog extends JDialog{
     	String finalImagePath = saveImage();
     	String genero = (String) cmbGenero.getSelectedItem();
     	
+    	String rol = (String) cmbRol.getSelectedItem();
+    	if (rol != null && rol.equals("Seleccionar")) {
+    	    rol = null; 
+    	}
+    	
         if(user == null) {
-        	user = new User(txtName.getText().trim(), txtLastName.getText().trim(), txtCorreo.getText().trim(), password, finalImagePath, txtTelefono.getText().trim(), genero, txtFechaNac.getText().trim());
+        	user = new User(txtName.getText().trim(), txtLastName.getText().trim(), txtCorreo.getText().trim(), password, finalImagePath, txtTelefono.getText().trim(), genero, txtFechaNac.getText().trim(),rol);
         }else {
         	user.setName(txtName.getText().trim());
         	user.setLastName(txtLastName.getText().trim());
@@ -478,10 +490,16 @@ public class UserFormDialog extends JDialog{
         	user.setEmail(txtCorreo.getText().trim());
         	user.setPassword(password);
         	if (finalImagePath != null) user.setImagePath(finalImagePath);
+        	user.setRol(rol);
         }
         saved = true; dispose();
     }
 
     public boolean isSaved() { return saved; }
     public User getUser() { return user; }
+
+	public JComboBox<String> getCmbRol() {return cmbRol;}
+	public void setCmbRol(JComboBox<String> cmbRol) {this.cmbRol = cmbRol;}
+    
+    
 }

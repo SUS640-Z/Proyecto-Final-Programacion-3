@@ -10,11 +10,25 @@ public class User {
 	private String telefono;
 	private String genero;
 	private String fechaNacimiento;
+	private String rol;
 	
 	public User() {
 		
 	}
 
+	public User(int id, String name, String lastName, String email, String password, String imagePath, String telefono, String genero, String fechaNacimiento, String role) {
+		this.id = id;
+		this.name = name;
+		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
+		this.imagePath = imagePath;
+		this.telefono = telefono;
+		this.genero = genero;
+		this.fechaNacimiento = fechaNacimiento;
+		this.rol = role;
+	}
+	
 	public User(int id, String name, String lastName, String email, String password, String imagePath, String telefono, String genero, String fechaNacimiento) {
 		this.id = id;
 		this.name = name;
@@ -26,7 +40,7 @@ public class User {
 		this.genero = genero;
 		this.fechaNacimiento = fechaNacimiento;
 	}
-
+	
 	public User(String name, String lastName, String email, String password, String imagePath, String telefono, String genero, String fechaNacimiento) {
 		this.name = name;
 		this.lastName = lastName;
@@ -36,6 +50,18 @@ public class User {
 		this.telefono = telefono;
 		this.genero = genero;
 		this.fechaNacimiento = fechaNacimiento;
+	}
+
+	public User(String name, String lastName, String email, String password, String imagePath, String telefono, String genero, String fechaNacimiento,String role) {
+		this.name = name;
+		this.lastName = lastName;
+		this.email = email;
+		this.password = password;
+		this.imagePath = imagePath;
+		this.telefono = telefono;
+		this.genero = genero;
+		this.fechaNacimiento = fechaNacimiento;
+		this.rol = role;
 	}
 
 	public User(int id,String email, String password) {
@@ -81,4 +107,8 @@ public class User {
 
 	public String getFechaNacimiento() { return fechaNacimiento; }
 	public void setFechaNacimiento(String fechaNacimiento) { this.fechaNacimiento = fechaNacimiento; }
+
+	public String getRol() {return rol;}
+	public void setRol(String role) {this.rol = role;}
+	
 }
