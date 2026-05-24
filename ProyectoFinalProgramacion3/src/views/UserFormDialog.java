@@ -386,7 +386,7 @@ public class UserFormDialog extends JDialog{
 			@Override public void insertUpdate(DocumentEvent e) { accion.run(); }
 			@Override public void changedUpdate(DocumentEvent e) { accion.run(); }
 		  };
-	  }
+	}
 
     public void chooseImage() {
 		String lastDirectory = Config.get("registration.image.last.directory", System.getProperty("user.home"));

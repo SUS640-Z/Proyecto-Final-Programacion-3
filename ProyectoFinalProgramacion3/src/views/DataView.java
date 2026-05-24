@@ -20,13 +20,16 @@ import utils.ThemeManager;
 public class DataView extends JFrame {
 	public static final String HOME = "HOME";
 	public static final String USERS = "USERS";
+	public static final String PRODUCTSTYPE = "PRODUCTSTYPE";
 	
 	public JButton btnUsers;
+	public JButton btnProductsType;
 	public JButton btnHome;
 	public JButton btnSalir; 
 	public JButton btnMode;
 	
 	public UserView usersPanel;
+	public ProductTypeView productsTypePanel;
 	private CardLayout cardLayout;
 	private JPanel container;
 	
@@ -54,6 +57,7 @@ public class DataView extends JFrame {
 		
 		btnHome = crearBoton("Inicio");
 		btnUsers = crearBoton("Ver Usuarios");
+		btnProductsType = crearBoton("Ver Tipos de Productos");
 		btnSalir = crearBoton("Cerrar Sesión");
 		btnMode = crearBoton("Cambiar Modo");
 		
@@ -65,6 +69,7 @@ public class DataView extends JFrame {
 		
 		navbar.add(btnHome);
 		navbar.add(btnUsers);
+		navbar.add(btnProductsType);
 		navbar.add(btnSalir);
 		navbar.add(btnMode);
 		
@@ -93,9 +98,11 @@ public class DataView extends JFrame {
 		homePanel.add(lblBienvenida, BorderLayout.CENTER);
 		
 		usersPanel = new UserView(); 
+		productsTypePanel = new ProductTypeView();
 		
 		container.add(homePanel, HOME);
 		container.add(usersPanel, USERS);
+		container.add(productsTypePanel, PRODUCTSTYPE);
 		
 		add(container, BorderLayout.CENTER);
 	}

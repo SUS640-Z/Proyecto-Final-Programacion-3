@@ -6,19 +6,23 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
 import javax.swing.JOptionPane;
+
+import models.ProductType;
 import models.User;
+import repository.ProductTypeRepository;
 import repository.UserRepository;
+import tableModels.ProductTypeTableModel;
 import tableModels.UserTableModel;
 import config.Config;
 import views.DataView;
-import views.LoginView;
+
 import views.LoginWindow;
-import views.RegistroView;
-import views.UserFormDialog;
+
 
 public class DataController {
 	private DataView view;
 	private UserController userController;
+	private ProductTypeController productTypeController;
 	
 	public DataController(DataView view) {
 		this.view = view;
@@ -38,6 +42,10 @@ public class DataController {
 
 		view.btnUsers.addActionListener(e -> {
 			showUsers();
+		});
+		
+		view.btnProductsType.addActionListener(e -> {
+			showProductType();
 		});
 		
 		view.btnHome.addActionListener(e -> {
@@ -66,6 +74,26 @@ public class DataController {
 		}
 			
 		userController.loadUsers();
+	}
+	
+	private void showProductType() {
+		ProductTypeRepository repository = new ProductTypeRepository();
+		try {
+			List<ProductType> productsType = repository.getProductsType(); 
+			ProductTypeTableModel model = new ProductTypeTableModel(productsType); 
+			
+			view.productsTypePanel.setTableModel(model); 
+			view.showView(DataView.PRODUCTSTYPE); 
+			
+		} catch (Exception ex) { 
+			JOptionPane.showMessageDialog(view, "Error al cargar los usuarios: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		}
+		
+		if(productTypeController == null) {
+			productTypeController = new ProductTypeController(view.productsTypePanel);
+		}
+			
+		productTypeController.loadProductsType();
 	}
 	
 	private void handleClose() {
