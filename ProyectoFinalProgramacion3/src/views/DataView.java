@@ -20,16 +20,19 @@ import utils.ThemeManager;
 public class DataView extends JFrame {
 	public static final String HOME = "HOME";
 	public static final String USERS = "USERS";
-	public static final String PRODUCTSTYPE = "PRODUCTS";
+	public static final String PRODUCTS = "PRODUCTS";
+	public static final String PRODUCTSTYPE = "PRODUCTSTYPE";
 	
 	public JButton btnUsers;
-	public JButton btnProducts;
+	public JButton btnProducts;	
+	public JButton btnProductsType;
 	public JButton btnHome;
 	public JButton btnSalir; 
 	public JButton btnMode;
 	
 	public UserView usersPanel;
 	public ProductView productsPanel;
+	public ProductTypeView productsTypePanel;
 	private CardLayout cardLayout;
 	private JPanel container;
 	
@@ -58,6 +61,7 @@ public class DataView extends JFrame {
 		btnHome = crearBoton("Inicio");
 		btnUsers = crearBoton("Ver Usuarios");
 		btnProducts = crearBoton("Ver Productos");
+		btnProductsType = crearBoton("Ver Tipos de Productos");
 		btnSalir = crearBoton("Cerrar Sesión");
 		btnMode = crearBoton("Cambiar Modo");
 		
@@ -70,6 +74,7 @@ public class DataView extends JFrame {
 		navbar.add(btnHome);
 		navbar.add(btnUsers);
 		navbar.add(btnProducts);
+		navbar.add(btnProductsType);
 		navbar.add(btnSalir);
 		navbar.add(btnMode);
 		
@@ -99,10 +104,13 @@ public class DataView extends JFrame {
 		
 		usersPanel = new UserView(); 
 		productsPanel = new ProductView();
+		productsTypePanel = new ProductTypeView();
 		
 		container.add(homePanel, HOME);
 		container.add(usersPanel, USERS);
-		container.add(productsPanel, PRODUCTSTYPE);
+		container.add(productsPanel, PRODUCTS);
+		container.add(productsTypePanel, PRODUCTSTYPE);
+
 		
 		add(container, BorderLayout.CENTER);
 	}

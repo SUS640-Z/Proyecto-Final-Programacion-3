@@ -12,17 +12,20 @@ import models.User;
 import repository.ProductRepository;
 import repository.UserRepository;
 import tableModels.ProductTableModel;
+import models.ProductType;
+
+import repository.ProductTypeRepository;
+import tableModels.ProductTypeTableModel;
 import tableModels.UserTableModel;
 import config.Config;
 import views.DataView;
-
 import views.LoginWindow;
-
 
 public class DataController {
 	private DataView view;
 	private UserController userController;
 	private ProductController productController;
+	private ProductTypeController productTypeController;
 	
 	public DataController(DataView view) {
 		this.view = view;
@@ -40,13 +43,9 @@ public class DataController {
 			}
 		});
 
-		view.btnUsers.addActionListener(e -> {
-			showUsers();
-		});
-		
-		view.btnProducts.addActionListener(e -> {
-			showProduct();
-		});
+		view.btnUsers.addActionListener(e -> showUsers());
+		view.btnProducts.addActionListener(e -> showProduct());
+		view.btnProductsType.addActionListener(e -> showProductType());
 		
 		view.btnHome.addActionListener(e -> {
 			view.showView(DataView.HOME);
@@ -57,43 +56,47 @@ public class DataController {
 	}
 	
 	private void showUsers() {
-		UserRepository repository = new UserRepository();
-		try {
-			List<User> users = repository.getUsers(); 
-			UserTableModel model = new UserTableModel(users); 
-			
-			view.usersPanel.setTableModel(model); 
-			view.showView(DataView.USERS); 
-			
-		} catch (Exception ex) { 
-			JOptionPane.showMessageDialog(view, "Error al cargar los usuarios: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-		}
-		
-		if(userController == null) {
+		// 1. Aseguramos que el controlador hijo exista
+		if (userController == null) {
 			userController = new UserController(view.usersPanel);
 		}
-			
+		
+		// 2. Dejamos que el controlador se encargue de consultar al repositorio y llenar la tabla
 		userController.loadUsers();
+		
+		// 3. Cambiamos la vista y el estado del menú
+		view.showView(DataView.USERS); 
+		updateMenuState(DataView.USERS);
 	}
 	
+
 	private void showProduct() {
-		ProductRepository repository = new ProductRepository();
-		try {
-			List<Product> productsType = repository.getProducts(); 
-			ProductTableModel model = new ProductTableModel(productsType); 
-			
-			view.productsPanel.setTableModel(model); 
-			view.showView(DataView.PRODUCTSTYPE); 
-			
-		} catch (Exception ex) { 
-			JOptionPane.showMessageDialog(view, "Error al cargar los productos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-		}
-		
-		if(productController == null) {
+		// 1. Aseguramos que el controlador hijo exista
+		if (productController == null) {
 			productController = new ProductController(view.productsPanel);
 		}
+		
+		// 2. El sub-controlador lee la BD y actualiza el panel de productos
+		productController.loadProductsType();		
+		
+		// 3. CORRECCIÓN: Mostramos la constante correcta de productos (asumiendo que se llama PRODUCTS)
+		// Si en tu DataView la constante se llama diferente, ajusta este String.
+		view.showView(DataView.PRODUCTS); 
+		updateMenuState(DataView.PRODUCTS);
+	}
+
+	private void showProductType() {
+		// 1. Aseguramos que el controlador hijo exista
+		if (productTypeController == null) {
+			productTypeController = new ProductTypeController(view.productsTypePanel);
+		}
 			
-		productController.loadProductsType();
+		// 2. El sub-controlador lee la BD y actualiza el panel de tipos de productos
+		productTypeController.loadProductsType();
+
+		// 3. Mostramos la vista de tipos de productos
+		view.showView(DataView.PRODUCTSTYPE); 
+		updateMenuState(DataView.PRODUCTSTYPE);
 	}
 	
 	private void handleClose() {
@@ -107,6 +110,9 @@ public class DataController {
 	private void updateMenuState(String viewName) {
 		view.btnUsers.setEnabled(!viewName.equals(DataView.USERS));
 		view.btnHome.setEnabled(!viewName.equals(DataView.HOME));
+		// Tip extra: Es buena idea deshabilitar también los botones de productos cuando estés en ellos
+		if(view.btnProducts != null) view.btnProducts.setEnabled(!viewName.equals(DataView.PRODUCTS));
+		if(view.btnProductsType != null) view.btnProductsType.setEnabled(!viewName.equals(DataView.PRODUCTSTYPE));
 	}
 	
 	private void saveWindowPreferences() {
@@ -127,7 +133,7 @@ public class DataController {
 		
 		if(!xValue.isBlank() && !yValue.isBlank()) {
 			view.setWindowLocation(Integer.parseInt(xValue), Integer.parseInt(yValue));
-		}else {
+		} else {
 			view.setLocationRelativeTo(null);
 		}
 		
