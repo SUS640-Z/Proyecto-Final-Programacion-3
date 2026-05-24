@@ -6,19 +6,23 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
 import javax.swing.JOptionPane;
+
+import models.Product;
 import models.User;
+import repository.ProductRepository;
 import repository.UserRepository;
+import tableModels.ProductTableModel;
 import tableModels.UserTableModel;
 import config.Config;
 import views.DataView;
-import views.LoginView;
+
 import views.LoginWindow;
-import views.RegistroView;
-import views.UserFormDialog;
+
 
 public class DataController {
 	private DataView view;
 	private UserController userController;
+	private ProductController productController;
 	
 	public DataController(DataView view) {
 		this.view = view;
@@ -38,6 +42,10 @@ public class DataController {
 
 		view.btnUsers.addActionListener(e -> {
 			showUsers();
+		});
+		
+		view.btnProducts.addActionListener(e -> {
+			showProduct();
 		});
 		
 		view.btnHome.addActionListener(e -> {
@@ -66,6 +74,26 @@ public class DataController {
 		}
 			
 		userController.loadUsers();
+	}
+	
+	private void showProduct() {
+		ProductRepository repository = new ProductRepository();
+		try {
+			List<Product> productsType = repository.getProducts(); 
+			ProductTableModel model = new ProductTableModel(productsType); 
+			
+			view.productsPanel.setTableModel(model); 
+			view.showView(DataView.PRODUCTSTYPE); 
+			
+		} catch (Exception ex) { 
+			JOptionPane.showMessageDialog(view, "Error al cargar los productos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		}
+		
+		if(productController == null) {
+			productController = new ProductController(view.productsPanel);
+		}
+			
+		productController.loadProductsType();
 	}
 	
 	private void handleClose() {
