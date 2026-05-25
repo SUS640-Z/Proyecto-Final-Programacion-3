@@ -6,8 +6,12 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.List;
 import javax.swing.JOptionPane;
+
+import models.OrderDetails;
 import models.User;
+import repository.OrderDetailsRepository;
 import repository.UserRepository;
+import tableModels.OrderDetailsTableModel;
 import tableModels.UserTableModel;
 import config.Config;
 import views.DataView;
@@ -19,6 +23,7 @@ import views.UserFormDialog;
 public class DataController {
 	private DataView view;
 	private UserController userController;
+	private OrderDetailsController orderDetailsController;
 	
 	public DataController(DataView view) {
 		this.view = view;
@@ -38,6 +43,10 @@ public class DataController {
 
 		view.btnUsers.addActionListener(e -> {
 			showUsers();
+		});
+		
+		view.btnOrdersDetails.addActionListener(e -> {
+			showOrderDetails();
 		});
 		
 		view.btnHome.addActionListener(e -> {
@@ -66,6 +75,26 @@ public class DataController {
 		}
 			
 		userController.loadUsers();
+	}
+	
+	private void showOrderDetails() {
+		OrderDetailsRepository repository = new OrderDetailsRepository();
+		try {
+			List<OrderDetails> ordersDetails = repository.getOrdersDetails(); 
+			OrderDetailsTableModel model = new OrderDetailsTableModel(ordersDetails); 
+			
+			view.ordersDetailsPanel.setTableModel(model); 
+			view.showView(DataView.ORDERDETAILS); 
+			
+		} catch (Exception ex) { 
+			JOptionPane.showMessageDialog(view, "Error al cargar los usuarios: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+		}
+		
+		if(orderDetailsController == null) {
+			orderDetailsController = new OrderDetailsController(view.ordersDetailsPanel);
+		}
+			
+		orderDetailsController.loadOrdersDetails();
 	}
 	
 	private void handleClose() {
