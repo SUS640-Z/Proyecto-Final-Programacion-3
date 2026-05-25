@@ -7,23 +7,32 @@ import java.awt.event.WindowEvent;
 import java.util.List;
 import javax.swing.JOptionPane;
 
+
 import models.OrderDetails;
 import models.User;
 import repository.OrderDetailsRepository;
 import repository.UserRepository;
 import tableModels.OrderDetailsTableModel;
+import models.Product;
+import models.User;
+import repository.ProductRepository;
+import repository.UserRepository;
+import tableModels.ProductTableModel;
+import models.ProductType;
+import repository.ProductTypeRepository;
+import tableModels.ProductTypeTableModel;
 import tableModels.UserTableModel;
 import config.Config;
 import views.DataView;
-import views.LoginView;
 import views.LoginWindow;
-import views.RegistroView;
-import views.UserFormDialog;
 
 public class DataController {
 	private DataView view;
 	private UserController userController;
 	private OrderDetailsController orderDetailsController;
+	private ProductController productController;
+	private ProductTypeController productTypeController;
+
 	
 	public DataController(DataView view) {
 		this.view = view;
@@ -41,13 +50,10 @@ public class DataController {
 			}
 		});
 
-		view.btnUsers.addActionListener(e -> {
-			showUsers();
-		});
-		
-		view.btnOrdersDetails.addActionListener(e -> {
-			showOrderDetails();
-		});
+		view.btnUsers.addActionListener(e -> showUsers());
+		view.btnProducts.addActionListener(e -> showProduct());
+		view.btnProductsType.addActionListener(e -> showProductType());
+		view.btnOrdersDetails.addActionListener(e -> {showOrderDetails();});
 		
 		view.btnHome.addActionListener(e -> {
 			view.showView(DataView.HOME);
@@ -58,43 +64,52 @@ public class DataController {
 	}
 	
 	private void showUsers() {
-		UserRepository repository = new UserRepository();
-		try {
-			List<User> users = repository.getUsers(); 
-			UserTableModel model = new UserTableModel(users); 
-			
-			view.usersPanel.setTableModel(model); 
-			view.showView(DataView.USERS); 
-			
-		} catch (Exception ex) { 
-			JOptionPane.showMessageDialog(view, "Error al cargar los usuarios: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-		}
-		
-		if(userController == null) {
+		if (userController == null) {
 			userController = new UserController(view.usersPanel);
 		}
-			
+
 		userController.loadUsers();
+
+		view.showView(DataView.USERS); 
+		updateMenuState(DataView.USERS);
+	}
+	
+
+	private void showProduct() {
+		
+		if (productController == null) {
+			productController = new ProductController(view.productsPanel);
+		}
+		
+		
+		productController.loadProductsType();		
+		
+		view.showView(DataView.PRODUCTS); 
+		updateMenuState(DataView.PRODUCTS);
+	}
+
+	private void showProductType() {
+
+		if (productTypeController == null) {
+			productTypeController = new ProductTypeController(view.productsTypePanel);
+		}
+
+		productTypeController.loadProductsType();
+
+		view.showView(DataView.PRODUCTSTYPE); 
+		updateMenuState(DataView.PRODUCTSTYPE);
 	}
 	
 	private void showOrderDetails() {
-		OrderDetailsRepository repository = new OrderDetailsRepository();
-		try {
-			List<OrderDetails> ordersDetails = repository.getOrdersDetails(); 
-			OrderDetailsTableModel model = new OrderDetailsTableModel(ordersDetails); 
-			
-			view.ordersDetailsPanel.setTableModel(model); 
-			view.showView(DataView.ORDERDETAILS); 
-			
-		} catch (Exception ex) { 
-			JOptionPane.showMessageDialog(view, "Error al cargar los usuarios: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
-		}
-		
-		if(orderDetailsController == null) {
+
+		if (orderDetailsController == null) {
 			orderDetailsController = new OrderDetailsController(view.ordersDetailsPanel);
 		}
-			
+
 		orderDetailsController.loadOrdersDetails();
+
+		view.showView(DataView.ORDERDETAILS); 
+		updateMenuState(DataView.ORDERDETAILS);
 	}
 	
 	private void handleClose() {
@@ -108,6 +123,10 @@ public class DataController {
 	private void updateMenuState(String viewName) {
 		view.btnUsers.setEnabled(!viewName.equals(DataView.USERS));
 		view.btnHome.setEnabled(!viewName.equals(DataView.HOME));
+		if(view.btnProducts != null) view.btnProducts.setEnabled(!viewName.equals(DataView.PRODUCTS));
+		if(view.btnProductsType != null) view.btnProductsType.setEnabled(!viewName.equals(DataView.PRODUCTSTYPE));
+		if(view.btnOrdersDetails != null) view.btnOrdersDetails.setEnabled(!viewName.equals(DataView.ORDERDETAILS));
+
 	}
 	
 	private void saveWindowPreferences() {
@@ -128,7 +147,7 @@ public class DataController {
 		
 		if(!xValue.isBlank() && !yValue.isBlank()) {
 			view.setWindowLocation(Integer.parseInt(xValue), Integer.parseInt(yValue));
-		}else {
+		} else {
 			view.setLocationRelativeTo(null);
 		}
 		

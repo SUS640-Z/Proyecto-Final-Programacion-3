@@ -109,8 +109,7 @@ public class UserController {
 	        for (String rol : rolesDeBD) {
 	            comboRoles.addItem(rol);
 	        }
-	        
-	        // Si vas a editar un usuario existente, pre-seleccionamos su rol actual
+
 	        if (user != null && user.getRol() != null) {
 	            comboRoles.setSelectedItem(user.getRol());
 	        }

@@ -21,8 +21,12 @@ public class DataView extends JFrame {
 	public static final String HOME = "HOME";
 	public static final String USERS = "USERS";
 	public static final String ORDERDETAILS = "ORDERDETAILS";
+	public static final String PRODUCTS = "PRODUCTS";
+	public static final String PRODUCTSTYPE = "PRODUCTSTYPE";
 	
 	public JButton btnUsers;
+	public JButton btnProducts;	
+	public JButton btnProductsType;
 	public JButton btnOrdersDetails;
 	public JButton btnHome;
 	public JButton btnSalir; 
@@ -30,6 +34,9 @@ public class DataView extends JFrame {
 	
 	public UserView usersPanel;
 	public OrderDetailsView ordersDetailsPanel;
+	public ProductView productsPanel;
+	public ProductTypeView productsTypePanel;
+
 	private CardLayout cardLayout;
 	private JPanel container;
 	
@@ -58,6 +65,8 @@ public class DataView extends JFrame {
 		btnHome = crearBoton("Inicio");
 		btnUsers = crearBoton("Ver Usuarios");
 		btnOrdersDetails = crearBoton("Ver detalles de las ordenes");
+		btnProducts = crearBoton("Ver Productos");
+		btnProductsType = crearBoton("Ver Tipos de Productos");
 		btnSalir = crearBoton("Cerrar Sesión");
 		btnMode = crearBoton("Cambiar Modo");
 		
@@ -70,6 +79,8 @@ public class DataView extends JFrame {
 		navbar.add(btnHome);
 		navbar.add(btnUsers);
 		navbar.add(btnOrdersDetails);
+		navbar.add(btnProducts);
+		navbar.add(btnProductsType);
 		navbar.add(btnSalir);
 		navbar.add(btnMode);
 		
@@ -98,11 +109,19 @@ public class DataView extends JFrame {
 		homePanel.add(lblBienvenida, BorderLayout.CENTER);
 		
 		usersPanel = new UserView(); 
+
+		ordersDetailsPanel = new OrderDetailsView();
+		productsPanel = new ProductView();
+		productsTypePanel = new ProductTypeView();
 		ordersDetailsPanel = new OrderDetailsView();
 		
 		container.add(homePanel, HOME);
 		container.add(usersPanel, USERS);
+		container.add(productsPanel, PRODUCTS);
+		container.add(productsTypePanel, PRODUCTSTYPE);
 		container.add(ordersDetailsPanel,ORDERDETAILS);
+
+
 		
 		add(container, BorderLayout.CENTER);
 	}
