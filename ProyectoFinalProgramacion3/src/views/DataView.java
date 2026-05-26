@@ -14,19 +14,24 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
-
 import utils.ThemeManager;
 
 public class DataView extends JFrame {
 	public static final String HOME = "HOME";
 	public static final String USERS = "USERS";
+	public static final String ROLES = "ROLES";
+	public static final String ADDRESSES = "ADDRESSES";
 	
 	public JButton btnUsers;
+	public JButton btnRoles;
+	public JButton btnAddresses;
 	public JButton btnHome;
 	public JButton btnSalir; 
 	public JButton btnMode;
 	
 	public UserView usersPanel;
+	public RolView rolesPanel;
+	public AddressView addressPanel;
 	private CardLayout cardLayout;
 	private JPanel container;
 	
@@ -35,7 +40,7 @@ public class DataView extends JFrame {
 		setSize(1000, 600);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); 
         setLocationRelativeTo(null);
-        setResizable(false);
+        setResizable(true);
         
         try {
             Toolkit tk = Toolkit.getDefaultToolkit();
@@ -49,22 +54,22 @@ public class DataView extends JFrame {
 	}
 	
 	public void createNavbar() {
-		JPanel navbar = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 10));
+		JPanel navbar = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
 		navbar.setBackground(new Color(15, 19, 9));
 		
 		btnHome = crearBoton("Inicio");
-		btnUsers = crearBoton("Ver Usuarios");
+		btnUsers = crearBoton("Usuarios");
+		btnRoles = crearBoton("Roles");
+		btnAddresses = crearBoton("Direcciones");
 		btnSalir = crearBoton("Cerrar Sesión");
-		btnMode = crearBoton("Cambiar Modo");
+		btnMode = crearBoton("Modo");
 		
-		
-		btnMode.addActionListener(e -> {
-		    	ThemeManager.toggle();
-		});
-		
+		btnMode.addActionListener(e -> ThemeManager.toggle());
 		
 		navbar.add(btnHome);
 		navbar.add(btnUsers);
+		navbar.add(btnRoles);
+		navbar.add(btnAddresses);
 		navbar.add(btnSalir);
 		navbar.add(btnMode);
 		
@@ -93,31 +98,19 @@ public class DataView extends JFrame {
 		homePanel.add(lblBienvenida, BorderLayout.CENTER);
 		
 		usersPanel = new UserView(); 
+		rolesPanel = new RolView(); 
+		addressPanel = new AddressView(); 
 		
 		container.add(homePanel, HOME);
 		container.add(usersPanel, USERS);
+		container.add(rolesPanel, ROLES); 
+		container.add(addressPanel, ADDRESSES); 
 		
 		add(container, BorderLayout.CENTER);
 	}
 	
-	public void showView(String view) {
-		cardLayout.show(container, view);
-	}
-
-	public int confirmExit() {
-	    return JOptionPane.showConfirmDialog(
-	        this,
-	        "¿Seguro que deseas cerrar la sesión?",
-	        "Cerrar Sesión",
-	        JOptionPane.YES_NO_OPTION
-	    );
-	}
-	
-	public void setWindowSize(int width, int height) {
-		setSize(width, height);
-	}
-	
-	public void setWindowLocation(int x, int y) {
-		setLocation(x, y);
-	}
+	public void showView(String view) { cardLayout.show(container, view); }
+	public int confirmExit() { return JOptionPane.showConfirmDialog(this, "¿Seguro que deseas cerrar la sesión?", "Cerrar Sesión", JOptionPane.YES_NO_OPTION); }
+	public void setWindowSize(int width, int height) { setSize(width, height); }
+	public void setWindowLocation(int x, int y) { setLocation(x, y); }
 }

@@ -4,6 +4,7 @@ import java.awt.Desktop;
 import java.io.File;
 import java.util.List;
 
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
 import models.User;
@@ -98,27 +99,47 @@ public class UserController {
 	
 	private void openForm(User user) {
 		UserFormDialog dialog = new UserFormDialog(null, user);
-		dialog.setVisible(true);
 		
+		// ¡CÓDIGO DEL EQUIPO PARA LLENAR EL COMBOBOX!
+		try {
+			JComboBox<String> comboRoles = dialog.getCmbRol(); 
+			comboRoles.removeAllItems();
+			comboRoles.addItem("Seleccionar");
+			
+			List<String> rolesDeBD = repo.obtenerRoles();
+			for (String rol : rolesDeBD) {
+				comboRoles.addItem(rol);
+			}
+			
+			if (user != null && user.getRol() != null) {
+				comboRoles.setSelectedItem(user.getRol());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(view, "Error al cargar los roles en el formulario: " + e.getMessage());
+		}
+		
+		dialog.setVisible(true);
+
 		if(dialog.isSaved()) {
 			User savedUser = dialog.getUser();
 			try {
 				if(user == null) {
-
-					repo.save(savedUser); 
+					repo.save(savedUser);
 					model.addRow(savedUser); 
 				} else {
 					int row = view.getSelectedRow();
 					savedUser.setId(user.getId()); 
 
-					boolean updated = repo.update(row, savedUser);
+					boolean updated = repo.update(user.getId(), savedUser);
+					
 					if(updated) {
 						model.updateRow(row, savedUser); 
 					}
 				}
 			} catch(Exception e) {
 				e.printStackTrace();
-				JOptionPane.showMessageDialog(view, e.getMessage());
+				JOptionPane.showMessageDialog(view, "Error al guardar el usuario: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 			}
 		}
 	}

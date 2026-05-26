@@ -211,7 +211,6 @@ public class LoginView extends JPanel {
 	public JLabel getLblRegister() { return lblCrearCuenta; }
 	public JTextField getTxtUsuario() { return txtUsuario; }
 	public JPasswordField getTxtContrasena() { return txtContrasena; }
-	
 	public String getEmail() { return txtUsuario.getText().trim(); }
 	public String getPassword() { return new String(txtContrasena.getPassword()); }
 	

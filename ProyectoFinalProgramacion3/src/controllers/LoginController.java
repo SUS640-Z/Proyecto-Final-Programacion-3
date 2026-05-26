@@ -1,101 +1,91 @@
 package controllers;
+
+import java.awt.Window;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.io.IOException;
-import java.util.List;
-
 import javax.swing.JOptionPane;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
+import javax.swing.SwingUtilities;
 
-import exceptions.InvalidPasswordException;
-import exceptions.InvalidUserException;
 import models.User;
-
 import repository.LoginRepository;
-import repository.UserRepository;
-import utils.Session;
 import views.DataView;
 import views.LoginView;
 import views.RegistroView;
 
 public class LoginController {
-	private LoginRepository repository;
-	private UserRepository repo;
+	
 	private LoginView view;
+	private LoginRepository repo;
 
 	public LoginController(LoginView view) {
-		repository = new LoginRepository();
-		repo = new UserRepository();
 		this.view = view;
+		this.repo = new LoginRepository();
 		registerListeners();
 	}
 
 	private void registerListeners() {
-		view.getBtnLogin().addActionListener(e -> manejarLogin());
-
-		view.getLblRegister().addMouseListener(new MouseAdapter() {
+		// Evento para el botón de Ingresar
+		this.view.getBtnLogin().addActionListener(e -> manejarLogin());
+		
+		// Evento para el texto de "Crea una cuenta" (JLabel usa MouseListener)
+		this.view.getLblRegister().addMouseListener(new MouseAdapter() {
+			@Override
 			public void mouseClicked(MouseEvent e) {
-				RegistroView vistaRegistro = new RegistroView();
-				new controllers.RegistroController(vistaRegistro); 
-				view.getWindow().dispose();
+				RegistroView registroView = new RegistroView();
+				new RegistroController(registroView);
+				cerrarVentana();
 			}
 		});
-
-		DocumentListener limpiarErrores = new DocumentListener() {
-			public void removeUpdate(DocumentEvent e) { view.reiniciarErrorMessages(); }
-			public void insertUpdate(DocumentEvent e) { view.reiniciarErrorMessages(); }
-			public void changedUpdate(DocumentEvent e) { view.reiniciarErrorMessages(); }
-		};
-		
-		view.getTxtUsuario().getDocument().addDocumentListener(limpiarErrores);
-		view.getTxtContrasena().getDocument().addDocumentListener(limpiarErrores);
 	}
 
 	private void manejarLogin() {
+		// ¡Corregido! Usamos getTxtUsuario() como lo tienes en tu LoginView
+		String email = view.getTxtUsuario().getText().trim();
+		String password = new String(view.getTxtContrasena().getPassword()).trim();
+
+		// Limpiamos cualquier error previo usando tus propios métodos
 		view.reiniciarErrorMessages();
-		
-		if(!validateCredentials(new User(view.getEmail(), view.getPassword()))){
+
+		// Validación rápida de campos vacíos
+		if (email.isEmpty() || password.isEmpty()) {
+			view.ErrorGeneral("Por favor, ingresa tu correo y contraseña.");
 			return;
 		}
-		
-		User user = repository.login(view.getEmail(), view.getPassword());
+
+		try {
+			User user = repo.login(email, password);
+
+			if (user != null) {
+				// ¡LOGIN EXITOSO!
+				JOptionPane.showMessageDialog(view, "¡Bienvenido " + user.getName() + "!\nHas iniciado sesión como: " + user.getRol(), "Login Exitoso", JOptionPane.INFORMATION_MESSAGE);
 				
-		if(user == null) {
-			view.PasswordError("Credenciales incorrectas");
-			return;
-		}
-		
-		Session.login(user);
-		new DataController(new DataView());
-		System.out.println("Hola");
-		/*
-		if(Session.getRole().equals("ADMIN")) {
-			new HomeController(new MainWindow());			
+				// Abrimos el panel de Administrador directamente:
+				DataView dataView = new DataView();
+				new DataController(dataView);
+				
+				// Cerramos la ventana de Login
+				cerrarVentana();
+				
+			} else {
+				// Usamos tu texto rojo para cuando se equivocan
+				view.ErrorGeneral("Correo o contraseña incorrectos.");
+			}
 			
-		}else {
-			JOptionPane.showMessageDialog(view.getWindow(), "No tienes permisos");
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(view, "Error al conectar con la base de datos: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
-		*/
-		
-		view.getWindow().dispose();
 	}
 	
-	private boolean validateCredentials(User user) {
-		boolean valid = true;
-		
-
-		if(user.getEmail().isEmpty()) {
-			view.showEmailError("Usuario Requerido");
-			valid = false;
+	private void cerrarVentana() {
+		// Usamos el getter de tu LoginView para cerrar la ventana principal
+		if (view.getWindow() != null) {
+			view.getWindow().dispose();
+		} else {
+			Window window = SwingUtilities.getWindowAncestor(view);
+			if (window != null) {
+				window.dispose();
+			}
 		}
-		
-		if(user.getPassword().isEmpty()) {
-			view.PasswordError("Contraseña Requerida");
-			valid = false;
-		}
-		
-		
-		return valid;
 	}
 }

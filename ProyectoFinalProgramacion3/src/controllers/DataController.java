@@ -11,18 +11,16 @@ import repository.UserRepository;
 import tableModels.UserTableModel;
 import config.Config;
 import views.DataView;
-import views.LoginView;
 import views.LoginWindow;
-import views.RegistroView;
-import views.UserFormDialog;
 
 public class DataController {
 	private DataView view;
 	private UserController userController;
+	private RolController rolController;
+	private AddressController addressController;
 	
 	public DataController(DataView view) {
 		this.view = view;
-		
 		loadWindowPreferences();
 		registerListeners();
 	}
@@ -36,9 +34,9 @@ public class DataController {
 			}
 		});
 
-		view.btnUsers.addActionListener(e -> {
-			showUsers();
-		});
+		view.btnUsers.addActionListener(e -> showUsers());
+		view.btnRoles.addActionListener(e -> showRoles());
+		view.btnAddresses.addActionListener(e -> showAddresses());
 		
 		view.btnHome.addActionListener(e -> {
 			view.showView(DataView.HOME);
@@ -53,19 +51,32 @@ public class DataController {
 		try {
 			List<User> users = repository.getUsers(); 
 			UserTableModel model = new UserTableModel(users); 
-			
 			view.usersPanel.setTableModel(model); 
 			view.showView(DataView.USERS); 
-			
+			updateMenuState(DataView.USERS);
 		} catch (Exception ex) { 
 			JOptionPane.showMessageDialog(view, "Error al cargar los usuarios: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
-		
-		if(userController == null) {
-			userController = new UserController(view.usersPanel);
-		}
-			
+		if(userController == null) userController = new UserController(view.usersPanel);
 		userController.loadUsers();
+	}
+	
+	private void showRoles() {
+		view.showView(DataView.ROLES);
+		updateMenuState(DataView.ROLES);
+		if(rolController == null) {
+			rolController = new RolController(view.rolesPanel);
+		}
+		rolController.loadRoles();
+	}
+
+	private void showAddresses() {
+		view.showView(DataView.ADDRESSES);
+		updateMenuState(DataView.ADDRESSES);
+		if(addressController == null) {
+			addressController = new AddressController(view.addressPanel);
+		}
+		addressController.loadAddresses();
 	}
 	
 	private void handleClose() {
@@ -78,13 +89,14 @@ public class DataController {
 	
 	private void updateMenuState(String viewName) {
 		view.btnUsers.setEnabled(!viewName.equals(DataView.USERS));
+		view.btnRoles.setEnabled(!viewName.equals(DataView.ROLES));
+		view.btnAddresses.setEnabled(!viewName.equals(DataView.ADDRESSES));
 		view.btnHome.setEnabled(!viewName.equals(DataView.HOME));
 	}
 	
 	private void saveWindowPreferences() {
 		Dimension size = view.getSize();
 		Point point = view.getLocation();
-		
 		Config.set("registration.window.width", String.valueOf(size.width));
 		Config.set("registration.window.height", String.valueOf(size.height));
 		Config.set("registration.window.x", String.valueOf(point.x));
@@ -92,8 +104,8 @@ public class DataController {
 	}
 	
 	private void loadWindowPreferences() {
-		int width = Integer.parseInt(Config.get("registration.window.width", "500"));
-		int height = Integer.parseInt(Config.get("registration.window.height", "500"));
+		int width = Integer.parseInt(Config.get("registration.window.width", "1000"));
+		int height = Integer.parseInt(Config.get("registration.window.height", "600"));
 		String xValue = Config.get("registration.window.x", "");
 		String yValue = Config.get("registration.window.y", "");
 		
@@ -102,7 +114,6 @@ public class DataController {
 		}else {
 			view.setLocationRelativeTo(null);
 		}
-		
 		view.setWindowSize(width, height);
 	}
 }

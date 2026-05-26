@@ -1,7 +1,6 @@
 package services;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.List;
@@ -25,91 +24,99 @@ import com.itextpdf.layout.element.Table;
 import com.itextpdf.layout.properties.TextAlignment;
 import com.itextpdf.layout.properties.UnitValue;
 
+import models.Address;
+import models.Rol;
 import models.User;
 
 public class PDFExporter {
 
-	public void exportUsers(List<User> users, File file) throws IOException {
+    // Método privado para agregar el logo (para no repetir código)
+    private void agregarLogo(Document doc) throws IOException {
+        InputStream is = getClass().getResourceAsStream("/assets/img/SATURN_BUCKS_51.png");
+        if (is != null) {
+            ImageData data = ImageDataFactory.create(is.readAllBytes());
+            Image img = new Image(data).scaleAbsolute(50, 50);
+            float altoPagina = PageSize.LETTER.rotate().getHeight();
+            img.setFixedPosition(40, altoPagina - 90);
+            doc.add(img);
+        }
+    }
 
-		try (PdfDocument pdfDoc = new PdfDocument(new PdfWriter(file));
-				Document doc = new Document(pdfDoc, PageSize.LETTER.rotate());) {
-			InputStream is = getClass().getResourceAsStream("/assets/img/SATURN_BUCKS_51.png");
+    // --- EXPORTAR USUARIOS ---
+    public void exportUsers(List<User> users, File file) throws IOException {
+        try (PdfDocument pdfDoc = new PdfDocument(new PdfWriter(file));
+             Document doc = new Document(pdfDoc, PageSize.LETTER.rotate())) {
+            
+            agregarLogo(doc);
+            doc.add(new Paragraph("Reporte de Usuarios").setBold().setFontSize(14).setTextAlignment(TextAlignment.CENTER));
+            doc.add(new Paragraph("").setMarginTop(30));
 
-			if (is != null) {
-				ImageData data = ImageDataFactory.create(is.readAllBytes());
-				Image img = new Image(data).scaleAbsolute(50, 50);
+            float[] widths = {1, 4, 4, 6};
+            Table table = new Table(UnitValue.createPercentArray(widths)).useAllAvailableWidth();
+            
+            Cell header = new Cell(1, 4).add(new Paragraph("Usuarios del sistema")).setBackgroundColor(new DeviceRgb(114, 155, 121)).setFontColor(DeviceGray.WHITE).setTextAlignment(TextAlignment.CENTER);
+            table.addHeaderCell(header);
+            table.addHeaderCell("ID"); table.addHeaderCell("Nombre"); table.addHeaderCell("Apellido"); table.addHeaderCell("Correo");
 
-				float altoPagina = PageSize.LETTER.rotate().getHeight();
-				float margen = 40;
+            for (User u : users) {
+                table.addCell(String.valueOf(u.getId()));
+                table.addCell(u.getName());
+                table.addCell(u.getLastName());
+                table.addCell(u.getEmail());
+            }
+            doc.add(table);
+        }
+    }
 
-				img.setFixedPosition(margen, altoPagina - margen - 50);
+    // --- EXPORTAR ROLES ---
+    public void exportRoles(List<Rol> roles, File file) throws IOException {
+        try (PdfDocument pdfDoc = new PdfDocument(new PdfWriter(file));
+             Document doc = new Document(pdfDoc, PageSize.LETTER.rotate())) {
+            
+            agregarLogo(doc);
+            doc.add(new Paragraph("Reporte de Roles").setBold().setFontSize(14).setTextAlignment(TextAlignment.CENTER));
+            doc.add(new Paragraph("").setMarginTop(30));
 
-				doc.add(img);
-			}
+            float[] widths = {1, 4, 7};
+            Table table = new Table(UnitValue.createPercentArray(widths)).useAllAvailableWidth();
+            
+            Cell header = new Cell(1, 3).add(new Paragraph("Roles del sistema")).setBackgroundColor(new DeviceRgb(114, 155, 121)).setFontColor(DeviceGray.WHITE).setTextAlignment(TextAlignment.CENTER);
+            table.addHeaderCell(header);
+            table.addHeaderCell("ID"); table.addHeaderCell("Nombre"); table.addHeaderCell("Descripción");
 
-			doc.add(new Paragraph("Reporte de Usuarios").setBold().setFontSize(12)
-					.setTextAlignment(TextAlignment.CENTER));
+            for (Rol r : roles) {
+                table.addCell(String.valueOf(r.getId()));
+                table.addCell(r.getName());
+                table.addCell(r.getDescription());
+            }
+            doc.add(table);
+        }
+    }
 
-			doc.add(new Paragraph("").setMarginTop(30));
+    // --- EXPORTAR DIRECCIONES ---
+    public void exportAddresses(List<Address> addresses, File file) throws IOException {
+        try (PdfDocument pdfDoc = new PdfDocument(new PdfWriter(file));
+             Document doc = new Document(pdfDoc, PageSize.LETTER.rotate())) {
+            
+            agregarLogo(doc);
+            doc.add(new Paragraph("Reporte de Direcciones").setBold().setFontSize(14).setTextAlignment(TextAlignment.CENTER));
+            doc.add(new Paragraph("").setMarginTop(30));
 
-			float[] columnsWidth = { 1, 4, 4, 6};
+            float[] widths = {1, 3, 3, 3, 3};
+            Table table = new Table(UnitValue.createPercentArray(widths)).useAllAvailableWidth();
+            
+            Cell header = new Cell(1, 5).add(new Paragraph("Direcciones registradas")).setBackgroundColor(new DeviceRgb(114, 155, 121)).setFontColor(DeviceGray.WHITE).setTextAlignment(TextAlignment.CENTER);
+            table.addHeaderCell(header);
+            table.addHeaderCell("ID"); table.addHeaderCell("Usuario"); table.addHeaderCell("Colonia"); table.addHeaderCell("Calle"); table.addHeaderCell("Ref.");
 
-			Table table = new Table(UnitValue.createPercentArray(columnsWidth)).useAllAvailableWidth();
-
-			PdfFont font = PdfFontFactory.createFont(StandardFonts.HELVETICA);
-
-			Cell cell = new Cell(1, 5).add(new Paragraph("Usuarios del sistema")).setFont(font).setFontSize(14)
-					.setFontColor(DeviceGray.WHITE).setBackgroundColor(new DeviceRgb(114, 155, 121))
-					.setTextAlignment(TextAlignment.CENTER);
-
-			table.addHeaderCell(cell);
-
-			for (int i = 0; i < 2; i++) {
-
-				Cell[] headerFooter = new Cell[] {
-						new Cell().setTextAlignment(TextAlignment.CENTER).setBorderTop(new SolidBorder(1f))
-								.setBackgroundColor(new DeviceGray(0.80f)).add(new Paragraph("#")),
-
-						new Cell().setTextAlignment(TextAlignment.CENTER).setBorderTop(new SolidBorder(1f))
-								.setBackgroundColor(new DeviceGray(0.80f)).add(new Paragraph("Nombre")),
-
-						new Cell().setTextAlignment(TextAlignment.CENTER).setBorderTop(new SolidBorder(1f))
-								.setBackgroundColor(new DeviceGray(0.80f)).add(new Paragraph("Apellido")),
-
-						new Cell().setTextAlignment(TextAlignment.CENTER).setBorderTop(new SolidBorder(1f))
-								.setBackgroundColor(new DeviceGray(0.80f)).add(new Paragraph("Correo")),
-				};
-
-				for (Cell celda : headerFooter) {
-					if (i == 0) {
-						table.addHeaderCell(celda);
-					} else {
-						table.addFooterCell(celda);
-					}
-				}
-			}
-			
-			int indice = 1;
-			
-			for(User u : users) {
-				table.addCell(new Cell().setTextAlignment(TextAlignment.CENTER)
-                        .add(new Paragraph(String.valueOf(indice))));
-
-                table.addCell(new Cell().setTextAlignment(TextAlignment.LEFT)
-                        .add(new Paragraph(u.getName())));
-
-                table.addCell(new Cell().setTextAlignment(TextAlignment.LEFT)
-                        .add(new Paragraph(u.getLastName())));
-
-                table.addCell(new Cell().setTextAlignment(TextAlignment.CENTER)
-                        .add(new Paragraph(u.getEmail())));
-
-                indice++;
-			}
-
-			doc.add(table);
-		}
-
-	}
-
+            for (Address a : addresses) {
+                table.addCell(String.valueOf(a.getId()));
+                table.addCell(a.getUserName());
+                table.addCell(a.getNeighborhood());
+                table.addCell(a.getStreet());
+                table.addCell(a.getReference());
+            }
+            doc.add(table);
+        }
+    }
 }
