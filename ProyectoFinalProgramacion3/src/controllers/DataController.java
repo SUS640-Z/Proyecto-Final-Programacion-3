@@ -7,14 +7,19 @@ import java.awt.event.WindowEvent;
 import java.util.List;
 import javax.swing.JOptionPane;
 import models.User;
+import models.Order;
 import repository.UserRepository;
+import repository.OrderRepository;
 import tableModels.UserTableModel;
+import tableModels.OrderTableModel;
 import config.Config;
 import views.DataView;
 import views.LoginWindow;
 
 public class DataController {
 	private DataView view;
+	private User loggedUser; 
+	
 	private UserController userController;
 	private RolController rolController;
 	private AddressController addressController;
@@ -22,11 +27,15 @@ public class DataController {
 	private OrderDetailsController orderDetailsController;
 	private ProductController productController;
 	private ProductTypeController productTypeController;
+	private OrderController orderController;
 	
-	public DataController(DataView view) {
+	public DataController(DataView view, User loggedUser) {
 		this.view = view;
+		this.loggedUser = loggedUser;
+		
 		loadWindowPreferences();
 		registerListeners();
+		configurarPermisosPorRol(); 
 	}
 
 	public void registerListeners() {
@@ -41,7 +50,8 @@ public class DataController {
 		view.btnUsers.addActionListener(e -> showUsers());
 		view.btnRoles.addActionListener(e -> showRoles());
 		view.btnAddresses.addActionListener(e -> showAddresses());
-
+		view.btnOrders.addActionListener(e -> showOrders());
+		
 		view.btnProducts.addActionListener(e -> showProduct());
 		view.btnProductsType.addActionListener(e -> showProductType());
 		view.btnOrdersDetails.addActionListener(e -> showOrderDetails());
@@ -65,51 +75,74 @@ public class DataController {
 		} catch (Exception ex) { 
 			JOptionPane.showMessageDialog(view, "Error al cargar los usuarios: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
-		if(userController == null) {
-			userController = new UserController(view.usersPanel);
-		}
+		if(userController == null) userController = new UserController(view.usersPanel);
 		userController.loadUsers();
+	}
+	
+	private void showOrders() {
+		view.showView(DataView.ORDERS);
+		updateMenuState(DataView.ORDERS);
+		
+		if(orderController == null) {
+			orderController = new OrderController(view.ordersPanel);
+		}
+		orderController.loadOrders();
 	}
 	
 	private void showRoles() {
 		view.showView(DataView.ROLES);
 		updateMenuState(DataView.ROLES);
-		if(rolController == null) {
-			rolController = new RolController(view.rolesPanel);
-		}
+		if(rolController == null) rolController = new RolController(view.rolesPanel);
 		rolController.loadRoles();
 	}
 
 	private void showAddresses() {
 		view.showView(DataView.ADDRESSES);
 		updateMenuState(DataView.ADDRESSES);
-		if(addressController == null) {
-			addressController = new AddressController(view.addressPanel);
-		}
+		if(addressController == null) addressController = new AddressController(view.addressPanel);
 		addressController.loadAddresses();
 	}
 
 	private void showProduct() {
 		view.showView(DataView.PRODUCTS);
 		updateMenuState(DataView.PRODUCTS);
+		
 		if(productController == null) {
-			// productController = new ProductController(view.productsPanel);
+
+			productController = new ProductController(view.productsPanel);
 		}
+
+		productController.loadProductsType(); 
 	}
 
 	private void showProductType() {
 		view.showView(DataView.PRODUCTSTYPE);
 		updateMenuState(DataView.PRODUCTSTYPE);
+		
 		if(productTypeController == null) {
-			// typeController = new ProductTypeController(view.productsTypePanel);
+			productTypeController = new ProductTypeController(view.productsTypePanel);
 		}
+		productTypeController.loadProductsType(); 
 	}
 
 	private void showOrderDetails() {
 		view.showView(DataView.ORDERDETAILS);
 		updateMenuState(DataView.ORDERDETAILS);
+		
 		if(orderDetailsController == null) {
-			// orderDetailsController = new OrderDetailsController(view.ordersDetailsPanel);
+			orderDetailsController = new OrderDetailsController(view.ordersDetailsPanel);
+		}
+		orderDetailsController.loadOrdersDetails(); 
+	}
+	private void configurarPermisosPorRol() {
+		if (loggedUser == null || loggedUser.getRol() == null) return;
+		
+		String rol = loggedUser.getRol().trim().toLowerCase();
+		
+		if (rol.equals("empleado")) {
+			view.btnRoles.setVisible(false);        
+			view.btnProductsType.setVisible(false); 
+			view.btnOrdersDetails.setVisible(false);
 		}
 	}
 	
@@ -125,6 +158,7 @@ public class DataController {
 		view.btnUsers.setEnabled(!viewName.equals(DataView.USERS));
 		view.btnRoles.setEnabled(!viewName.equals(DataView.ROLES));
 		view.btnAddresses.setEnabled(!viewName.equals(DataView.ADDRESSES));
+		view.btnOrders.setEnabled(!viewName.equals(DataView.ORDERS));
 		view.btnProducts.setEnabled(!viewName.equals(DataView.PRODUCTS));
 		view.btnProductsType.setEnabled(!viewName.equals(DataView.PRODUCTSTYPE));
 		view.btnOrdersDetails.setEnabled(!viewName.equals(DataView.ORDERDETAILS));

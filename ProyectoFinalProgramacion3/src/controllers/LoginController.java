@@ -24,10 +24,9 @@ public class LoginController {
 	}
 
 	private void registerListeners() {
-		// Evento para el botón de Ingresar
+
 		this.view.getBtnLogin().addActionListener(e -> manejarLogin());
-		
-		// Evento para el texto de "Crea una cuenta" (JLabel usa MouseListener)
+
 		this.view.getLblRegister().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -39,14 +38,12 @@ public class LoginController {
 	}
 
 	private void manejarLogin() {
-		// ¡Corregido! Usamos getTxtUsuario() como lo tienes en tu LoginView
+
 		String email = view.getTxtUsuario().getText().trim();
 		String password = new String(view.getTxtContrasena().getPassword()).trim();
 
-		// Limpiamos cualquier error previo usando tus propios métodos
 		view.reiniciarErrorMessages();
 
-		// Validación rápida de campos vacíos
 		if (email.isEmpty() || password.isEmpty()) {
 			view.ErrorGeneral("Por favor, ingresa tu correo y contraseña.");
 			return;
@@ -56,18 +53,16 @@ public class LoginController {
 			User user = repo.login(email, password);
 
 			if (user != null) {
-				// ¡LOGIN EXITOSO!
+
 				JOptionPane.showMessageDialog(view, "¡Bienvenido " + user.getName() + "!\nHas iniciado sesión como: " + user.getRol(), "Login Exitoso", JOptionPane.INFORMATION_MESSAGE);
-				
-				// Abrimos el panel de Administrador directamente:
+
 				DataView dataView = new DataView();
-				new DataController(dataView);
-				
-				// Cerramos la ventana de Login
-				cerrarVentana();
+			    new DataController(dataView, user); 
+			    
+			    cerrarVentana();
 				
 			} else {
-				// Usamos tu texto rojo para cuando se equivocan
+
 				view.ErrorGeneral("Correo o contraseña incorrectos.");
 			}
 			
@@ -78,7 +73,7 @@ public class LoginController {
 	}
 	
 	private void cerrarVentana() {
-		// Usamos el getter de tu LoginView para cerrar la ventana principal
+
 		if (view.getWindow() != null) {
 			view.getWindow().dispose();
 		} else {

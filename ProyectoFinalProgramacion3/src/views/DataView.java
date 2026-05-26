@@ -21,6 +21,7 @@ public class DataView extends JFrame {
 	public static final String USERS = "USERS";
 	public static final String ROLES = "ROLES";
 	public static final String ADDRESSES = "ADDRESSES";
+	public static final String ORDERS = "ORDERS"; 
 	public static final String ORDERDETAILS = "ORDERDETAILS";
 	public static final String PRODUCTS = "PRODUCTS";
 	public static final String PRODUCTSTYPE = "PRODUCTSTYPE";
@@ -28,6 +29,7 @@ public class DataView extends JFrame {
 	public JButton btnUsers;
 	public JButton btnRoles;
 	public JButton btnAddresses;
+	public JButton btnOrders; 
 	public JButton btnProducts;	
 	public JButton btnProductsType;
 	public JButton btnOrdersDetails;
@@ -38,6 +40,7 @@ public class DataView extends JFrame {
 	public UserView usersPanel;
 	public RolView rolesPanel;
 	public AddressView addressPanel;
+	public OrderView ordersPanel; 
 
 	public OrderDetailsView ordersDetailsPanel;
 	public ProductView productsPanel;
@@ -48,7 +51,7 @@ public class DataView extends JFrame {
 	
 	public DataView() {
 		setTitle("Saturnbucks - Panel de Administración");
-		setSize(1200, 650); 
+		setSize(1250, 650);
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); 
         setLocationRelativeTo(null);
         setResizable(true);
@@ -65,16 +68,17 @@ public class DataView extends JFrame {
 	}
 	
 	public void createNavbar() {
-		JPanel navbar = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
+		JPanel navbar = new JPanel(new FlowLayout(FlowLayout.CENTER, 8, 10));
 		navbar.setBackground(new Color(15, 19, 9));
 		
 		btnHome = crearBoton("Inicio");
 		btnUsers = crearBoton("Usuarios");
 		btnRoles = crearBoton("Roles");
 		btnAddresses = crearBoton("Direcciones");
-		btnOrdersDetails = crearBoton("Órdenes");
+		btnOrders = crearBoton("Pedidos"); 
+		btnOrdersDetails = crearBoton("Detalles Órdenes");
 		btnProducts = crearBoton("Productos");
-		btnProductsType = crearBoton("Tipos de Prod.");
+		btnProductsType = crearBoton("Tipos Prod.");
 		btnSalir = crearBoton("Cerrar Sesión");
 		btnMode = crearBoton("Modo");
 		
@@ -84,6 +88,7 @@ public class DataView extends JFrame {
 		navbar.add(btnUsers);
 		navbar.add(btnRoles);
 		navbar.add(btnAddresses);
+		navbar.add(btnOrders); 
 		navbar.add(btnOrdersDetails);
 		navbar.add(btnProducts);
 		navbar.add(btnProductsType);
@@ -117,6 +122,7 @@ public class DataView extends JFrame {
 		usersPanel = new UserView(); 
 		rolesPanel = new RolView(); 
 		addressPanel = new AddressView(); 
+		ordersPanel = new OrderView(); 
 
 		ordersDetailsPanel = new OrderDetailsView();
 		productsPanel = new ProductView();
@@ -126,6 +132,7 @@ public class DataView extends JFrame {
 		container.add(usersPanel, USERS);
 		container.add(rolesPanel, ROLES); 
 		container.add(addressPanel, ADDRESSES); 
+		container.add(ordersPanel, ORDERS); 
 		container.add(productsPanel, PRODUCTS);
 		container.add(productsTypePanel, PRODUCTSTYPE);
 		container.add(ordersDetailsPanel, ORDERDETAILS);

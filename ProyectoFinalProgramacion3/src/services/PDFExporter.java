@@ -26,11 +26,11 @@ import com.itextpdf.layout.properties.UnitValue;
 
 import models.Address;
 import models.Rol;
+import models.Order;
 import models.User;
 
 public class PDFExporter {
 
-    // Método privado para agregar el logo (para no repetir código)
     private void agregarLogo(Document doc) throws IOException {
         InputStream is = getClass().getResourceAsStream("/assets/img/SATURN_BUCKS_51.png");
         if (is != null) {
@@ -42,7 +42,6 @@ public class PDFExporter {
         }
     }
 
-    // --- EXPORTAR USUARIOS ---
     public void exportUsers(List<User> users, File file) throws IOException {
         try (PdfDocument pdfDoc = new PdfDocument(new PdfWriter(file));
              Document doc = new Document(pdfDoc, PageSize.LETTER.rotate())) {
@@ -68,7 +67,6 @@ public class PDFExporter {
         }
     }
 
-    // --- EXPORTAR ROLES ---
     public void exportRoles(List<Rol> roles, File file) throws IOException {
         try (PdfDocument pdfDoc = new PdfDocument(new PdfWriter(file));
              Document doc = new Document(pdfDoc, PageSize.LETTER.rotate())) {
@@ -93,7 +91,6 @@ public class PDFExporter {
         }
     }
 
-    // --- EXPORTAR DIRECCIONES ---
     public void exportAddresses(List<Address> addresses, File file) throws IOException {
         try (PdfDocument pdfDoc = new PdfDocument(new PdfWriter(file));
              Document doc = new Document(pdfDoc, PageSize.LETTER.rotate())) {
@@ -115,6 +112,38 @@ public class PDFExporter {
                 table.addCell(a.getNeighborhood());
                 table.addCell(a.getStreet());
                 table.addCell(a.getReference());
+            }
+            doc.add(table);
+        }
+    }
+    public void exportOrders(List<Order> orders, File file) throws IOException {
+        try (PdfDocument pdfDoc = new PdfDocument(new PdfWriter(file));
+             Document doc = new Document(pdfDoc, PageSize.LETTER.rotate())) {
+            
+            agregarLogo(doc);
+            doc.add(new Paragraph("Reporte de Pedidos").setBold().setFontSize(14).setTextAlignment(TextAlignment.CENTER));
+            doc.add(new Paragraph("").setMarginTop(30));
+
+            float[] widths = {1, 4, 3, 2, 2};
+            Table table = new Table(UnitValue.createPercentArray(widths)).useAllAvailableWidth();
+            
+            Cell header = new Cell(1, 5).add(new Paragraph("Pedidos registrados"))
+                    .setBackgroundColor(new DeviceRgb(114, 155, 121))
+                    .setFontColor(DeviceGray.WHITE)
+                    .setTextAlignment(TextAlignment.CENTER);
+            table.addHeaderCell(header);
+            table.addHeaderCell("ID"); 
+            table.addHeaderCell("Cliente"); 
+            table.addHeaderCell("Fecha"); 
+            table.addHeaderCell("Total"); 
+            table.addHeaderCell("Estado");
+
+            for (Order o : orders) {
+                table.addCell(String.valueOf(o.getId()));
+                table.addCell(o.getUserName());
+                table.addCell(o.getOrderDate());
+                table.addCell(String.format("$%.2f", o.getTotal()));
+                table.addCell(o.getStatus());
             }
             doc.add(table);
         }
