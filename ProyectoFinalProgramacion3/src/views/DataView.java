@@ -21,10 +21,16 @@ public class DataView extends JFrame {
 	public static final String USERS = "USERS";
 	public static final String ROLES = "ROLES";
 	public static final String ADDRESSES = "ADDRESSES";
+	public static final String ORDERDETAILS = "ORDERDETAILS";
+	public static final String PRODUCTS = "PRODUCTS";
+	public static final String PRODUCTSTYPE = "PRODUCTSTYPE";
 	
 	public JButton btnUsers;
 	public JButton btnRoles;
 	public JButton btnAddresses;
+	public JButton btnProducts;	
+	public JButton btnProductsType;
+	public JButton btnOrdersDetails;
 	public JButton btnHome;
 	public JButton btnSalir; 
 	public JButton btnMode;
@@ -32,12 +38,17 @@ public class DataView extends JFrame {
 	public UserView usersPanel;
 	public RolView rolesPanel;
 	public AddressView addressPanel;
+
+	public OrderDetailsView ordersDetailsPanel;
+	public ProductView productsPanel;
+	public ProductTypeView productsTypePanel;
+	
 	private CardLayout cardLayout;
 	private JPanel container;
 	
 	public DataView() {
 		setTitle("Saturnbucks - Panel de Administración");
-		setSize(1000, 600);
+		setSize(1200, 650); 
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE); 
         setLocationRelativeTo(null);
         setResizable(true);
@@ -54,13 +65,16 @@ public class DataView extends JFrame {
 	}
 	
 	public void createNavbar() {
-		JPanel navbar = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 10));
+		JPanel navbar = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
 		navbar.setBackground(new Color(15, 19, 9));
 		
 		btnHome = crearBoton("Inicio");
 		btnUsers = crearBoton("Usuarios");
 		btnRoles = crearBoton("Roles");
 		btnAddresses = crearBoton("Direcciones");
+		btnOrdersDetails = crearBoton("Órdenes");
+		btnProducts = crearBoton("Productos");
+		btnProductsType = crearBoton("Tipos de Prod.");
 		btnSalir = crearBoton("Cerrar Sesión");
 		btnMode = crearBoton("Modo");
 		
@@ -70,6 +84,9 @@ public class DataView extends JFrame {
 		navbar.add(btnUsers);
 		navbar.add(btnRoles);
 		navbar.add(btnAddresses);
+		navbar.add(btnOrdersDetails);
+		navbar.add(btnProducts);
+		navbar.add(btnProductsType);
 		navbar.add(btnSalir);
 		navbar.add(btnMode);
 		
@@ -78,7 +95,7 @@ public class DataView extends JFrame {
 	
 	private JButton crearBoton(String texto) {
 		JButton btn = new JButton(texto);
-		btn.setFont(new Font("Arial", Font.BOLD, 14));
+		btn.setFont(new Font("Arial", Font.BOLD, 13));
 		btn.setBackground(new Color(48, 60, 26));
 		btn.setForeground(Color.WHITE);
 		btn.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -96,15 +113,22 @@ public class DataView extends JFrame {
 		lblBienvenida.setForeground(new Color(210, 180, 140));
 		lblBienvenida.setFont(new Font("Times New Roman", Font.BOLD, 26));
 		homePanel.add(lblBienvenida, BorderLayout.CENTER);
-		
+
 		usersPanel = new UserView(); 
 		rolesPanel = new RolView(); 
 		addressPanel = new AddressView(); 
+
+		ordersDetailsPanel = new OrderDetailsView();
+		productsPanel = new ProductView();
+		productsTypePanel = new ProductTypeView();
 		
 		container.add(homePanel, HOME);
 		container.add(usersPanel, USERS);
 		container.add(rolesPanel, ROLES); 
 		container.add(addressPanel, ADDRESSES); 
+		container.add(productsPanel, PRODUCTS);
+		container.add(productsTypePanel, PRODUCTSTYPE);
+		container.add(ordersDetailsPanel, ORDERDETAILS);
 		
 		add(container, BorderLayout.CENTER);
 	}

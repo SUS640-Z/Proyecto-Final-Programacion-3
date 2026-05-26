@@ -51,6 +51,22 @@ public class User {
 		this.fechaNacimiento = fechaNacimiento;
 	}
 
+	public User(int id, String email, String password) {
+		this.id = id;
+		this.name = ""; 
+		this.lastName = ""; 
+		this.email = email;
+		this.password = password;
+		this.imagePath = "";
+	}
+	
+	public User(String email, String password) {
+		this.name = ""; 
+		this.lastName = ""; 
+		this.email = email;
+		this.password = password;
+		this.imagePath = "";
+	}
 
 	public int getId() { return id; }
 	public void setId(int id) { this.id = id; }
@@ -79,7 +95,6 @@ public class User {
 	public String getFechaNacimiento() { return fechaNacimiento; }
 	public void setFechaNacimiento(String fechaNacimiento) { this.fechaNacimiento = fechaNacimiento; }
 
-	// LOS MÉTODOS QUE LE FALTABAN A ECLIPSE
 	public String getRol() { return rol; }
 	public void setRol(String rol) { this.rol = rol; }
 }

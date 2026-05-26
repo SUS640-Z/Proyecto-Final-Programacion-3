@@ -11,7 +11,7 @@ import utils.PasswordUtils;
 public class LoginRepository {
 
 	public User login(String email, String password) {
-		// Consulta usando las tablas y columnas nuevas (en inglés)
+
 		String sql = "SELECT Users.user_id, Users.email, Users.password_hash, Users.user_name, Rol.rol_name " +
 					 "FROM users Users " +
 					 "INNER JOIN rol Rol ON Users.rol_id = Rol.rol_id " +
@@ -25,8 +25,7 @@ public class LoginRepository {
 			try (ResultSet rs = stmt.executeQuery()) {
 				if(rs.next()) {
 					String hashedPassword = rs.getString("password_hash");
-					
-					// PROTECCIÓN CONTRA CONTRASEÑAS NULAS (Lo de ayer)
+
 					if(hashedPassword == null) {
 						System.out.println("Error: El usuario existe pero no tiene contraseña en la Base de Datos.");
 						return null; 
@@ -35,7 +34,7 @@ public class LoginRepository {
 					boolean correctPassword = PasswordUtils.checkPassword(password, hashedPassword);
 
 					if(!correctPassword) {
-						return null; // Contraseña incorrecta
+						return null; 
 					}
 
 					User user = new User();
@@ -46,6 +45,7 @@ public class LoginRepository {
 
 					return user;
 				}
+
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

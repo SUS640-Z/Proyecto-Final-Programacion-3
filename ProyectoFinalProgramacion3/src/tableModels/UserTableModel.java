@@ -10,7 +10,9 @@ public class UserTableModel extends AbstractTableModel {
 
 	private List<User> users;
 
+
 	private final String[] columns = {"Nombre", "Apellido", "Rol", "Correo", "Teléfono", "Género", "Fecha Nac.", "Imagen"};
+
 
 	public UserTableModel(List<User> users) {
 		this.users = users;
@@ -27,8 +29,10 @@ public class UserTableModel extends AbstractTableModel {
 
 	@Override
 	public Class<?> getColumnClass(int columnIndex) {
+
 		if (columnIndex == 7) return ImageIcon.class; 
 		return String.class;
+
 	}
 
 	@Override
@@ -37,6 +41,7 @@ public class UserTableModel extends AbstractTableModel {
 		switch(columnIndex) {
 			case 0: return user.getName();
 			case 1: return user.getLastName();
+
 			case 2: return user.getRol(); 
 			case 3: return user.getEmail();
 			case 4: return user.getTelefono();

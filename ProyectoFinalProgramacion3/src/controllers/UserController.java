@@ -99,6 +99,7 @@ public class UserController {
 	
 	private void openForm(User user) {
 		UserFormDialog dialog = new UserFormDialog(null, user);
+
 		
 		// ¡CÓDIGO DEL EQUIPO PARA LLENAR EL COMBOBOX!
 		try {
@@ -129,13 +130,14 @@ public class UserController {
 					model.addRow(savedUser); 
 				} else {
 					int row = view.getSelectedRow();
-					savedUser.setId(user.getId()); 
+		            savedUser.setId(user.getId()); 
 
 					boolean updated = repo.update(user.getId(), savedUser);
 					
 					if(updated) {
 						model.updateRow(row, savedUser); 
 					}
+
 				}
 			} catch(Exception e) {
 				e.printStackTrace();

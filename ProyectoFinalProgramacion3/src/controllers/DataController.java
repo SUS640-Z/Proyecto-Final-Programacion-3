@@ -18,6 +18,10 @@ public class DataController {
 	private UserController userController;
 	private RolController rolController;
 	private AddressController addressController;
+
+	private OrderDetailsController orderDetailsController;
+	private ProductController productController;
+	private ProductTypeController productTypeController;
 	
 	public DataController(DataView view) {
 		this.view = view;
@@ -37,6 +41,10 @@ public class DataController {
 		view.btnUsers.addActionListener(e -> showUsers());
 		view.btnRoles.addActionListener(e -> showRoles());
 		view.btnAddresses.addActionListener(e -> showAddresses());
+
+		view.btnProducts.addActionListener(e -> showProduct());
+		view.btnProductsType.addActionListener(e -> showProductType());
+		view.btnOrdersDetails.addActionListener(e -> showOrderDetails());
 		
 		view.btnHome.addActionListener(e -> {
 			view.showView(DataView.HOME);
@@ -57,7 +65,9 @@ public class DataController {
 		} catch (Exception ex) { 
 			JOptionPane.showMessageDialog(view, "Error al cargar los usuarios: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
-		if(userController == null) userController = new UserController(view.usersPanel);
+		if(userController == null) {
+			userController = new UserController(view.usersPanel);
+		}
 		userController.loadUsers();
 	}
 	
@@ -78,6 +88,30 @@ public class DataController {
 		}
 		addressController.loadAddresses();
 	}
+
+	private void showProduct() {
+		view.showView(DataView.PRODUCTS);
+		updateMenuState(DataView.PRODUCTS);
+		if(productController == null) {
+			// productController = new ProductController(view.productsPanel);
+		}
+	}
+
+	private void showProductType() {
+		view.showView(DataView.PRODUCTSTYPE);
+		updateMenuState(DataView.PRODUCTSTYPE);
+		if(productTypeController == null) {
+			// typeController = new ProductTypeController(view.productsTypePanel);
+		}
+	}
+
+	private void showOrderDetails() {
+		view.showView(DataView.ORDERDETAILS);
+		updateMenuState(DataView.ORDERDETAILS);
+		if(orderDetailsController == null) {
+			// orderDetailsController = new OrderDetailsController(view.ordersDetailsPanel);
+		}
+	}
 	
 	private void handleClose() {
 		int option = view.confirmExit();
@@ -91,6 +125,9 @@ public class DataController {
 		view.btnUsers.setEnabled(!viewName.equals(DataView.USERS));
 		view.btnRoles.setEnabled(!viewName.equals(DataView.ROLES));
 		view.btnAddresses.setEnabled(!viewName.equals(DataView.ADDRESSES));
+		view.btnProducts.setEnabled(!viewName.equals(DataView.PRODUCTS));
+		view.btnProductsType.setEnabled(!viewName.equals(DataView.PRODUCTSTYPE));
+		view.btnOrdersDetails.setEnabled(!viewName.equals(DataView.ORDERDETAILS));
 		view.btnHome.setEnabled(!viewName.equals(DataView.HOME));
 	}
 	
@@ -111,7 +148,7 @@ public class DataController {
 		
 		if(!xValue.isBlank() && !yValue.isBlank()) {
 			view.setWindowLocation(Integer.parseInt(xValue), Integer.parseInt(yValue));
-		}else {
+		} else {
 			view.setLocationRelativeTo(null);
 		}
 		view.setWindowSize(width, height);

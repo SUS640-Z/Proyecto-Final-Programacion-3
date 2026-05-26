@@ -41,6 +41,7 @@ import models.User;
 import config.Config;
 import utils.PasswordUtils;
 
+
 public class UserFormDialog extends JDialog {
 	
 	private JPanel contentPane;
@@ -53,6 +54,7 @@ public class UserFormDialog extends JDialog {
 	
 	private JLabel lblImagePreview, lblImageName, lblCancelar;
 	private JButton btnSelectImage, btnGuardar;
+
 	private String selectedImagePath;
 
 	private User user;
@@ -62,7 +64,7 @@ public class UserFormDialog extends JDialog {
 		super(parent, true);
 		this.user = user;
 		setTitle(user == null ? "Agregar Usuario" : "Editar Usuario");
-		setSize(450, 750); // Tamaño un poco más alto para que quepa todo sin apretarse
+		setSize(450, 750); 
 		setLocationRelativeTo(parent);
 		setResizable(true);
 
@@ -91,55 +93,46 @@ public class UserFormDialog extends JDialog {
 		c.fill = GridBagConstraints.HORIZONTAL; c.gridx = 0;
 		Font fontAviso = new Font("Arial", Font.ITALIC, 10);
 
-		// NOMBRES
 		c.insets = new Insets(10, 5, 0, 5); c.gridy = 0; panel.add(new LblSubtitulo("Nombre:"), c);
 		c.insets = new Insets(0, 5, 0, 5); c.gridy = 1; txtName = new JTextField(20); panel.add(txtName, c);
 		lblAvisoName = new LblAviso(""); lblAvisoName.setForeground(Color.RED); lblAvisoName.setFont(fontAviso);
 		c.gridy = 2; panel.add(lblAvisoName, c);
 
-		// APELLIDOS
 		c.insets = new Insets(2, 5, 0, 5); c.gridy = 3; panel.add(new LblSubtitulo("Apellidos:"), c);
 		c.insets = new Insets(0, 5, 0, 5); c.gridy = 4; txtLastName = new JTextField(20); panel.add(txtLastName, c);
 		lblAvisoLastName = new LblAviso(""); lblAvisoLastName.setForeground(Color.RED); lblAvisoLastName.setFont(fontAviso);
 		c.gridy = 5; panel.add(lblAvisoLastName, c);
 
-		// TELÉFONO
 		c.insets = new Insets(2, 5, 0, 5); c.gridy = 6; panel.add(new LblSubtitulo("Teléfono:"), c);
 		c.insets = new Insets(0, 5, 0, 5); c.gridy = 7; txtTelefono = new JTextField(20); panel.add(txtTelefono, c);
 		lblAvisoTelefono = new LblAviso(""); lblAvisoTelefono.setForeground(Color.RED); lblAvisoTelefono.setFont(fontAviso);
 		c.gridy = 8; panel.add(lblAvisoTelefono, c);
 
-		// FECHA DE NACIMIENTO
 		c.insets = new Insets(2, 5, 0, 5); c.gridy = 9; panel.add(new LblSubtitulo("Fecha de Nac. (AAAA-MM-DD):"), c);
 		c.insets = new Insets(0, 5, 0, 5); c.gridy = 10; txtFechaNac = new JTextField(20); panel.add(txtFechaNac, c);
 		lblAvisoFechaNac = new LblAviso(""); lblAvisoFechaNac.setForeground(Color.RED); lblAvisoFechaNac.setFont(fontAviso);
 		c.gridy = 11; panel.add(lblAvisoFechaNac, c);
 
-		// GÉNERO (Actualizado a la BD)
 		c.insets = new Insets(2, 5, 0, 5); c.gridy = 12; panel.add(new LblSubtitulo("Género:"), c);
 		c.insets = new Insets(0, 5, 5, 5); c.gridy = 13;
 		String[] opcionesGen = {"Seleccionar", "Feminine", "Masculine"};
 		cmbGenero = new JComboBox<>(opcionesGen); panel.add(cmbGenero, c);
 
-		// ROL (AQUÍ ESTÁ LA INTEGRACIÓN DEL EQUIPO)
 		c.insets = new Insets(2, 5, 0, 5); c.gridy = 14; panel.add(new LblSubtitulo("Rol:"), c);
 		c.insets = new Insets(0, 5, 5, 5); c.gridy = 15;
 		String[] roles = {"Seleccionar"};
 		cmbRol = new JComboBox<>(roles); panel.add(cmbRol, c);
 
-		// CORREO
 		c.insets = new Insets(2, 5, 0, 5); c.gridy = 16; panel.add(new LblSubtitulo("Correo electrónico:"), c);
 		c.insets = new Insets(0, 5, 0, 5); c.gridy = 17; txtCorreo = new JTextField(20); panel.add(txtCorreo, c);
 		lblAvisoCorreo = new LblAviso(""); lblAvisoCorreo.setForeground(Color.RED); lblAvisoCorreo.setFont(fontAviso);
 		c.gridy = 18; panel.add(lblAvisoCorreo, c);
 
-		// CONTRASEÑA
 		c.insets = new Insets(2, 5, 0, 5); c.gridy = 19; panel.add(new LblSubtitulo(user == null ? "Contraseña:" : "Nueva Contraseña (dejar en blanco para no cambiar):"), c);
 		c.insets = new Insets(0, 5, 0, 5); c.gridy = 20; txtContrasena = new JPasswordField(20); panel.add(txtContrasena, c);
 		lblAvisoContra = new LblAviso(""); lblAvisoContra.setForeground(Color.RED); lblAvisoContra.setFont(fontAviso);
 		c.gridy = 21; panel.add(lblAvisoContra, c);
 
-		// IMAGEN DE PERFIL
 		c.insets = new Insets(5, 5, 2, 5); c.gridy = 22; panel.add(new LblSubtitulo("Foto de perfil:"), c);
 		c.insets = new Insets(0, 5, 2, 5); c.gridy = 23;
 		lblImagePreview = new JLabel(); lblImagePreview.setPreferredSize(new Dimension(50, 50));
@@ -155,7 +148,6 @@ public class UserFormDialog extends JDialog {
 		lblAvisoImage = new LblAviso(""); lblAvisoImage.setForeground(Color.RED); lblAvisoImage.setFont(fontAviso);
 		c.gridy = 25; panel.add(lblAvisoImage, c);
 
-		// BOTONES FINALES
 		c.insets = new Insets(15, 5, 5, 5); c.gridy = 26;
 		btnGuardar = new JButton("Guardar");
 		btnGuardar.setFont(new Font("Times New Roman", Font.PLAIN, 18));
@@ -187,8 +179,7 @@ public class UserFormDialog extends JDialog {
 		txtCorreo.setText(user.getEmail());
 		
 		if(user.getGenero() != null) cmbGenero.setSelectedItem(user.getGenero());
-		
-		// Mostrar imagen si tiene
+
 		if(user.getImagePath() != null && !user.getImagePath().isEmpty()) {
 			selectedImagePath = user.getImagePath();
 			ImageIcon icon = new ImageIcon(selectedImagePath);
@@ -197,7 +188,9 @@ public class UserFormDialog extends JDialog {
 		}
 	}
 
+
 	private void chooseImage() {
+
 		String lastDirectory = Config.get("registration.image.last.directory", System.getProperty("user.home"));
 		JFileChooser chooser = new JFileChooser(lastDirectory);
 		chooser.setDialogTitle("Seleccionar imagen");
@@ -235,7 +228,7 @@ public class UserFormDialog extends JDialog {
 	}
 
 	private void verificarYGuardar() {
-		// Validaciones rápidas
+
 		boolean valido = true;
 		if(txtName.getText().trim().isEmpty()) { lblAvisoName.setText("Requerido"); valido = false; } else lblAvisoName.setText("");
 		if(txtLastName.getText().trim().isEmpty()) { lblAvisoLastName.setText("Requerido"); valido = false; } else lblAvisoLastName.setText("");
@@ -246,7 +239,6 @@ public class UserFormDialog extends JDialog {
 
 		if(!valido) return;
 
-		// Lógica del Equipo para recolectar el Rol y Género
 		String finalImagePath = saveImage();
 		String genero = cmbGenero.getSelectedIndex() == 0 ? null : (String) cmbGenero.getSelectedItem();
 		
@@ -275,9 +267,9 @@ public class UserFormDialog extends JDialog {
 		dispose();
 	}
 
-	// GETTERS OBLIGATORIOS PARA EL CONTROLADOR DEL EQUIPO
 	public boolean isSaved() { return saved; }
 	public User getUser() { return user; }
 	public JComboBox<String> getCmbRol() { return cmbRol; }
 	public void setCmbRol(JComboBox<String> cmbRol) { this.cmbRol = cmbRol; }
+
 }

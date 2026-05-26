@@ -13,12 +13,13 @@ import models.User;
 public class UserRepository {
 
 	public void save(User user) throws SQLException {
+
 		String sql = "INSERT INTO users (user_name, last_name, email, phone, password_hash, image_path, rol_id, gender, birth_date) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 		
 		int idRol = obtenerIdPorNombreRol(user.getRol());
 		
 		if (idRol == -1) {
-			idRol = 2; // Por defecto le asigna el rol de Cliente
+			idRol = 2; 
 		}
 		
 		try(Connection connection = DataBaseConnection.getConnection();
@@ -42,11 +43,14 @@ public class UserRepository {
 				}
 			}
 		}
+
 	}
 
 	public List<User> getUsers() throws SQLException {
 		List<User> users = new ArrayList<>();
+
 		String sql = "SELECT * FROM users AS u INNER JOIN rol AS r ON u.rol_id=r.rol_id";
+
 
 		try(Connection connection = DataBaseConnection.getConnection();
 			Statement st = connection.createStatement();
@@ -74,6 +78,7 @@ public class UserRepository {
 	public boolean delete(int id) {
 		deleteAddress(id);
 		String sql="DELETE FROM users WHERE user_id = ?";
+
 		try(Connection connection = DataBaseConnection.getConnection();
 			PreparedStatement pst = connection.prepareStatement(sql)) {
 			pst.setInt(1, id);
@@ -86,6 +91,7 @@ public class UserRepository {
 	
 	public boolean deleteAddress(int id) {
 		String sql="DELETE FROM client_address WHERE user_id = ?";
+
 		try(Connection connection = DataBaseConnection.getConnection();
 			PreparedStatement pst = connection.prepareStatement(sql)) {
 			pst.setInt(1, id);
@@ -118,6 +124,7 @@ public class UserRepository {
 			pst.setString(9, updatedUser.getFechaNacimiento()); 
 			pst.setInt(10, id);                              
 			
+
 			return pst.executeUpdate() > 0;
 		} catch(SQLException ex) {
 			ex.printStackTrace();
@@ -125,6 +132,7 @@ public class UserRepository {
 		return false;
 	}
 	
+
 	public List<String> obtenerRoles() throws SQLException {
 		List<String> roles = new ArrayList<>();
 		String sql = "SELECT rol_name FROM rol"; 
@@ -141,6 +149,7 @@ public class UserRepository {
 	}
 	
 	private int obtenerIdPorNombreRol(String nombreRol) {
+
 		if (nombreRol == null || nombreRol.equals("Seleccionar")) return -1;
 		String sql = "SELECT rol_id FROM rol WHERE rol_name = ?";
 		
@@ -157,5 +166,6 @@ public class UserRepository {
 			ex.printStackTrace();
 		}
 		return -1;
+
 	}
 }
