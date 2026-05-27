@@ -16,6 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 
+import components.AvatarCircular;
 import controllers.LoginController;
 import controllers.RegistroController;
 import utils.Session;
@@ -48,7 +49,7 @@ public class InicioView extends JFrame {
 		
 		
         if (Session.getCurrentUser() != null && "Cliente".equals(Session.getRol())) {
-            //generarMenuPersonalizado(); 
+        	generarMenuCliente();
         } else {
             generarMenuPersonalizado(); 
         }
@@ -208,5 +209,40 @@ public class InicioView extends JFrame {
         panelFooter.add(lblFooter);
 
         contentPane.add(panelFooter, BorderLayout.SOUTH);
+    }
+    
+    private void generarMenuCliente() {
+        JPanel panelMenu = new JPanel();
+        panelMenu.setBackground(new Color(15, 19, 9)); 
+        panelMenu.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(48, 60, 26))); 
+
+        // Opciones del menú
+        JLabel lblPerfil = crearItemMenu("Mi Perfil");
+        JLabel lblOrdenes = crearItemMenu("Mis Órdenes");
+        JLabel lblLogout = crearItemMenu("Cerrar Sesión");
+        
+        // OBTENEMOS EL NOMBRE DEL USUARIO DE LA SESIÓN
+        String nombreUsuario = Session.getCurrentUser().getName(); // Ajusta según tu modelo User
+        
+        // CREAMOS EL AVATAR (Tamaño de 32x32 píxeles para la Navbar)
+        // Nota: Si tienes la imagen en tu objeto usuario, le pasas el Image en lugar del String
+        AvatarCircular avatar = new AvatarCircular(nombreUsuario, 32);
+        
+        JLabel lblSeparador1 = new JLabel("  |  ");
+        lblSeparador1.setForeground(Color.DARK_GRAY);
+        JLabel lblSeparador2 = new JLabel("  |  ");
+        lblSeparador2.setForeground(Color.DARK_GRAY);
+        JLabel lblSeparador3 = new JLabel("  "); // Espacio sutil para el avatar
+
+        // Añadir componentes al panel de la barra
+        panelMenu.add(lblPerfil);
+        panelMenu.add(lblSeparador1);
+        panelMenu.add(lblOrdenes);
+        panelMenu.add(lblSeparador2);
+        panelMenu.add(lblLogout);
+        panelMenu.add(lblSeparador3);
+        panelMenu.add(avatar); // ¡Listo! Aquí aparece el círculo con su inicial
+
+        contentPane.add(panelMenu, BorderLayout.NORTH);
     }
 }

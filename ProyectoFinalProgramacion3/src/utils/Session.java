@@ -27,6 +27,14 @@ public class Session {
 		return currentUser.getRol();
 	}
 	
+	public static String getName( ) {
+		return currentUser.getName();
+	}
+	
+	public static String getImage( ) {
+		return currentUser.getImagePath();
+	}
+	
 	
 
 }
