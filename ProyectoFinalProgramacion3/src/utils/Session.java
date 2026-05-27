@@ -22,11 +22,11 @@ public class Session {
 		return currentUser != null;
 	}
 	
-	/*
-	public static String getRole( ) {
-		return currentUser.getRole();
+	
+	public static String getRol( ) {
+		return currentUser.getRol();
 	}
-	*/
+	
 	
 
 }

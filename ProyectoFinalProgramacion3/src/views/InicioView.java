@@ -18,6 +18,7 @@ import javax.swing.JPanel;
 
 import controllers.LoginController;
 import controllers.RegistroController;
+import utils.Session;
 
 public class InicioView extends JFrame {
 
@@ -30,7 +31,7 @@ public class InicioView extends JFrame {
     public InicioView() {
         setTitle("Saturnbucks - Inicio");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 500, 650);
+        setBounds(100, 100, 800, 450);
         setResizable(false);
         setLocationRelativeTo(null);
         
@@ -43,8 +44,16 @@ public class InicioView extends JFrame {
         contentPane = new JPanel(new BorderLayout());
         contentPane.setBackground(new Color(15, 19, 9));
         setContentPane(contentPane);
+		
+		
+		
+        if (Session.getCurrentUser() != null && "Cliente".equals(Session.getRol())) {
+            //generarMenuPersonalizado(); 
+        } else {
+            generarMenuPersonalizado(); 
+        }
 
-        generarMenuPersonalizado();
+        //generarMenuPersonalizado();
         generarContenidoPagina();
         generarFooter(); 
         
@@ -58,7 +67,8 @@ public class InicioView extends JFrame {
 
         JLabel lblLogin = crearItemMenu("Iniciar Sesión");
         JLabel lblRegistro = crearItemMenu("Crear Cuenta");
-        JLabel lblDireccion = crearItemMenu("Ordena Aquí");
+        JLabel lblIcono = new JLabel("hOLA");
+        //JLabel lblDireccion = crearItemMenu("Ordena Aquí");
         
         JLabel lblSeparador1 = new JLabel("  |  ");
         lblSeparador1.setForeground(Color.DARK_GRAY);
@@ -79,26 +89,28 @@ public class InicioView extends JFrame {
                 dispose(); 
             }
         });
-
+        
+        /*
         lblDireccion.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) { 
                 new Dirreccion().setVisible(true); 
                 dispose(); 
             }
-        });
-
+        });*/
+        
         panelMenu.add(lblLogin);
         panelMenu.add(lblSeparador1);
         panelMenu.add(lblRegistro);
         panelMenu.add(lblSeparador2);
-        panelMenu.add(lblDireccion);
+        panelMenu.add(lblIcono);
+        //panelMenu.add(lblDireccion);
 
         contentPane.add(panelMenu, BorderLayout.NORTH);
     }
 
     private JLabel crearItemMenu(String texto) {
         JLabel label = new JLabel(texto);
-        label.setFont(new Font("Arial", Font.BOLD, 14));
+        label.setFont(new Font("Arial", Font.BOLD, 18));
         label.setForeground(new Color(210, 180, 140)); 
         label.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
@@ -157,6 +169,7 @@ public class InicioView extends JFrame {
         panelCentral.add(txtHistoria, c);
 
         c.gridy = 4;
+        /*
         c.insets = new Insets(10, 20, 10, 20);
         JLabel lblMenuEstelar = new JLabel("★ Nuestro Menú Estelar ★");
         lblMenuEstelar.setFont(new Font("Times New Roman", Font.BOLD, 22));
@@ -177,6 +190,7 @@ public class InicioView extends JFrame {
         txtMenu.setFont(new Font("Arial", Font.PLAIN, 15));
         txtMenu.setHorizontalAlignment(JLabel.CENTER);
         panelCentral.add(txtMenu, c);
+        */
 
         contentPane.add(panelCentral, BorderLayout.CENTER);
     }
