@@ -20,16 +20,25 @@ import components.AvatarCircular;
 import controllers.LoginController;
 import controllers.RegistroController;
 import utils.Session;
+import models.User;
 
 public class InicioView extends JFrame {
 
     private JPanel contentPane;
+    private User loggedUser; 
+
 
     public static void main(String[] args) {
-        new InicioView();
+        new InicioView(null);
     }
 
     public InicioView() {
+        this(null);
+    }
+
+    public InicioView(User loggedUser) {
+        this.loggedUser = loggedUser;
+        
         setTitle("Saturnbucks - Inicio");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 800, 450);
@@ -94,7 +103,7 @@ public class InicioView extends JFrame {
         /*
         lblDireccion.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) { 
-                new Dirreccion().setVisible(true); 
+            	new Dirreccion(loggedUser).setVisible(true);
                 dispose(); 
             }
         });*/
@@ -168,7 +177,6 @@ public class InicioView extends JFrame {
         txtHistoria.setFont(new Font("Arial", Font.PLAIN, 15));
         txtHistoria.setHorizontalAlignment(JLabel.CENTER);
         panelCentral.add(txtHistoria, c);
-
         c.gridy = 4;
         /*
         c.insets = new Insets(10, 20, 10, 20);

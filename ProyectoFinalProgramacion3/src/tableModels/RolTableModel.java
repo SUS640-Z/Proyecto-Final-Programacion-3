@@ -6,7 +6,7 @@ import models.Rol;
 
 public class RolTableModel extends AbstractTableModel {
 	private List<Rol> roles;
-	private final String[] columns = {"ID", "Nombre del Rol", "Descripción"};
+	private final String[] columns = {"ID","Nombre del Rol", "Descripción"};
 
 	public RolTableModel(List<Rol> roles) {
 		this.roles = roles;

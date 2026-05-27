@@ -6,7 +6,7 @@ import models.Address;
 
 public class AddressTableModel extends AbstractTableModel {
 	private List<Address> addresses;
-	private final String[] columns = {"ID", "Cliente (Dueño)", "Colonia", "Calle", "Referencia"};
+	private final String[] columns = {"ID","Cliente", "Colonia", "Calle", "Referencia"};
 
 	public AddressTableModel(List<Address> addresses) {
 		this.addresses = addresses;
