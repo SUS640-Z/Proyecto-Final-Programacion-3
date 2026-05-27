@@ -1,5 +1,6 @@
 package views;
-import java.awt.BorderLayout; 
+
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Font;
@@ -7,28 +8,12 @@ import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Insets;
 import java.awt.Image;
-import javax.swing.border.Border;
-import javax.swing.BorderFactory;
-import javax.swing.border.TitledBorder;
-
-import components.BordePanel;
-import components.BtnDirecion;
-import components.LblAlertForm;
-import components.LblAviso;
-import components.LblSubtituloDirreccion;
-import javax.swing.border.LineBorder;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-
-
-import javax.swing.DefaultComboBoxModel;
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -36,361 +21,179 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
+import javax.swing.border.TitledBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
+
+import components.LblAviso;
+import components.LblSubtitulo;
+import models.Address;
+import models.User;
+import repository.AddressRepository;
 
 public class Dirreccion extends JFrame {
 
-	private BordePanel contentPane;
-    private JTextField txtNombre;
-    private JTextField txtCalle;
-    private JTextField txtCodigoPostal;
-    private JTextField txtNumeroTelefono;
-    BtnDirecion btnConfirmar; 
-    GridBagConstraints c;
-    LblAlertForm lblObs1;
-    LblAlertForm lblObs2;
-    LblAlertForm lblObs3;
-    LblAlertForm lblObs4;
-    LblAlertForm lblObs5;
-    LblAlertForm lblObs6;
-    JComboBox cboxPaises;
-    JTextArea txtDetalles;
-    BtnDirecion btnConfirmar2;
-    JPanel panelFormulario;
+	private JPanel contentPane;
+	private JTextField txtColonia, txtCalle, txtReferencia;
+	private JTextArea txtInstrucciones;
+	
+	private LblAviso lblAvisoColonia, lblAvisoCalle, lblAvisoReferencia, lblAvisoInstrucciones;
+	private JButton btnGuardar;
+	private JLabel lblCancelar;
 
-    public Dirreccion() {
-    	setTitle("Saturnbucks.direccion");
-    		//setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-    	setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 450, 650); //Juan pablo tamaño
-        //setBounds(100, 100, 450, 720);//Ivan tamaño 
-        setResizable(false);
-        setLocationRelativeTo(null);
-        Toolkit tk = Toolkit.getDefaultToolkit();
-        Image icono = tk.getImage("src/img/SATURN_BUCKS_51.png");
-        setIconImage(icono);
-        contentPane = new BordePanel("DATOS DE ENVIO",Color.black);
-        contentPane.setBackground(new Color(210, 180, 140));
+	private User loggedUser; 
 
-        Border emptyBorder = BorderFactory.createEmptyBorder(10, 10, 10, 10);
-        Border panelTitledBorder = BorderFactory.createTitledBorder(
-                BorderFactory.createLineBorder(Color.BLACK, 2),
-                "DATOS DE ENVIO",
-                TitledBorder.CENTER,
-                TitledBorder.TOP,
-                new Font("Arial", Font.BOLD, 14),
-                Color.BLACK);
-
-        contentPane.setBorder(BorderFactory.createCompoundBorder(emptyBorder, panelTitledBorder));
-        setContentPane(contentPane);
-
-        GridBagLayout gbl_contentPane = new GridBagLayout();
-        contentPane.setLayout(gbl_contentPane);
-
-        panelFormulario = new JPanel();
-        panelFormulario.setOpaque(false);
-        GridBagConstraints gbc_panel = new GridBagConstraints();
-        gbc_panel.fill = GridBagConstraints.BOTH;
-        gbc_panel.gridx = 0;
-        gbc_panel.gridy = 0;
-        contentPane.add(panelFormulario, gbc_panel);
-
-        GridBagLayout gbl_form = new GridBagLayout();
-        panelFormulario.setLayout(gbl_form);
-
-        c = new GridBagConstraints();
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.gridx = 0;
-
-        LblSubtituloDirreccion lblTitulo = new LblSubtituloDirreccion("Ingresa tu direccion");
-        c.gridy = 0;
-        c.insets = new Insets(10, 5, 20, 5);
-        panelFormulario.add(lblTitulo, c);
-
-        c.insets = new Insets(2, 5, 0, 5); 
-        c.gridy = 1;
-        panelFormulario.add(new JLabel("País/Región:"), c);
-        
-        cboxPaises = new JComboBox();
-        cboxPaises.setModel(new DefaultComboBoxModel<>(new String[] {
-        	"Seleccionar","Alemania", "Argentina", "Australia", "Brasil", "Canadá", "Chile", "China", 
-            "Colombia", "España", "Estados Unidos", "Francia", "Japón", "México", "Perú"
-        }));
-        JPanel pnlPaises = new JPanel(new BorderLayout());
-        pnlPaises.setOpaque(false);
-        pnlPaises.add(cboxPaises, BorderLayout.CENTER);
-        lblObs1 = new LblAlertForm(" ");
-        pnlPaises.add(lblObs1, BorderLayout.SOUTH);
-        
-        c.insets = new Insets(0, 5, 3, 5); 
-        c.gridy = 2;
-        panelFormulario.add(pnlPaises, c);
-
-        c.insets = new Insets(2, 5, 0, 5);
-        c.gridy = 3;
-        panelFormulario.add(new JLabel("Nombre completo:"), c);
-        
-        txtNombre = new JTextField();
-        txtNombre.putClientProperty("JTextField.placeholderText", "Ingresa tus nombres y apellidos");
-
-        txtNombre.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                char caracter = e.getKeyChar();
-
-                if (!Character.isLetter(caracter) && !Character.isWhitespace(caracter)) {
-                    e.consume();
-                }
-            }
-        });
-
-
-        JPanel pnlNombre = new JPanel(new BorderLayout());
-        pnlNombre.setOpaque(false);
-        pnlNombre.add(txtNombre, BorderLayout.CENTER);
-        lblObs2 = new LblAlertForm(" ");
-        pnlNombre.add(lblObs2, BorderLayout.SOUTH);
-        
-        c.insets = new Insets(0, 5, 3, 5); 
-        c.gridy = 4;
-        panelFormulario.add(pnlNombre, c);
-
-        c.insets = new Insets(2, 5, 0, 5);
-        c.gridy = 5;
-        panelFormulario.add(new JLabel("Direccion (col, calle, num): "), c);
-        
-        txtCalle = new JTextField();
-        txtCalle.putClientProperty("JTextField.placeholderText", "Ingresa tu colonia y calle");
-        JPanel pnlCalle = new JPanel(new BorderLayout());
-        pnlCalle.setOpaque(false);
-        pnlCalle.add(txtCalle, BorderLayout.CENTER);
-        lblObs3 = new LblAlertForm(" ");
-        pnlCalle.add(lblObs3, BorderLayout.SOUTH);
-        
-        c.insets = new Insets(0, 5, 3, 5); 
-        c.gridy = 6;
-        panelFormulario.add(pnlCalle, c);
-
-        c.insets = new Insets(2, 5, 0, 5);
-        c.gridy = 7;
-        panelFormulario.add(new JLabel("Codigo Postal:"), c);
-        
-        txtCodigoPostal = new JTextField();
-        txtCodigoPostal.putClientProperty("JTextField.placeholderText", "Ingresa tu C.P");
-        
-        txtCodigoPostal.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                char caracter = e.getKeyChar();
-
-                if (!Character.isDigit(caracter) && !Character.isWhitespace(caracter)) {
-                    e.consume();
-                }
-            }
-        });
-
-        JPanel pnlCP = new JPanel(new BorderLayout());
-        pnlCP.setOpaque(false);
-        pnlCP.add(txtCodigoPostal, BorderLayout.CENTER);
-        lblObs4 = new LblAlertForm(" ");
-        pnlCP.add(lblObs4, BorderLayout.SOUTH);
-        
-        c.insets = new Insets(0, 5, 0, 5); 
-        c.gridy = 8;
-        panelFormulario.add(pnlCP, c);
-
-        c.fill = GridBagConstraints.NONE;
-        c.anchor = GridBagConstraints.CENTER;
-        c.gridy = 9;
-        c.insets = new Insets(5, 5, 20, 5);
-
-        c.fill = GridBagConstraints.HORIZONTAL;
-        c.insets = new Insets(2, 5, 0, 5);
-        c.gridy = 10;
-        panelFormulario.add(new JLabel("Numero de telefono:"), c);
-        
-        txtNumeroTelefono = new JTextField();
-        txtNumeroTelefono.putClientProperty("JTextField.placeholderText", "Ingresa tu numero de telefono");
-        txtNumeroTelefono.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyTyped(KeyEvent e) {
-                char caracter = e.getKeyChar();
-
-                if (!Character.isDigit(caracter) && !Character.isWhitespace(caracter)) {
-                    e.consume();
-                }
-            }
-        });
-        JPanel pnlTel = new JPanel(new BorderLayout());
-        pnlTel.setOpaque(false);
-        pnlTel.add(txtNumeroTelefono, BorderLayout.CENTER);
-        lblObs5 = new LblAlertForm(" ");
-        pnlTel.add(lblObs5, BorderLayout.SOUTH);
-        
-        c.insets = new Insets(0, 5, 3, 5); 
-        c.gridy = 11;
-        panelFormulario.add(pnlTel, c);
-
-        c.insets = new Insets(2, 5, 0, 5);
-        c.gridy = 12;
-        panelFormulario.add(new JLabel("Instrucciones de entrega:"), c);
-        
-        txtDetalles = new JTextArea(4, 20);
-        JScrollPane scroll = new JScrollPane(txtDetalles);
-        JPanel pnlDetalles = new JPanel(new BorderLayout());
-        pnlDetalles.setOpaque(false);
-        pnlDetalles.add(scroll, BorderLayout.CENTER);
-        lblObs6 = new LblAlertForm(" "); 
-        pnlDetalles.add(lblObs6, BorderLayout.SOUTH);
-        
-        c.insets = new Insets(0, 5, 0, 5); 
-        c.gridy = 13;
-        panelFormulario.add(pnlDetalles, c);
-
-        JCheckBox chckbx = new JCheckBox("Usar como predeterminada");
-        chckbx.setOpaque(false);
-        c.insets = new Insets(5, 5, 10, 5);
-        c.gridy = 14;
-        panelFormulario.add(chckbx, c);
-        	
-        generarBotones();
-        
-
-        setVisible(true);
-    }
-    
-    private void generarBotones() {
-    	btnConfirmar = new BtnDirecion("Confirmar Direccion", 20, 3);
-    	btnConfirmar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        c.gridy = 15;
-        c.insets = new Insets(10, 5, 10, 5);
-        panelFormulario.add(btnConfirmar, c);
+	public Dirreccion(User loggedUser) {
+		this.loggedUser = loggedUser;
 		
-        btnConfirmar.addActionListener( e -> validarForm());
-        
-        JLabel lblRegresar = new JLabel("<html><u>Regresar</u></html>");
-        lblRegresar.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-        lblRegresar.setForeground(Color.BLACK);
-        lblRegresar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        lblRegresar.setAlignmentX(JLabel.CENTER);
-        
-        c.gridy = 15;
-        c.insets = new Insets(5, 90, 5, 5);
-        contentPane.add(lblRegresar, c);
-        lblRegresar.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-	            	int option = JOptionPane.showConfirmDialog(null, "¿Seguro que deseas regresar? Se perderán todos los datos");
-	    			
-	    			if(option == JOptionPane.YES_OPTION) {
-	    				new InicioView();
-	    				dispose();
-	    			} 
-            }
-        });
+		setTitle("Saturnbucks - Agregar Dirección");
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setSize(450, 650); 
+		setLocationRelativeTo(null);
+		setResizable(true);
 
+		try {
+            Toolkit tk = Toolkit.getDefaultToolkit();
+            Image icono = tk.getImage("src/assets/img/SATURN_BUCKS_51.png");
+            setIconImage(icono);
+        } catch (Exception e) {}
 
+		contentPane = new JPanel(new BorderLayout());
+		contentPane.setBackground(new Color(15, 19, 9));
+
+		Border emptyBorder = BorderFactory.createEmptyBorder(5, 5, 5, 5);
+		Border panelTitledBorder = BorderFactory.createTitledBorder(
+				BorderFactory.createLineBorder(Color.WHITE, 2),
+				"NUEVA DIRECCIÓN DE ENVÍO",
+				TitledBorder.CENTER, TitledBorder.TOP,
+				new Font("Arial", Font.BOLD, 14), Color.WHITE);
+		contentPane.setBorder(BorderFactory.createCompoundBorder(emptyBorder, panelTitledBorder));
+		setContentPane(contentPane);
+
+		generarComponentes();
+		aplicarValidacionesEnTiempoReal();
 	}
-    
-	private void validarForm() {
-		resetearAvisos();
+
+	private void generarComponentes() {
+		JPanel panel = new JPanel(new GridBagLayout());
+		panel.setOpaque(false);
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL; c.gridx = 0;
+		Font fontAviso = new Font("Arial", Font.ITALIC, 10);
+
+		c.insets = new Insets(15, 5, 0, 5); c.gridy = 0; panel.add(new LblSubtitulo("Colonia:"), c);
+		c.insets = new Insets(0, 5, 0, 5); c.gridy = 1; txtColonia = new JTextField(20); panel.add(txtColonia, c);
+		lblAvisoColonia = new LblAviso(" "); lblAvisoColonia.setForeground(Color.RED); lblAvisoColonia.setFont(fontAviso);
+		c.gridy = 2; panel.add(lblAvisoColonia, c);
+
+		c.insets = new Insets(5, 5, 0, 5); c.gridy = 3; panel.add(new LblSubtitulo("Calle y Número:"), c);
+		c.insets = new Insets(0, 5, 0, 5); c.gridy = 4; txtCalle = new JTextField(20); panel.add(txtCalle, c);
+		lblAvisoCalle = new LblAviso(" "); lblAvisoCalle.setForeground(Color.RED); lblAvisoCalle.setFont(fontAviso);
+		c.gridy = 5; panel.add(lblAvisoCalle, c);
+
+		c.insets = new Insets(5, 5, 0, 5); c.gridy = 6; panel.add(new LblSubtitulo("Referencia (Ej. Portón negro):"), c);
+		c.insets = new Insets(0, 5, 0, 5); c.gridy = 7; txtReferencia = new JTextField(20); panel.add(txtReferencia, c);
+		lblAvisoReferencia = new LblAviso(" "); lblAvisoReferencia.setForeground(Color.RED); lblAvisoReferencia.setFont(fontAviso);
+		c.gridy = 8; panel.add(lblAvisoReferencia, c);
+
+		c.insets = new Insets(5, 5, 0, 5); c.gridy = 9; panel.add(new LblSubtitulo("Instrucciones de entrega:"), c);
+		c.insets = new Insets(0, 5, 0, 5); c.gridy = 10; 
+		txtInstrucciones = new JTextArea(3, 20);
+		txtInstrucciones.setLineWrap(true);
+		txtInstrucciones.setWrapStyleWord(true);
+		JScrollPane scrollDesc = new JScrollPane(txtInstrucciones);
+		panel.add(scrollDesc, c);
+		lblAvisoInstrucciones = new LblAviso(" "); lblAvisoInstrucciones.setForeground(Color.RED); lblAvisoInstrucciones.setFont(fontAviso);
+		c.gridy = 11; panel.add(lblAvisoInstrucciones, c);
+
+		c.insets = new Insets(25, 5, 5, 5); c.gridy = 12;
+		btnGuardar = new JButton("Guardar Dirección");
+		btnGuardar.setFont(new Font("Times New Roman", Font.PLAIN, 18));
+		btnGuardar.setBackground(new Color(48, 60, 26));
+		btnGuardar.setForeground(Color.WHITE);
+		btnGuardar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		btnGuardar.setBorder(new LineBorder(Color.GRAY, 2, true));
+		btnGuardar.addActionListener(e -> save());
+		panel.add(btnGuardar, c);
+
+		c.insets = new Insets(10, 5, 10, 5); c.gridy = 13;
+		lblCancelar = new JLabel("<html><u>Cancelar</u></html>", JLabel.CENTER);
+		lblCancelar.setForeground(Color.WHITE);
+		lblCancelar.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+		lblCancelar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		lblCancelar.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) { 
+				int option = JOptionPane.showConfirmDialog(null, "¿Seguro que deseas cancelar? Se perderán los datos.", "Cancelar", JOptionPane.YES_NO_OPTION);
+    			if(option == JOptionPane.YES_OPTION) {
+    				new InicioView(loggedUser).setVisible(true);
+    				dispose(); 
+    			}
+			}
+		});
+		panel.add(lblCancelar, c);
+
+		JScrollPane mainScroll = new JScrollPane(panel);
+		mainScroll.setBorder(null);
+		mainScroll.setOpaque(false);
+		mainScroll.getViewport().setOpaque(false);
+		contentPane.add(mainScroll, BorderLayout.CENTER);
+	}
+
+	private void save() {
 		boolean valido = true;
 		
-		
-		if(!verificarPais()) {
-			valido = false;
+		if (txtColonia.getText().trim().isEmpty()) { lblAvisoColonia.setText("Requerido"); valido = false; } else { lblAvisoColonia.setText(" "); }
+		if (txtCalle.getText().trim().isEmpty()) { lblAvisoCalle.setText("Requerido"); valido = false; } else { lblAvisoCalle.setText(" "); }
+		if (txtReferencia.getText().trim().isEmpty()) { lblAvisoReferencia.setText("Requerido"); valido = false; } else { lblAvisoReferencia.setText(" "); }
+		if (txtInstrucciones.getText().trim().isEmpty()) { lblAvisoInstrucciones.setText("Requerido"); valido = false; } else { lblAvisoInstrucciones.setText(" "); }
+
+		if (!valido) return;
+
+		try {
+			Address nuevaAddr = new Address();
+			if (loggedUser != null) {
+				nuevaAddr.setUserId(loggedUser.getId());
+			} else {
+				nuevaAddr.setUserId(1); 
+			}
+			
+			nuevaAddr.setNeighborhood(txtColonia.getText().trim());
+			nuevaAddr.setStreet(txtCalle.getText().trim());
+			nuevaAddr.setReference(txtReferencia.getText().trim());
+			nuevaAddr.setInstructions(txtInstrucciones.getText().trim());
+			
+			AddressRepository repo = new AddressRepository();
+			repo.save(nuevaAddr);
+			
+			JOptionPane.showMessageDialog(this, "¡Tu dirección de envío ha sido guardada con éxito!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+			new InicioView(loggedUser).setVisible(true);
+			dispose();
+			
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			JOptionPane.showMessageDialog(this, "Hubo un error al guardar tu dirección: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
-		
-		if(!verificarNombre()) {
-			valido = false;
-		}
-		
-		if(!verificarDirrecion()) {
-			valido = false;
-		}
-		
-		if(!verificarCP()) {
-			valido = false;
-		}
-		
-		if(!verificarTelefono()) {
-			valido = false;
-		}
-		
-		if(!verificarDetails()) {
-			valido = false;
-		}
-		
-		if (valido) {
-			JOptionPane.showMessageDialog(this, "Exito");
-			reenviarLoginView();
-		}
-		
-	}
-	
-	
-	private void reenviarLoginView() {
-		new LoginWindow();
-		this.dispose();
 	}
 
-	private boolean verificarDetails() {
-		if(txtDetalles.getText().trim().equals("")) {
-			lblObs6.setText(" ");
-			lblObs6.setFont(new Font("Arial", Font.BOLD, 10));
-			return false;
-		}
-		return true;
+	private void aplicarValidacionesEnTiempoReal() {
+		agregarDocumentListener(txtColonia, lblAvisoColonia);
+		agregarDocumentListener(txtCalle, lblAvisoCalle);
+		agregarDocumentListener(txtReferencia, lblAvisoReferencia);
+
+		txtInstrucciones.getDocument().addDocumentListener(new DocumentListener() {
+			public void insertUpdate(DocumentEvent e) { lblAvisoInstrucciones.setText(" "); }
+			public void removeUpdate(DocumentEvent e) { lblAvisoInstrucciones.setText(" "); }
+			public void changedUpdate(DocumentEvent e) { lblAvisoInstrucciones.setText(" "); }
+		});
 	}
 
-	private boolean verificarTelefono() {
-		if(txtNumeroTelefono.getText().trim().equals("")) {
-			lblObs5.setText("El telefono es obligatorio");
-			lblObs5.setFont(new Font("Arial", Font.BOLD, 10));
-			return false;
-		}
-		return true;
-	}
-
-	private boolean verificarCP() {
-		if(txtCodigoPostal.getText().trim().equals("")) {
-			lblObs4.setText("El Código postal es obligatorio");
-			lblObs4.setFont(new Font("Arial", Font.BOLD, 10));
-			return false;
-		}
-		return true;
-	}
-
-	private boolean verificarDirrecion() {
-		if(txtCalle.getText().trim().equals("")) {
-			lblObs3.setText("*Este campo es obligatorio");
-			lblObs3.setFont(new Font("Arial", Font.BOLD, 10));
-			return false;
-		}
-		return true;
-	}
-
-	private boolean verificarNombre() {
-		if(txtNombre.getText().trim().equals("")) {
-			lblObs2.setText("Nombre requerido");
-			lblObs2.setFont(new Font("Arial", Font.BOLD, 10));
-			return false;
-		}
-		return true;
-	}
-
-	private boolean verificarPais() {
-		if(cboxPaises.getSelectedIndex() == 0) {
-			lblObs1.setText("Debes escoger un pais");
-			lblObs1.setFont(new Font("Arial", Font.BOLD, 10));
-			return false;
-		}
-		return true;
-	}
-	private void resetearAvisos() {
-	    lblObs1.setText(" ");
-	    lblObs2.setText(" ");
-	    lblObs3.setText(" ");
-	    lblObs4.setText(" ");
-	    lblObs5.setText(" ");
-	    lblObs6.setText(" ");
+	private void agregarDocumentListener(JTextField textField, LblAviso label) {
+		textField.getDocument().addDocumentListener(new DocumentListener() {
+			public void insertUpdate(DocumentEvent e) { label.setText(" "); }
+			public void removeUpdate(DocumentEvent e) { label.setText(" "); }
+			public void changedUpdate(DocumentEvent e) { label.setText(" "); }
+		});
 	}
 }

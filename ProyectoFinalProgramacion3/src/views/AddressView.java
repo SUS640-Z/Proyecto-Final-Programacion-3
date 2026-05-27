@@ -84,9 +84,14 @@ public class AddressView extends JPanel {
 		return btn;
 	}
 
-	public void setTableModel(AddressTableModel model) { 
-		table.setModel(model); 
-	}
+    public void setTableModel(tableModels.AddressTableModel model) { 
+        table.setModel(model); 
+
+        table.getColumnModel().getColumn(0).setMinWidth(0);
+        table.getColumnModel().getColumn(0).setMaxWidth(0);
+        table.getColumnModel().getColumn(0).setPreferredWidth(0);
+        table.getColumnModel().getColumn(0).setResizable(false);
+    }
 	
 	public File selectPdfFile() {
 		String path = Config.get("address.export.pdf", System.getProperty("user.home"));

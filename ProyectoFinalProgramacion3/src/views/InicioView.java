@@ -18,16 +18,25 @@ import javax.swing.JPanel;
 
 import controllers.LoginController;
 import controllers.RegistroController;
+import models.User;
 
 public class InicioView extends JFrame {
 
     private JPanel contentPane;
+    private User loggedUser; 
+
 
     public static void main(String[] args) {
-        new InicioView();
+        new InicioView(null);
     }
 
     public InicioView() {
+        this(null);
+    }
+
+    public InicioView(User loggedUser) {
+        this.loggedUser = loggedUser;
+        
         setTitle("Saturnbucks - Inicio");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBounds(100, 100, 500, 650);
@@ -82,15 +91,17 @@ public class InicioView extends JFrame {
 
         lblDireccion.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) { 
-                new Dirreccion().setVisible(true); 
+            	new Dirreccion(loggedUser).setVisible(true);
                 dispose(); 
             }
         });
 
-        panelMenu.add(lblLogin);
-        panelMenu.add(lblSeparador1);
-        panelMenu.add(lblRegistro);
-        panelMenu.add(lblSeparador2);
+        if (loggedUser == null) {
+            panelMenu.add(lblLogin);
+            panelMenu.add(lblSeparador1);
+            panelMenu.add(lblRegistro);
+            panelMenu.add(lblSeparador2);
+        }
         panelMenu.add(lblDireccion);
 
         contentPane.add(panelMenu, BorderLayout.NORTH);
@@ -155,28 +166,17 @@ public class InicioView extends JFrame {
         txtHistoria.setFont(new Font("Arial", Font.PLAIN, 15));
         txtHistoria.setHorizontalAlignment(JLabel.CENTER);
         panelCentral.add(txtHistoria, c);
-
         c.gridy = 4;
-        c.insets = new Insets(10, 20, 10, 20);
-        JLabel lblMenuEstelar = new JLabel("★ Nuestro Menú Estelar ★");
-        lblMenuEstelar.setFont(new Font("Times New Roman", Font.BOLD, 22));
-        lblMenuEstelar.setForeground(new Color(210, 180, 140));
-        lblMenuEstelar.setHorizontalAlignment(JLabel.CENTER);
-        panelCentral.add(lblMenuEstelar, c);
+        c.insets = new Insets(20, 40, 20, 40);
+        
+        JPanel pnlVisitanos = new JPanel(new BorderLayout(10, 10));
+        pnlVisitanos.setBackground(new Color(48, 60, 26)); 
+        pnlVisitanos.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(210, 180, 140), 2),
+            BorderFactory.createEmptyBorder(15, 20, 15, 20)
+        ));
 
-        c.gridy = 5;
-        c.insets = new Insets(10, 40, 20, 40);
-        JLabel txtMenu = new JLabel(
-            "<html><div style='text-align: center;'>" +
-            "1. Frappe Vía Láctea - Dulce y cremoso.<br>" +
-            "2. Espresso Agujero Negro - Fuerte y concentrado.<br>" +
-            "3. Latte Anillos de Saturno - Suave con caramelo." +
-            "</div></html>"
-        );
-        txtMenu.setForeground(Color.LIGHT_GRAY);
-        txtMenu.setFont(new Font("Arial", Font.PLAIN, 15));
-        txtMenu.setHorizontalAlignment(JLabel.CENTER);
-        panelCentral.add(txtMenu, c);
+
 
         contentPane.add(panelCentral, BorderLayout.CENTER);
     }

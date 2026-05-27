@@ -89,7 +89,14 @@ public class RolView extends JPanel {
         return btn;
     }
 
-    public void setTableModel(RolTableModel model) { table.setModel(model); }
+    public void setTableModel(tableModels.RolTableModel model) { 
+        table.setModel(model); 
+
+        table.getColumnModel().getColumn(0).setMinWidth(0);
+        table.getColumnModel().getColumn(0).setMaxWidth(0);
+        table.getColumnModel().getColumn(0).setPreferredWidth(0);
+        table.getColumnModel().getColumn(0).setResizable(false);
+    }
     public int getSelectedRow() { return table.getSelectedRow(); }
     
     public File selectPdfFile() {

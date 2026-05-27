@@ -25,7 +25,10 @@ public class DataView extends JFrame {
 	public static final String ORDERDETAILS = "ORDERDETAILS";
 	public static final String PRODUCTS = "PRODUCTS";
 	public static final String PRODUCTSTYPE = "PRODUCTSTYPE";
+	public static final String DASHBOARD = "DASHBOARD"; 
 	
+	public JButton btnHome;
+	public JButton btnDashboard; 
 	public JButton btnUsers;
 	public JButton btnRoles;
 	public JButton btnAddresses;
@@ -33,10 +36,10 @@ public class DataView extends JFrame {
 	public JButton btnProducts;	
 	public JButton btnProductsType;
 	public JButton btnOrdersDetails;
-	public JButton btnHome;
 	public JButton btnSalir; 
 	public JButton btnMode;
 	
+	public DashboardView dashboardPanel; 
 	public UserView usersPanel;
 	public RolView rolesPanel;
 	public AddressView addressPanel;
@@ -71,7 +74,7 @@ public class DataView extends JFrame {
 		JPanel navbar = new JPanel(new FlowLayout(FlowLayout.CENTER, 8, 10));
 		navbar.setBackground(new Color(15, 19, 9));
 		
-		btnHome = crearBoton("Inicio");
+		btnHome = crearBoton("Inicio");		
 		btnUsers = crearBoton("Usuarios");
 		btnRoles = crearBoton("Roles");
 		btnAddresses = crearBoton("Direcciones");
@@ -79,6 +82,7 @@ public class DataView extends JFrame {
 		btnOrdersDetails = crearBoton("Detalles Órdenes");
 		btnProducts = crearBoton("Productos");
 		btnProductsType = crearBoton("Tipos Prod.");
+		btnDashboard = crearBoton("Estadísticas"); 
 		btnSalir = crearBoton("Cerrar Sesión");
 		btnMode = crearBoton("Modo");
 		
@@ -92,6 +96,7 @@ public class DataView extends JFrame {
 		navbar.add(btnOrdersDetails);
 		navbar.add(btnProducts);
 		navbar.add(btnProductsType);
+		navbar.add(btnDashboard); 
 		navbar.add(btnSalir);
 		navbar.add(btnMode);
 		
@@ -118,15 +123,15 @@ public class DataView extends JFrame {
 		lblBienvenida.setForeground(new Color(210, 180, 140));
 		lblBienvenida.setFont(new Font("Times New Roman", Font.BOLD, 26));
 		homePanel.add(lblBienvenida, BorderLayout.CENTER);
-
+ 
 		usersPanel = new UserView(); 
 		rolesPanel = new RolView(); 
 		addressPanel = new AddressView(); 
 		ordersPanel = new OrderView(); 
-
 		ordersDetailsPanel = new OrderDetailsView();
 		productsPanel = new ProductView();
 		productsTypePanel = new ProductTypeView();
+		dashboardPanel = new DashboardView();
 		
 		container.add(homePanel, HOME);
 		container.add(usersPanel, USERS);
@@ -136,6 +141,7 @@ public class DataView extends JFrame {
 		container.add(productsPanel, PRODUCTS);
 		container.add(productsTypePanel, PRODUCTSTYPE);
 		container.add(ordersDetailsPanel, ORDERDETAILS);
+		container.add(dashboardPanel, DASHBOARD); 
 		
 		add(container, BorderLayout.CENTER);
 	}

@@ -20,6 +20,7 @@ public class DataController {
 	private DataView view;
 	private User loggedUser; 
 	
+	private DashboardController dashboardController; 
 	private UserController userController;
 	private RolController rolController;
 	private AddressController addressController;
@@ -47,6 +48,7 @@ public class DataController {
 			}
 		});
 
+		view.btnDashboard.addActionListener(e -> showDashboard());
 		view.btnUsers.addActionListener(e -> showUsers());
 		view.btnRoles.addActionListener(e -> showRoles());
 		view.btnAddresses.addActionListener(e -> showAddresses());
@@ -62,6 +64,16 @@ public class DataController {
 		});
 		
 		view.btnSalir.addActionListener(e -> handleClose());
+	}
+
+	private void showDashboard() {
+		view.showView(DataView.DASHBOARD);
+		updateMenuState(DataView.DASHBOARD);
+		
+		if(dashboardController == null) {
+			dashboardController = new DashboardController(view.dashboardPanel);
+		}
+		dashboardController.loadStats(); 
 	}
 	
 	private void showUsers() {
@@ -108,10 +120,8 @@ public class DataController {
 		updateMenuState(DataView.PRODUCTS);
 		
 		if(productController == null) {
-
 			productController = new ProductController(view.productsPanel);
 		}
-
 		productController.loadProductsType(); 
 	}
 
@@ -134,12 +144,14 @@ public class DataController {
 		}
 		orderDetailsController.loadOrdersDetails(); 
 	}
+	
 	private void configurarPermisosPorRol() {
 		if (loggedUser == null || loggedUser.getRol() == null) return;
 		
 		String rol = loggedUser.getRol().trim().toLowerCase();
 		
 		if (rol.equals("empleado")) {
+			view.btnDashboard.setVisible(false);
 			view.btnRoles.setVisible(false);        
 			view.btnProductsType.setVisible(false); 
 			view.btnOrdersDetails.setVisible(false);
@@ -155,6 +167,8 @@ public class DataController {
 	}
 	
 	private void updateMenuState(String viewName) {
+		view.btnHome.setEnabled(!viewName.equals(DataView.HOME));
+		view.btnDashboard.setEnabled(!viewName.equals(DataView.DASHBOARD)); 
 		view.btnUsers.setEnabled(!viewName.equals(DataView.USERS));
 		view.btnRoles.setEnabled(!viewName.equals(DataView.ROLES));
 		view.btnAddresses.setEnabled(!viewName.equals(DataView.ADDRESSES));
@@ -162,7 +176,6 @@ public class DataController {
 		view.btnProducts.setEnabled(!viewName.equals(DataView.PRODUCTS));
 		view.btnProductsType.setEnabled(!viewName.equals(DataView.PRODUCTSTYPE));
 		view.btnOrdersDetails.setEnabled(!viewName.equals(DataView.ORDERDETAILS));
-		view.btnHome.setEnabled(!viewName.equals(DataView.HOME));
 	}
 	
 	private void saveWindowPreferences() {
