@@ -38,14 +38,20 @@ public class UserTableModel extends AbstractTableModel {
 	@Override
 	public Object getValueAt(int rowIndex, int columnIndex) {
 		User user = users.get(rowIndex);
+		String genero = user.getGenero();
+    	String conversionGenero;
+    	if(genero.equals("Masculine")) {
+    		conversionGenero="Masculino";
+    	}else {
+    		conversionGenero="Femenino";
+    	}
 		switch(columnIndex) {
 			case 0: return user.getName();
 			case 1: return user.getLastName();
-
 			case 2: return user.getRol(); 
 			case 3: return user.getEmail();
 			case 4: return user.getTelefono();
-			case 5: return user.getGenero();
+			case 5: return conversionGenero;
 			case 6: return user.getFechaNacimiento();
 			case 7: return cargarIcono(user.getImagePath(), 40, 40);
 		}

@@ -100,8 +100,6 @@ public class UserController {
 	private void openForm(User user) {
 		UserFormDialog dialog = new UserFormDialog(null, user);
 
-		
-		// ¡CÓDIGO DEL EQUIPO PARA LLENAR EL COMBOBOX!
 		try {
 			JComboBox<String> comboRoles = dialog.getCmbRol(); 
 			comboRoles.removeAllItems();

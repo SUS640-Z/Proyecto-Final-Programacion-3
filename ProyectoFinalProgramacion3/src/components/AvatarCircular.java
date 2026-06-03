@@ -1,6 +1,5 @@
 package components;
 
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -16,33 +15,30 @@ public class AvatarCircular extends JComponent {
 
     private String nombre;
     private Image imagenPerfil;
-    private Color fondoAzul = new Color(30, 144, 255); // Azul Dodgerr o el azul que prefieras
+    // SE MODIFICÓ: Cambiado a los colores temáticos de Saturnbucks
+    private Color fondoSaturn = new Color(48, 60, 26); 
 
-    // Constructor para cuando NO hay imagen (solo usa el nombre)
-    public AvatarCircular(String nombre, int tamaño) {
+    public AvatarCircular(String nombre, int tamano) {
         this.nombre = nombre;
         this.imagenPerfil = null;
-        Dimension dim = new Dimension(tamaño, tamaño);
+        Dimension dim = new Dimension(tamano, tamano);
         setPreferredSize(dim);
         setSize(dim);
     }
 
-    // Constructor para cuando SÍ hay una imagen de perfil
-    public AvatarCircular(Image imagenPerfil, int tamaño) {
+    public AvatarCircular(Image imagenPerfil, int tamano) {
         this.nombre = "";
         this.imagenPerfil = imagenPerfil;
-        Dimension dim = new Dimension(tamaño, tamaño);
+        Dimension dim = new Dimension(tamano, tamano);
         setPreferredSize(dim);
         setSize(dim);
     }
 
-    // Método para cambiar la imagen dinámicamente si el usuario sube una después
     public void setImagenPerfil(Image imagenPerfil) {
         this.imagenPerfil = imagenPerfil;
-        repaint(); // Forzar a Swing a redibujar el componente
+        repaint(); 
     }
 
-    // Método para cambiar el nombre dinámicamente
     public void setNombre(String nombre) {
         this.nombre = nombre;
         repaint();
@@ -60,30 +56,22 @@ public class AvatarCircular extends JComponent {
         int x = (getWidth() - diametro) / 2;
         int y = (getHeight() - diametro) / 2;
 
-        // CASO 1: Si hay una imagen, la recortamos y dibujamos en círculo
         if (imagenPerfil != null) {
-            // Creamos una máscara circular para recortar la imagen
             g2.setClip(new Ellipse2D.Float(x, y, diametro, diametro));
-            // Dibujamos la imagen estirada al tamaño del componente
             g2.drawImage(imagenPerfil, x, y, diametro, diametro, null);
-        } 
-        // CASO 2: Si no hay imagen, dibujamos el fondo azul con la letra inicial
-        else {
-            // Dibujar el círculo de fondo
-            g2.setColor(fondoAzul);
+        } else {
+            g2.setColor(fondoSaturn);
             g2.fillOval(x, y, diametro, diametro);
 
-            // Obtener la primera letra (en mayúscula)
             String inicial = " ";
             if (nombre != null && !nombre.trim().isEmpty()) {
                 inicial = nombre.trim().substring(0, 1).toUpperCase();
             }
 
-            // Configurar la fuente (adaptable automáticamente al tamaño del avatar)
-            g2.setColor(Color.WHITE);
-            g2.setFont(new Font("Arial", Font.BOLD, diametro / 2));
+            // Cambiado a Times New Roman para mantener la consistencia en textos grandes
+            g2.setColor(new Color(210, 180, 140)); 
+            g2.setFont(new Font("Times New Roman", Font.BOLD, diametro / 2));
 
-            // Centrar la letra perfectamente en el eje X y Y del círculo
             FontMetrics fm = g2.getFontMetrics();
             int letraX = x + (diametro - fm.stringWidth(inicial)) / 2;
             int letraY = y + ((diametro - fm.getHeight()) / 2) + fm.getAscent();

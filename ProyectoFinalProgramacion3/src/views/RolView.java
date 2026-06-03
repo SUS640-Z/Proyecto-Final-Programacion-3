@@ -91,6 +91,16 @@ public class RolView extends JPanel {
 
     public void setTableModel(tableModels.RolTableModel model) { 
         table.setModel(model); 
+        if(table.getColumnCount() >= 1 ) {
+        	  table.getColumnModel().getColumn(0).setPreferredWidth(100);;
+        }
+        if(table.getColumnCount() >= 2 ) {
+      	  table.getColumnModel().getColumn(1).setPreferredWidth(100);;
+        }
+        if(table.getColumnCount() >= 3 ) {
+        	  table.getColumnModel().getColumn(2).setPreferredWidth(700);;
+          }
+
 
         table.getColumnModel().getColumn(0).setMinWidth(0);
         table.getColumnModel().getColumn(0).setMaxWidth(0);

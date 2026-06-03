@@ -118,6 +118,7 @@ public class OrderDetailsController {
         
         if (dialog.isSaved()) {
             OrderDetails savedData = dialog.getOrderDetails(); 
+            
             try {
                 if (orderDetails == null) {
                     repo.save(savedData); 
@@ -129,9 +130,10 @@ public class OrderDetailsController {
 
                     boolean updated = repo.update(orderDetails.getId(), savedData);
                     if (updated) {
-                        model.updateRow(row, savedData); 
+                        repo.updateOrder(orderDetails.getId());
                         JOptionPane.showMessageDialog(view, "Detalle de orden actualizado con éxito", "Éxito", JOptionPane.INFORMATION_MESSAGE);
                     }
+                    repo.updateOrder(orderDetails.getId());
                 }
             } catch (Exception e) {
                 e.printStackTrace();

@@ -36,7 +36,7 @@ public class OrderDetailsRepository {
 	}
 
 	public List<OrderDetails> getOrdersDetails() throws SQLException {List<OrderDetails> list = new ArrayList<>();
-		String sql = "SELECT od.order_details_id, od.order_id, od.quantity, p.product_name, " +
+		String sql = "SELECT od.order_details_id, od.order_id, od.quantity, p.product_name,p.price, " +
 		             "CONCAT(u.user_name, ' ', u.last_name) AS client_name " +
 		             "FROM Order_details od " +
 		             "INNER JOIN Product p ON od.product_id = p.product_id " +
@@ -51,9 +51,15 @@ public class OrderDetailsRepository {
 				OrderDetails o = new OrderDetails();
 				o.setId(rs.getInt("order_details_id"));
 				o.setOrder_id(rs.getInt("order_id"));
-				o.setQuantity(rs.getInt("quantity"));
+				int cantidad = rs.getInt("quantity");
+	            o.setQuantity(cantidad);
+	            
 				o.setProduct_name(rs.getString("product_name"));
 				o.setClient_name(rs.getString("client_name")); 
+				double precio = rs.getDouble("price");
+				
+				double total = cantidad * precio;
+	            o.setPrice(total);
 				
 				list.add(o);
 			}
@@ -92,6 +98,29 @@ public class OrderDetailsRepository {
 	        ex.printStackTrace();
 	    }
 	    return false;
+	}
+	
+	
+	public boolean updateOrder(int orderId) throws SQLException {
+	    String sql = "UPDATE Orders o " +
+	                 "SET " +
+	                 "    o.total_amount = COALESCE((" +
+	                 "        SELECT SUM(od.quantity * p.price) " +
+	                 "        FROM Order_details od " +
+	                 "        INNER JOIN Product p ON od.product_id = p.product_id " +
+	                 "        WHERE od.order_id = o.order_id" +
+	                 "    ), 0.00) " +
+	                 "WHERE o.order_id = ?"; 
+
+	    try (Connection connection = DataBaseConnection.getConnection();
+	         PreparedStatement ps = connection.prepareStatement(sql)) {
+	        
+	        ps.setInt(1, orderId);
+	      
+	        int rowsAffected = ps.executeUpdate();
+	        
+	        return rowsAffected > 0;
+	    }
 	}
 	
 	public List<String> obtenerNombresUsuarios() throws SQLException {
