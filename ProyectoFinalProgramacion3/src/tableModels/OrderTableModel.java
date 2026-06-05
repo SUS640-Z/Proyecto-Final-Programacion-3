@@ -30,7 +30,7 @@ public class OrderTableModel extends AbstractTableModel {
 			case 1: return order.getUserName();
 			case 2: return order.getOrderDate();
 			case 3: return String.format("$%.2f", order.getTotal()); 
-			case 4: return order.getStatus();
+			case 4: return traducirEstado(order.getStatus()); // Se traduce aquí
 		}
 		return null;
 	}
@@ -39,7 +39,23 @@ public class OrderTableModel extends AbstractTableModel {
 		this.orders = orders;
 		fireTableDataChanged();
 	}
+	
 	public List<Order> getOrders() {
 		return orders;
+	}
+
+	private String traducirEstado(String estadoIngles) {
+	    if (estadoIngles == null) return "Desconocido";
+	    switch (estadoIngles.toLowerCase()) {
+	        case "pending": return "Pendiente";
+	        case "processing": return "Procesando";
+	        case "shipped": return "Enviado";
+	        case "delivered": return "Entregado";
+	        case "cancelled": return "Cancelado";
+	        case "refunded": return "Reembolsado";
+	        case "on_hold": return "En espera";
+	        case "failed": return "Fallido";
+	        default: return estadoIngles;
+	    }
 	}
 }

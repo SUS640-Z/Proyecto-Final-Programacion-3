@@ -47,7 +47,6 @@ public class OrderFormDialog extends JDialog {
 	private List<User> listaUsuariosBD;
 	private boolean saved = false;
 
-
 	public OrderFormDialog(JFrame parent, Order order, List<User> usuarios) {
 		super(parent, true);
 		this.order = order;
@@ -61,13 +60,13 @@ public class OrderFormDialog extends JDialog {
 		contentPane = new JPanel(new BorderLayout());
 		contentPane.setBackground(new Color(15, 19, 9));
 
-		javax.swing.border.Border emptyBorder = javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5);
-		javax.swing.border.Border panelTitledBorder = javax.swing.BorderFactory.createTitledBorder(
-				javax.swing.BorderFactory.createLineBorder(Color.WHITE, 2),
+		Border emptyBorder = BorderFactory.createEmptyBorder(5, 5, 5, 5);
+		Border panelTitledBorder = BorderFactory.createTitledBorder(
+				BorderFactory.createLineBorder(Color.WHITE, 2),
 				order == null ? "NUEVO PEDIDO" : "EDITAR PEDIDO",
-				javax.swing.border.TitledBorder.CENTER, javax.swing.border.TitledBorder.TOP,
+				TitledBorder.CENTER, TitledBorder.TOP,
 				new Font("Arial", Font.BOLD, 14), Color.WHITE);
-		contentPane.setBorder(javax.swing.BorderFactory.createCompoundBorder(emptyBorder, panelTitledBorder));
+		contentPane.setBorder(BorderFactory.createCompoundBorder(emptyBorder, panelTitledBorder));
 		setContentPane(contentPane);
 
 		generarComponentes();
@@ -75,6 +74,7 @@ public class OrderFormDialog extends JDialog {
 		
 		if (order != null) { loadData(); }
 	}
+	
 	private void generarComponentes() {
 		JPanel panel = new JPanel(new GridBagLayout());
 		panel.setOpaque(false);
@@ -100,7 +100,8 @@ public class OrderFormDialog extends JDialog {
 
 		c.insets = new Insets(5, 5, 0, 5); c.gridy = 6; panel.add(new LblSubtitulo("Estado:"), c);
 		c.insets = new Insets(0, 5, 0, 5); c.gridy = 7; 
-		String[] estados = {"Seleccionar", "pending", "processing", "shipped", "delivered", "cancelled", "refunded", "on_hold", "failed"};
+
+		String[] estados = {"Seleccionar", "Pendiente", "Procesando", "Enviado", "Entregado", "Cancelado", "Reembolsado", "En espera", "Fallido"};
 		cmbEstado = new JComboBox<>(estados); panel.add(cmbEstado, c);
 		lblAvisoEstado = new LblAviso(""); lblAvisoEstado.setForeground(Color.RED); lblAvisoEstado.setFont(fontAviso);
 		c.gridy = 8; panel.add(lblAvisoEstado, c);
@@ -138,7 +139,9 @@ public class OrderFormDialog extends JDialog {
 
 	private void loadData() {
 		txtTotal.setText(String.valueOf(order.getTotal()));
-		cmbEstado.setSelectedItem(order.getStatus());
+
+		cmbEstado.setSelectedItem(traducirInglesAEspanol(order.getStatus()));
+		
 		for(int i = 1; i < cmbUsuarios.getItemCount(); i++) {
 			if(cmbUsuarios.getItemAt(i).startsWith(order.getUserId() + " -")) { cmbUsuarios.setSelectedIndex(i); break; }
 		}
@@ -159,17 +162,48 @@ public class OrderFormDialog extends JDialog {
 		int userId = Integer.parseInt(seleccion.split(" ")[0]);
 		String userName = seleccion.substring(seleccion.indexOf("-") + 2);
 
+		String estadoIngles = traducirEspanolAIngles((String) cmbEstado.getSelectedItem());
+
 		if (order == null) {
-			order = new Order(0, userId, userName, "", total, (String) cmbEstado.getSelectedItem());
+			order = new Order(0, userId, userName, "", total, estadoIngles);
 		} else {
 			order.setUserId(userId);
 			order.setUserName(userName);
 			order.setTotal(total);
-			order.setStatus((String) cmbEstado.getSelectedItem());
+			order.setStatus(estadoIngles);
 		}
 		saved = true; dispose();
 	}
 
 	public boolean isSaved() { return saved; }
 	public Order getOrder() { return order; }
+
+	private String traducirInglesAEspanol(String estado) {
+	    if (estado == null) return "Seleccionar";
+	    switch (estado.toLowerCase()) {
+	        case "pending": return "Pendiente";
+	        case "processing": return "Procesando";
+	        case "shipped": return "Enviado";
+	        case "delivered": return "Entregado";
+	        case "cancelled": return "Cancelado";
+	        case "refunded": return "Reembolsado";
+	        case "on_hold": return "En espera";
+	        case "failed": return "Fallido";
+	        default: return estado;
+	    }
+	}
+	
+	private String traducirEspanolAIngles(String estado) {
+	    switch (estado) {
+	        case "Pendiente": return "pending";
+	        case "Procesando": return "processing";
+	        case "Enviado": return "shipped";
+	        case "Entregado": return "delivered";
+	        case "Cancelado": return "cancelled";
+	        case "Reembolsado": return "refunded";
+	        case "En espera": return "on_hold";
+	        case "Fallido": return "failed";
+	        default: return "pending";
+	    }
+	}
 }
