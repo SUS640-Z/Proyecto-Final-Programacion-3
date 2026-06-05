@@ -105,7 +105,7 @@ public class ProductController {
 		ProductFormDialog dialog = new ProductFormDialog(null, product);
 		
 		try {
-	        JComboBox<String> comboTipos = dialog.getCmbType(); // Usamos tu getter público
+	        JComboBox<String> comboTipos = dialog.getCmbType(); 
 	        comboTipos.removeAllItems();
 	        comboTipos.addItem("Seleccionar");
 	        

@@ -136,13 +136,13 @@ public class ProductRepository {
 	}
 	
 	private String normalizarTemporadaAIngles(String temporada) {
-		if (temporada == null) return "spring"; // O un valor default
+		if (temporada == null) return "spring";
 		switch (temporada.toLowerCase().trim()) {
 			case "primavera": return "spring";
 			case "verano":    return "summer";
 			case "otoño":     return "autumn";
 			case "invierno":  return "winter";
-			default:          return temporada.toLowerCase().trim(); // Por si ya venía en inglés
+			default:          return temporada.toLowerCase().trim(); 
 		}
 	}
 
@@ -154,7 +154,7 @@ public class ProductRepository {
 			case "autumn":
 			case "fall":   return "Otoño";
 			case "winter": return "Invierno";
-			default:       return season; // Devuelve el valor tal cual si no se identifica
+			default:       return season;
 		}
 	}
 

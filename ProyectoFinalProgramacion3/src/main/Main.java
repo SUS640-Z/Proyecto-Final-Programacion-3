@@ -7,7 +7,7 @@ import views.InicioView;
 public class Main {
 	public static void main(String[] args) {
 		
-		//FlatLightLaf.setup();
+		FlatLightLaf.setup();
 		ThemeManager.applySavedTheme();
 		new InicioView ();
 

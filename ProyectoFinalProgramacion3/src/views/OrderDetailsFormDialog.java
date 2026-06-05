@@ -204,7 +204,6 @@ public class OrderDetailsFormDialog extends JDialog {
         return true; 
     }
     private boolean verificarProducto() { 
-        // CORREGIDO: Validación lógica adaptada a JComboBox
         if(cmbProducto.getSelectedIndex() <= 0) { lblAvisoProducto.setText("Seleccione un producto"); return false; } 
         return true; 
     }

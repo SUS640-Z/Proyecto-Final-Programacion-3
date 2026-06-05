@@ -71,6 +71,13 @@ public class RegistroController{
 	        	String hashedPassword = PasswordUtils.hashPassword(plainPassword);
 	        	String genero = (String) view.getCmbGenero().getSelectedItem();
 	        	
+	        	String conversionGenero;
+	        	if(genero.equals("Masculino")) {
+	        		conversionGenero="Masculine";
+	        	}else {
+	        		conversionGenero="Femenine";
+	        	}
+	        	
 	            User nuevoUsuario = new User(
 	            	view.getTxtName().getText().trim(),
 	            	view.getTxtLastName().getText().trim(),
@@ -78,7 +85,7 @@ public class RegistroController{
 	            	hashedPassword, 
 	            	imagePathString,
 	            	view.getTxtTelefono().getText().trim(),
-	            	genero,
+	            	conversionGenero,
 	            	view.getTxtFechaNac().getText().trim()
 	            );
 

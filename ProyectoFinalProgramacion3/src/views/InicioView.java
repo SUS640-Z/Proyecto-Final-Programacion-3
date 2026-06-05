@@ -11,19 +11,30 @@ import java.awt.Insets;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
 
+import components.AvatarCircular;
 import controllers.LoginController;
+import controllers.MenuController;
+import controllers.ProfileController;
 import controllers.RegistroController;
+//import controllers.RegistroController;
+import utils.Session;
 import models.User;
 
 public class InicioView extends JFrame {
 
     private JPanel contentPane;
-    private User loggedUser; 
 
 
     public static void main(String[] args) {
@@ -35,11 +46,11 @@ public class InicioView extends JFrame {
     }
 
     public InicioView(User loggedUser) {
-        this.loggedUser = loggedUser;
+        //this.loggedUser = loggedUser;
         
         setTitle("Saturnbucks - Inicio");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 500, 650);
+        setBounds(100, 100, 800, 515);
         setResizable(false);
         setLocationRelativeTo(null);
         
@@ -52,8 +63,16 @@ public class InicioView extends JFrame {
         contentPane = new JPanel(new BorderLayout());
         contentPane.setBackground(new Color(15, 19, 9));
         setContentPane(contentPane);
+		
+		
+		
+        if (Session.getCurrentUser() != null && "Cliente".equals(Session.getRol())) {
+        	generarMenu();
+        } else {
+        	generarMenuPersonalizado();
+        }
 
-        generarMenuPersonalizado();
+
         generarContenidoPagina();
         generarFooter(); 
         
@@ -67,12 +86,11 @@ public class InicioView extends JFrame {
 
         JLabel lblLogin = crearItemMenu("Iniciar Sesión");
         JLabel lblRegistro = crearItemMenu("Crear Cuenta");
-        JLabel lblDireccion = crearItemMenu("Ordena Aquí");
+        //JLabel lblDireccion = crearItemMenu("Ordena Aquí");
         
         JLabel lblSeparador1 = new JLabel("  |  ");
         lblSeparador1.setForeground(Color.DARK_GRAY);
-        JLabel lblSeparador2 = new JLabel("  |  ");
-        lblSeparador2.setForeground(Color.DARK_GRAY);
+
 
         lblLogin.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) { 
@@ -88,28 +106,19 @@ public class InicioView extends JFrame {
                 dispose(); 
             }
         });
-
-        lblDireccion.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) { 
-            	new Dirreccion(loggedUser).setVisible(true);
-                dispose(); 
-            }
-        });
-
-        if (loggedUser == null) {
-            panelMenu.add(lblLogin);
-            panelMenu.add(lblSeparador1);
-            panelMenu.add(lblRegistro);
-            panelMenu.add(lblSeparador2);
-        }
-        panelMenu.add(lblDireccion);
+        
+        
+        panelMenu.add(lblLogin);
+        panelMenu.add(lblSeparador1);
+        panelMenu.add(lblRegistro);
+   
 
         contentPane.add(panelMenu, BorderLayout.NORTH);
     }
 
     private JLabel crearItemMenu(String texto) {
         JLabel label = new JLabel(texto);
-        label.setFont(new Font("Arial", Font.BOLD, 14));
+        label.setFont(new Font("Arial", Font.BOLD, 18));
         label.setForeground(new Color(210, 180, 140)); 
         label.setCursor(new Cursor(Cursor.HAND_CURSOR));
         
@@ -128,6 +137,7 @@ public class InicioView extends JFrame {
         c.fill = GridBagConstraints.HORIZONTAL;
         c.gridx = 0;
 
+       
         c.gridy = 0;
         c.insets = new Insets(30, 20, 10, 20); 
         JLabel lblBienvenida = new JLabel("BIENVENIDO A SATURNBUCKS");
@@ -136,6 +146,7 @@ public class InicioView extends JFrame {
         lblBienvenida.setHorizontalAlignment(JLabel.CENTER);
         panelCentral.add(lblBienvenida, c);
 
+       
         c.gridy = 1;
         c.insets = new Insets(0, 20, 30, 20);
         JLabel lblSlogan = new JLabel("El mejor café de la galaxia.");
@@ -144,6 +155,7 @@ public class InicioView extends JFrame {
         lblSlogan.setHorizontalAlignment(JLabel.CENTER);
         panelCentral.add(lblSlogan, c);
 
+      
         c.gridy = 2;
         c.insets = new Insets(10, 20, 10, 20);
         JLabel lblTituloHistoria = new JLabel("Nuestra Historia");
@@ -152,6 +164,7 @@ public class InicioView extends JFrame {
         lblTituloHistoria.setHorizontalAlignment(JLabel.CENTER);
         panelCentral.add(lblTituloHistoria, c);
 
+       
         c.gridy = 3;
         c.insets = new Insets(10, 40, 30, 40); 
         JLabel txtHistoria = new JLabel(
@@ -166,21 +179,38 @@ public class InicioView extends JFrame {
         txtHistoria.setFont(new Font("Arial", Font.PLAIN, 15));
         txtHistoria.setHorizontalAlignment(JLabel.CENTER);
         panelCentral.add(txtHistoria, c);
-        c.gridy = 4;
-        c.insets = new Insets(20, 40, 20, 40);
         
-        JPanel pnlVisitanos = new JPanel(new BorderLayout(10, 10));
-        pnlVisitanos.setBackground(new Color(48, 60, 26)); 
-        pnlVisitanos.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(210, 180, 140), 2),
-            BorderFactory.createEmptyBorder(15, 20, 15, 20)
-        ));
-
-
+      
+        if (Session.getCurrentUser() != null && "Cliente".equals(Session.getRol())) {
+            c.gridy = 4;
+          
+            c.fill = GridBagConstraints.NONE; 
+    
+            c.insets = new Insets(10, 40, 40, 40); 
+            
+            JButton btnOrdenar = new JButton("Ordenar");
+            btnOrdenar.setFont(new Font("Times New Roman", Font.PLAIN, 23));
+            btnOrdenar.setBackground(new Color(48, 60, 26)); 
+            btnOrdenar.setForeground(Color.WHITE);
+            btnOrdenar.setBorder(new LineBorder(Color.GRAY, 3, true));
+            btnOrdenar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            btnOrdenar.putClientProperty("btnOrdenar.buttonType", "toolBarButton"); 
+            
+            btnOrdenar.addActionListener(e -> {
+            	dispose();
+            	MenuView menuVista = new MenuView();;
+                MenuController control = new MenuController(menuVista); 
+            });
+            
+           
+            btnOrdenar.setPreferredSize(new java.awt.Dimension(250, 45));
+            
+           
+            panelCentral.add(btnOrdenar, c);
+        }
 
         contentPane.add(panelCentral, BorderLayout.CENTER);
     }
-
     private void generarFooter() {
         JPanel panelFooter = new JPanel();
         panelFooter.setBackground(new Color(15, 19, 9));
@@ -195,4 +225,60 @@ public class InicioView extends JFrame {
 
         contentPane.add(panelFooter, BorderLayout.SOUTH);
     }
+ 
+    
+    private void generarMenu() {
+        JPanel panelMenu = new JPanel();
+        panelMenu.setBackground(new Color(15, 19, 9)); 
+        panelMenu.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(48, 60, 26))); 
+
+        JLabel lblPerfil = crearItemMenu("Mi perfil");
+        JLabel lblOrdenes= crearItemMenu("Ordenes");
+        JLabel lblCerrar = crearItemMenu("Cerrar Sesion");
+        
+        JLabel lblSeparador1 = new JLabel("  |  ");
+        lblSeparador1.setForeground(Color.DARK_GRAY);
+        JLabel lblSeparador2 = new JLabel("  |  ");
+        lblSeparador2.setForeground(Color.DARK_GRAY);
+
+        panelMenu.add(lblPerfil);
+        panelMenu.add(lblSeparador1);
+        panelMenu.add(lblOrdenes);
+        panelMenu.add(lblSeparador2);
+        panelMenu.add(lblCerrar);
+        
+        lblPerfil.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) { 
+            	dispose();
+            	ProfileView perfilView = new ProfileView();
+            	new ProfileController(perfilView);
+            }
+        });
+        
+        lblCerrar.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) { 
+            	
+            	JOptionPane.showMessageDialog(
+                          null, 
+                          "Sesión cerrada exitosamente", 
+                          "Cierre de Sesión", 
+                         JOptionPane.INFORMATION_MESSAGE
+                );
+            	
+                dispose();
+                Session.logout();
+                
+                
+                InicioView ey = new InicioView();
+                
+            }
+        });
+        
+
+        contentPane.add(panelMenu, BorderLayout.NORTH);
+    }
+    
+    
+    
+    
 }

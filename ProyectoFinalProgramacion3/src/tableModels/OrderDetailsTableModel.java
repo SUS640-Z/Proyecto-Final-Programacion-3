@@ -10,7 +10,7 @@ import models.OrderDetails;
 
 public class OrderDetailsTableModel extends AbstractTableModel{
 	private List<OrderDetails> ordersDetails;
-	private final String[] columns = {"N. Orden", "Persona","Producto", "Cantidad"};
+	private final String[] columns = {"N. Orden", "Persona","Producto", "Cantidad","Subtotal"};
 	
 	public OrderDetailsTableModel(List<OrderDetails> ordersDetails) {
 		this.ordersDetails = ordersDetails;
@@ -33,6 +33,7 @@ public class OrderDetailsTableModel extends AbstractTableModel{
 		case 1: return orderDetails.getClient_name();
 		case 2: return orderDetails.getProduct_name();
 		case 3: return orderDetails.getQuantity();
+		case 4: return orderDetails.getPrice();
 		}
 		return null;
 	}

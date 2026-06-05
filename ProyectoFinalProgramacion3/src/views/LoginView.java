@@ -29,7 +29,9 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
+import utils.Session;
 import components.BordePanel;
+import components.IconoFlechaIzquierda;
 import components.LblAviso;
 import components.LblSubtitulo;
 
@@ -48,6 +50,7 @@ public class LoginView extends JPanel {
 	JButton btnConfimar;
 	JLabel lblCrearCuenta;
 	LoginView loginView;
+	JButton btnRegresar;
 	
 	public LoginView(LoginWindow window) {
 		this.setLayout(null);
@@ -127,6 +130,7 @@ public class LoginView extends JPanel {
 		btnConfimar.setBounds(143,300, 316, 40);
 		btnConfimar.setBorder(new LineBorder(Color.GRAY, 3, true));
 		btnConfimar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+		btnConfimar.putClientProperty("btnConfimar.buttonType", "toolBarButton"); 
 		add(btnConfimar);
 		
 		btnConfimar.addMouseListener(new MouseAdapter() {
@@ -146,6 +150,23 @@ public class LoginView extends JPanel {
             public void mouseEntered(MouseEvent e){ lblCrearCuenta.setForeground(new Color(204, 207, 198)); }
     		public void mouseExited(MouseEvent e){ lblCrearCuenta.setForeground(Color.WHITE); }
         });
+		
+		btnRegresar = new JButton(new IconoFlechaIzquierda());
+		btnRegresar.setRolloverEnabled(true);
+		btnRegresar.setBounds(10, 10, 50, 40);
+		btnRegresar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+
+		// --- EL TRUCO PARA DESACTIVAR EL BOTÓN GRIS ---
+		btnRegresar.setContentAreaFilled(false);  // Evita que Swing pinte el fondo gris al hacer clic
+		btnRegresar.setBorderPainted(false);      // Quita el borde cuadrado por defecto
+		btnRegresar.setFocusPainted(false);       // Elimina el recuadro de enfoque (la línea punteada/azul)
+		btnRegresar.setRolloverEnabled(true);     // Activa el efecto del verdecito al pasar el mouse
+
+		btnRegresar.putClientProperty("JButton.buttonType", "toolBarButton"); 
+		btnRegresar.setFocusable(false);
+
+		add(btnRegresar);
+
 	}
 
 	private void generarAvisos() {
@@ -197,6 +218,7 @@ public class LoginView extends JPanel {
 		lblCafeImg = new JLabel("", cargarIcono("../assets/img/cafe.png", 300, 300), JLabel.CENTER);
 		lblCafeImg.setBounds(145, 290, 350, 350); 
 		add(lblCafeImg);
+		
 	}
 	
 	private void generarComponentes() {
@@ -239,6 +261,16 @@ public class LoginView extends JPanel {
 	public LoginWindow getWindow() {
 		return window;
 	}
+
+	public JButton getBtnRegresar() {
+		return btnRegresar;
+	}
+
+	public void setBtnRegresar(JButton btnRegresar) {
+		this.btnRegresar = btnRegresar;
+	}
+	
+	
 	
 	
 }

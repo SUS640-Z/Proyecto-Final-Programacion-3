@@ -6,9 +6,13 @@ import java.awt.event.MouseEvent;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import com.formdev.flatlaf.FlatLaf;
+
 import models.User;
 import repository.LoginRepository;
+import utils.Session;
 import views.DataView;
+import views.InicioView;
 import views.LoginView;
 import views.RegistroView;
 
@@ -35,6 +39,8 @@ public class LoginController {
 				cerrarVentana();
 			}
 		});
+		
+		this.view.getBtnRegresar().addActionListener(e -> regresar());
 	}
 
 	private void manejarLogin() {
@@ -49,15 +55,23 @@ public class LoginController {
 			return;
 		}
 
+		
 		try {
 			User user = repo.login(email, password);
 
 			if (user != null) {
 
 				JOptionPane.showMessageDialog(view, "¡Bienvenido " + user.getName() + "!\nHas iniciado sesión como: " + user.getRol(), "Login Exitoso", JOptionPane.INFORMATION_MESSAGE);
-
-				DataView dataView = new DataView();
-			    new DataController(dataView, user); 
+				
+				Session.login(user);
+				
+				if(!Session.getRol().equals("Cliente")) {
+					DataView dataView = new DataView();
+				    new DataController(dataView, user); 			
+				}else {
+					InicioView inicioView = new InicioView();
+				}
+				
 			    
 			    cerrarVentana();
 				
@@ -82,5 +96,10 @@ public class LoginController {
 				window.dispose();
 			}
 		}
+	}
+	
+	private void regresar() {
+		InicioView inicioView = new InicioView();
+		cerrarVentana();
 	}
 }

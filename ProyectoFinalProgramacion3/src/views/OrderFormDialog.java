@@ -92,12 +92,14 @@ public class OrderFormDialog extends JDialog {
 		panel.add(cmbUsuarios, c);
 		lblAvisoUsuario = new LblAviso(""); lblAvisoUsuario.setForeground(Color.RED); lblAvisoUsuario.setFont(fontAviso);
 		c.gridy = 2; panel.add(lblAvisoUsuario, c);
-
+		
+		/*
 		c.insets = new Insets(5, 5, 0, 5); c.gridy = 3; panel.add(new LblSubtitulo("Total ($):"), c);
 		c.insets = new Insets(0, 5, 0, 5); c.gridy = 4; txtTotal = new JTextField(20); panel.add(txtTotal, c);
 		lblAvisoTotal = new LblAviso(""); lblAvisoTotal.setForeground(Color.RED); lblAvisoTotal.setFont(fontAviso);
 		c.gridy = 5; panel.add(lblAvisoTotal, c);
-
+		*/
+		
 		c.insets = new Insets(5, 5, 0, 5); c.gridy = 6; panel.add(new LblSubtitulo("Estado:"), c);
 		c.insets = new Insets(0, 5, 0, 5); c.gridy = 7; 
 
