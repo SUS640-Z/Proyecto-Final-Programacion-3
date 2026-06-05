@@ -23,8 +23,6 @@ import javax.swing.border.LineBorder;
 
 import models.ProductMandado;
 import utils.Mandado;
-import views.TiendaSaturnbucksView.CarritoManager;
-import views.TiendaSaturnbucksView.ItemCarrito;
 
 
 public class CarritoFormDialog extends JDialog {

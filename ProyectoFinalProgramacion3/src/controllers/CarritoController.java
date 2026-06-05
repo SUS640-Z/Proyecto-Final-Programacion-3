@@ -1,5 +1,9 @@
 package controllers;
 
-public class CarritoController {
+import repository.CarritoRepository;
+import views.CarritoFormDialog;
 
+public class CarritoController {
+	private CarritoFormDialog view;
+	private CarritoRepository repo;
 }
