@@ -47,8 +47,14 @@ public class Session {
 		return currentUser.getGenero();
 	}
 	
+	
+	
 	public static String getBithDate( ) {
 		return currentUser.getFechaNacimiento();
+	}
+	
+	public static int getId() {
+		return currentUser.getId();
 	}
 	
 	

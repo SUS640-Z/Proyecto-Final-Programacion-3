@@ -26,10 +26,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.LineBorder;
-
 import models.Product;
 import utils.Mandado;
-import views.TiendaSaturnbucksView.CarritoManager;
+
 
 public class MenuView extends JFrame {
     private List<Product> products;
