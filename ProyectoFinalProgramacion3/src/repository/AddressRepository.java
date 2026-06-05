@@ -109,4 +109,30 @@ public class AddressRepository {
 		}
 		return users;
 	}
+	public List<Address> getAddressesByUserId(int userId) throws SQLException {
+		List<Address> addresses = new ArrayList<>();
+		String sql = "SELECT a.*, u.user_name, u.last_name FROM client_address a INNER JOIN users u ON a.user_id = u.user_id WHERE a.user_id = ?";
+		
+		try(Connection connection = DataBaseConnection.getConnection();
+			PreparedStatement pst = connection.prepareStatement(sql)) {
+			
+			pst.setInt(1, userId);
+			try(ResultSet rs = pst.executeQuery()) {
+				while(rs.next()) {
+					String fullName = rs.getString("user_name") + " " + rs.getString("last_name");
+					Address addr = new Address(
+						rs.getInt("client_address_id"),
+						rs.getString("neighborhood"),
+						rs.getString("street"),
+						rs.getString("reference_address"),
+						rs.getString("delivery_instructions"),
+						rs.getInt("user_id"),
+						fullName
+					);
+					addresses.add(addr);
+				}
+			}
+		}
+		return addresses;
+	}
 }

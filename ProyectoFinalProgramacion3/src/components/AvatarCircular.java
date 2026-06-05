@@ -15,7 +15,6 @@ public class AvatarCircular extends JComponent {
 
     private String nombre;
     private Image imagenPerfil;
-    // SE MODIFICÓ: Cambiado a los colores temáticos de Saturnbucks
     private Color fondoSaturn = new Color(48, 60, 26); 
 
     public AvatarCircular(String nombre, int tamano) {
@@ -68,7 +67,6 @@ public class AvatarCircular extends JComponent {
                 inicial = nombre.trim().substring(0, 1).toUpperCase();
             }
 
-            // Cambiado a Times New Roman para mantener la consistencia en textos grandes
             g2.setColor(new Color(210, 180, 140)); 
             g2.setFont(new Font("Times New Roman", Font.BOLD, diametro / 2));
 

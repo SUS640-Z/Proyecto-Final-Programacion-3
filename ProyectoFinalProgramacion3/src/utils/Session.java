@@ -31,10 +31,12 @@ public class Session {
 		return currentUser.getName();
 	}
 	
-	public static String getImage( ) {
-		return currentUser.getImagePath();
+	public static String getImage() {
+	    if (currentUser != null && currentUser.getImagePath() != null) {
+	        return currentUser.getImagePath();
+	    }
+	    return ""; 
 	}
-	
 	public static String getEmail( ) {
 		return currentUser.getEmail();
 	}
@@ -48,7 +50,6 @@ public class Session {
 	}
 	
 	
-	
 	public static String getBithDate( ) {
 		return currentUser.getFechaNacimiento();
 	}
@@ -57,7 +58,7 @@ public class Session {
 		return currentUser.getId();
 	}
 	
-	
+
 	
 	
 

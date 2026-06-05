@@ -58,7 +58,6 @@ public class UserController {
 				try {
 					boolean deleted = repo.delete(userToDelete.getId()); 
 					if(deleted) {
-
 						model.removeRow(row); 
 						JOptionPane.showMessageDialog(view, "Usuario eliminado", "Éxito", JOptionPane.INFORMATION_MESSAGE);
 					}
@@ -125,18 +124,13 @@ public class UserController {
 			try {
 				if(user == null) {
 					repo.save(savedUser);
-					model.addRow(savedUser); 
 				} else {
-					int row = view.getSelectedRow();
-		            savedUser.setId(user.getId()); 
-
-					boolean updated = repo.update(user.getId(), savedUser);
-					
-					if(updated) {
-						model.updateRow(row, savedUser); 
-					}
-
+					savedUser.setId(user.getId()); 
+					repo.update(user.getId(), savedUser);
 				}
+
+				loadUsers(); 
+				
 			} catch(Exception e) {
 				e.printStackTrace();
 				JOptionPane.showMessageDialog(view, "Error al guardar el usuario: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);

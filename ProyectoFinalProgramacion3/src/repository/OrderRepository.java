@@ -94,4 +94,26 @@ public class OrderRepository {
 		} catch(SQLException ex) { ex.printStackTrace(); }
 		return false;
 	}
+	public List<Order> getOrdersByUserId(int userId) throws SQLException {
+		List<Order> orders = new ArrayList<>();
+		String sql = "SELECT o.order_id, o.user_id, o.order_date, o.total_amount, o.status_order, u.user_name, u.last_name " +
+		             "FROM orders o INNER JOIN users u ON o.user_id = u.user_id WHERE o.user_id = ?";
+
+		try (Connection connection = DataBaseConnection.getConnection();
+			 PreparedStatement pst = connection.prepareStatement(sql)) {
+
+			pst.setInt(1, userId);
+			try (ResultSet rs = pst.executeQuery()) {
+				while (rs.next()) {
+					Order order = new Order(
+						rs.getInt("order_id"), rs.getInt("user_id"),
+						rs.getString("user_name") + " " + rs.getString("last_name"), 
+						rs.getString("order_date"), rs.getDouble("total_amount"), rs.getString("status_order")
+					);
+					orders.add(order);
+				}
+			}
+		}
+		return orders;
+	}
 }

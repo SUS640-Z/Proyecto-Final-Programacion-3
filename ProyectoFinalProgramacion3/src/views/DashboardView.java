@@ -21,7 +21,6 @@ public class DashboardView extends JPanel {
         JPanel grid = new JPanel(new GridLayout(3, 2, 20, 20));
         grid.setOpaque(false);
 
-        // -- FILA 1 --
         lblTotalPedidos = new JLabel("0", SwingConstants.CENTER);
         lblTotalPedidos.setFont(new Font("Arial", Font.BOLD, 45)); 
         grid.add(crearTarjeta("Pedidos Totales", lblTotalPedidos, new Color(48, 60, 26)));
@@ -30,7 +29,6 @@ public class DashboardView extends JPanel {
         lblIngresos.setFont(new Font("Arial", Font.BOLD, 45));
         grid.add(crearTarjeta("Ingresos Generados", lblIngresos, new Color(78, 59, 49)));
 
-        // -- FILA 2 --
         lblClientes = new JLabel("0", SwingConstants.CENTER);
         lblClientes.setFont(new Font("Arial", Font.BOLD, 45));
         grid.add(crearTarjeta("Usuarios Registrados", lblClientes, new Color(114, 155, 121)));

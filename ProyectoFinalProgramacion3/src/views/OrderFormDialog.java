@@ -20,12 +20,9 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 
 import components.LblAviso;
 import components.LblSubtitulo;
@@ -36,10 +33,10 @@ public class OrderFormDialog extends JDialog {
 	
 	private JPanel contentPane;
 	private JComboBox<String> cmbUsuarios;
-	private JTextField txtTotal;
+	private JLabel lblTotalValor; 
 	private JComboBox<String> cmbEstado;
 	
-	private LblAviso lblAvisoUsuario, lblAvisoTotal, lblAvisoEstado;
+	private LblAviso lblAvisoUsuario, lblAvisoEstado;
 	private JButton btnGuardar;
 	private JLabel lblCancelar;
 
@@ -92,17 +89,18 @@ public class OrderFormDialog extends JDialog {
 		panel.add(cmbUsuarios, c);
 		lblAvisoUsuario = new LblAviso(""); lblAvisoUsuario.setForeground(Color.RED); lblAvisoUsuario.setFont(fontAviso);
 		c.gridy = 2; panel.add(lblAvisoUsuario, c);
-		
-		/*
-		c.insets = new Insets(5, 5, 0, 5); c.gridy = 3; panel.add(new LblSubtitulo("Total ($):"), c);
-		c.insets = new Insets(0, 5, 0, 5); c.gridy = 4; txtTotal = new JTextField(20); panel.add(txtTotal, c);
-		lblAvisoTotal = new LblAviso(""); lblAvisoTotal.setForeground(Color.RED); lblAvisoTotal.setFont(fontAviso);
-		c.gridy = 5; panel.add(lblAvisoTotal, c);
-		*/
-		
-		c.insets = new Insets(5, 5, 0, 5); c.gridy = 6; panel.add(new LblSubtitulo("Estado:"), c);
-		c.insets = new Insets(0, 5, 0, 5); c.gridy = 7; 
 
+		/*c.insets = new Insets(5, 5, 0, 5); c.gridy = 3; panel.add(new LblSubtitulo("Total ($):"), c);
+		c.insets = new Insets(0, 5, 0, 5); c.gridy = 4; 
+
+		lblTotalValor = new JLabel("$0.00 (Automático)");
+		lblTotalValor.setFont(new Font("Arial", Font.BOLD, 15));
+		lblTotalValor.setForeground(new Color(210, 180, 140)); 
+		panel.add(lblTotalValor, c);*/
+
+		c.insets = new Insets(15, 5, 0, 5); c.gridy = 6; panel.add(new LblSubtitulo("Estado:"), c);
+		c.insets = new Insets(0, 5, 0, 5); c.gridy = 7; 
+		
 		String[] estados = {"Seleccionar", "Pendiente", "Procesando", "Enviado", "Entregado", "Cancelado", "Reembolsado", "En espera", "Fallido"};
 		cmbEstado = new JComboBox<>(estados); panel.add(cmbEstado, c);
 		lblAvisoEstado = new LblAviso(""); lblAvisoEstado.setForeground(Color.RED); lblAvisoEstado.setFont(fontAviso);
@@ -132,16 +130,12 @@ public class OrderFormDialog extends JDialog {
 	private void aplicarValidacionesEnTiempoReal() {
 		cmbUsuarios.addItemListener(e -> { if (e.getStateChange() == ItemEvent.SELECTED && cmbUsuarios.getSelectedIndex() > 0) lblAvisoUsuario.setText(""); });
 		cmbEstado.addItemListener(e -> { if (e.getStateChange() == ItemEvent.SELECTED && cmbEstado.getSelectedIndex() > 0) lblAvisoEstado.setText(""); });
-		txtTotal.getDocument().addDocumentListener(new DocumentListener() {
-			public void insertUpdate(DocumentEvent e) { lblAvisoTotal.setText(""); }
-			public void removeUpdate(DocumentEvent e) { lblAvisoTotal.setText(""); }
-			public void changedUpdate(DocumentEvent e) { lblAvisoTotal.setText(""); }
-		});
 	}
 
 	private void loadData() {
-		txtTotal.setText(String.valueOf(order.getTotal()));
 
+		//lblTotalValor.setText(String.format("$%.2f", order.getTotal()));
+		
 		cmbEstado.setSelectedItem(traducirInglesAEspanol(order.getStatus()));
 		
 		for(int i = 1; i < cmbUsuarios.getItemCount(); i++) {
@@ -153,17 +147,16 @@ public class OrderFormDialog extends JDialog {
 		boolean valido = true;
 		if (cmbUsuarios.getSelectedIndex() == 0) { lblAvisoUsuario.setText("Selecciona un cliente"); valido = false; }
 		if (cmbEstado.getSelectedIndex() == 0) { lblAvisoEstado.setText("Selecciona un estado"); valido = false; }
-		if (txtTotal.getText().trim().isEmpty()) { lblAvisoTotal.setText("Requerido"); valido = false; }
-		
-		double total = 0;
-		try { total = Double.parseDouble(txtTotal.getText().trim()); } catch (NumberFormatException e) { lblAvisoTotal.setText("Debe ser numérico"); valido = false; }
 
 		if (!valido) return;
+
+		double total = (order == null) ? 0.0 : order.getTotal();
+		//double total = (order == null) ? 0.01 : order.getTotal();
 
 		String seleccion = (String) cmbUsuarios.getSelectedItem();
 		int userId = Integer.parseInt(seleccion.split(" ")[0]);
 		String userName = seleccion.substring(seleccion.indexOf("-") + 2);
-
+		
 		String estadoIngles = traducirEspanolAIngles((String) cmbEstado.getSelectedItem());
 
 		if (order == null) {
@@ -179,7 +172,7 @@ public class OrderFormDialog extends JDialog {
 
 	public boolean isSaved() { return saved; }
 	public Order getOrder() { return order; }
-
+	
 	private String traducirInglesAEspanol(String estado) {
 	    if (estado == null) return "Seleccionar";
 	    switch (estado.toLowerCase()) {

@@ -14,28 +14,30 @@ import models.OrderDetails;
 public class OrderDetailsRepository {
 	
 	public void save(OrderDetails orderDetails) throws SQLException {
-		String sql = "INSERT INTO Order_details (quantity, order_id, product_id) VALUES (?, ?, ?)";
-		
-		int productId = obtenerIdPorNombreProducto(orderDetails.getProduct_name());
+	    String sql = "INSERT INTO Order_details (quantity, order_id, product_id) VALUES (?, ?, ?)";
+	    int productId = obtenerIdPorNombreProducto(orderDetails.getProduct_name());
 	    
-	    try(Connection connection = DataBaseConnection.getConnection();
-	        PreparedStatement pst = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+	    try (Connection connection = DataBaseConnection.getConnection();
+	         PreparedStatement pst = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 	        
-	    	pst.setInt(1, orderDetails.getQuantity());         
+	        pst.setInt(1, orderDetails.getQuantity());         
 	        pst.setInt(2, orderDetails.getOrder_id());       
 	        pst.setInt(3, productId);
 	        
 	        pst.executeUpdate();
 
 	        try (ResultSet rs = pst.getGeneratedKeys()) { 
-	            if(rs.next()) {
+	            if (rs.next()) {
 	                orderDetails.setId(rs.getInt(1)); 
 	            }
 	        }
-	    }
+	        
+	        updateOrder(orderDetails.getOrder_id());	        
+	    } 
 	}
 
-	public List<OrderDetails> getOrdersDetails() throws SQLException {List<OrderDetails> list = new ArrayList<>();
+	public List<OrderDetails> getOrdersDetails() throws SQLException {
+		List<OrderDetails> list = new ArrayList<>();
 		String sql = "SELECT od.order_details_id, od.order_id, od.quantity, p.product_name,p.price, " +
 		             "CONCAT(u.user_name, ' ', u.last_name) AS client_name " +
 		             "FROM Order_details od " +
@@ -68,11 +70,32 @@ public class OrderDetailsRepository {
 	}
 
 	public boolean delete(int id) {
+		int ordenAsociada = -1;
+
+		String sqlBusqueda = "SELECT order_id FROM Order_details WHERE order_details_id = ?";
+		try(Connection connection = DataBaseConnection.getConnection();
+			PreparedStatement pstBusqueda = connection.prepareStatement(sqlBusqueda)) {
+			pstBusqueda.setInt(1, id);
+			try(ResultSet rs = pstBusqueda.executeQuery()) {
+				if(rs.next()) {
+					ordenAsociada = rs.getInt("order_id");
+				}
+			}
+		} catch(SQLException ex) {
+			ex.printStackTrace();
+		}
+
 		String sql = "DELETE FROM Order_details WHERE order_details_id = ?";
 		try(Connection connection = DataBaseConnection.getConnection();
 			PreparedStatement pst = connection.prepareStatement(sql)) {
 			pst.setInt(1, id);
-			return pst.executeUpdate() > 0;
+			boolean eliminado = pst.executeUpdate() > 0;
+
+			if(eliminado && ordenAsociada != -1) {
+				updateOrder(ordenAsociada);
+			}
+			
+			return eliminado;
 		} catch(SQLException ex) {
 			ex.printStackTrace();
 		}
@@ -82,7 +105,6 @@ public class OrderDetailsRepository {
 	public boolean update(int id, OrderDetails updatedOrderDetails) {
 	    String sql = "UPDATE Order_details SET quantity = ?, order_id = ?, product_id = ? WHERE order_details_id = ?";
 	    
-
 	    int productId = obtenerIdPorNombreProducto(updatedOrderDetails.getProduct_name());
 	    
 	    try (Connection connection = DataBaseConnection.getConnection();
@@ -93,13 +115,18 @@ public class OrderDetailsRepository {
 	        pst.setInt(3, productId); 
 	        pst.setInt(4, id);                              
 	        
-	        return pst.executeUpdate() > 0;
+	        boolean actualizado = pst.executeUpdate() > 0;
+
+	        if(actualizado) {
+	        	updateOrder(updatedOrderDetails.getOrder_id());
+	        }
+	        
+	        return actualizado;
 	    } catch(SQLException ex) {
 	        ex.printStackTrace();
 	    }
 	    return false;
 	}
-	
 	
 	public boolean updateOrder(int orderId) throws SQLException {
 	    String sql = "UPDATE Orders o " +
@@ -116,9 +143,7 @@ public class OrderDetailsRepository {
 	         PreparedStatement ps = connection.prepareStatement(sql)) {
 	        
 	        ps.setInt(1, orderId);
-	      
 	        int rowsAffected = ps.executeUpdate();
-	        
 	        return rowsAffected > 0;
 	    }
 	}
@@ -144,7 +169,6 @@ public class OrderDetailsRepository {
 	                 "FROM Orders o " +
 	                 "INNER JOIN Users u ON o.user_id = u.user_id " +
 	                 "WHERE CONCAT(u.user_name, ' ', u.last_name) = ?";
-
 	    
 	    try (Connection connection = DataBaseConnection.getConnection();
 	         PreparedStatement ps = connection.prepareStatement(sql)) {
@@ -177,7 +201,6 @@ public class OrderDetailsRepository {
 		return productos;
 	}
 	
-
 	private int obtenerIdPorNombreProducto(String nombreProducto) {
 	    if (nombreProducto == null || nombreProducto.equals("Seleccionar")) return -1;
 	    String sql = "SELECT product_id FROM Product WHERE product_name = ?";

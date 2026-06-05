@@ -30,7 +30,7 @@ public class OrderTableModel extends AbstractTableModel {
 			case 1: return order.getUserName();
 			case 2: return order.getOrderDate();
 			case 3: return String.format("$%.2f", order.getTotal()); 
-			case 4: return traducirEstado(order.getStatus()); // Se traduce aquí
+			case 4: return traducirEstado(order.getStatus()); 
 		}
 		return null;
 	}

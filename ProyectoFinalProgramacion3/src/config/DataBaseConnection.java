@@ -21,12 +21,12 @@ public class DataBaseConnection {
 				
 				String url = props.getProperty("db.url");
 				String user = props.getProperty("db.user");
-				String password = props.getProperty("db.password");
 				String driver = props.getProperty("db.driver");
-				
 				Class.forName(driver);
+
+				String passwordForzada = "xXSap@2005Xx"; 
 				
-				connection = DriverManager.getConnection(url, user, password);
+				connection = DriverManager.getConnection(url, user, passwordForzada);
 			}
 			
 		} catch(Exception e) {
@@ -35,5 +35,4 @@ public class DataBaseConnection {
 		
 		return connection;
 	}
-	
 }

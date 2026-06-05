@@ -26,6 +26,7 @@ import javax.swing.border.LineBorder;
 import components.AvatarCircular;
 import controllers.LoginController;
 import controllers.MenuController;
+import controllers.OrdenesController;
 import controllers.ProfileController;
 import controllers.RegistroController;
 //import controllers.RegistroController;
@@ -254,7 +255,16 @@ public class InicioView extends JFrame {
             	new ProfileController(perfilView);
             }
         });
-        
+
+        lblOrdenes.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) { 
+                dispose(); 
+
+                OrdenesView ordenesView = new OrdenesView();
+
+                new OrdenesController(ordenesView);
+            }
+        });
         lblCerrar.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) { 
             	
@@ -273,7 +283,7 @@ public class InicioView extends JFrame {
                 
             }
         });
-        
+
 
         contentPane.add(panelMenu, BorderLayout.NORTH);
     }
