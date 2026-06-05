@@ -20,6 +20,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
@@ -27,12 +28,16 @@ import javax.swing.SpinnerNumberModel;
 import javax.swing.border.LineBorder;
 
 import models.Product;
+import utils.Mandado;
+import views.TiendaSaturnbucksView.CarritoManager;
 
 public class MenuView extends JFrame {
     private List<Product> products;
     private JPanel contentPane;
     private JPanel gridProductos; // Componente global
-	
+    JLabel lblCarrito;
+    JLabel lblInicio;
+    
     public MenuView() {
         setTitle("Saturnbucks - Menú Galáctico");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -65,29 +70,17 @@ public class MenuView extends JFrame {
         panelMenu.setBackground(new Color(15, 19, 9));
         panelMenu.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(48, 60, 26)));
 
-        JLabel lblInicio = crearItemMenu("Inicio");
+        lblInicio = crearItemMenu("Inicio");
         JLabel lblSeparador1 = new JLabel("  |  ");
         lblSeparador1.setForeground(Color.DARK_GRAY);
         
-        JLabel lblCarrito = crearItemMenu("Ver Carrito");
+        lblCarrito = crearItemMenu("Ver Carrito");
 
         panelMenu.add(lblInicio);
         panelMenu.add(lblSeparador1);
         panelMenu.add(lblCarrito);
         
-        lblInicio.addMouseListener(new MouseAdapter() {
-            public void mouseClicked(MouseEvent e) {
-            	dispose();
-            	InicioView inicioView = new InicioView();
-            }
-        });
-
-        lblCarrito.addMouseListener(new MouseAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                // new CarritoView(); 
-            }
-        });
+ 
 
         contentPane.add(panelMenu, BorderLayout.NORTH);
     }
@@ -179,9 +172,9 @@ public class MenuView extends JFrame {
         JLabel lblPrecio;
         
         if(prod.getSeason().equals("No especificada")) {
-            lblPrecio = new JLabel("$" + prod.getPrice() + " USD");
+            lblPrecio = new JLabel("$" + prod.getPrice());
         }else {
-            lblPrecio = new JLabel("$" + prod.getPrice() + " USD (" + prod.getSeason().toUpperCase() + ")");
+            lblPrecio = new JLabel("$" + prod.getPrice() + " (" + prod.getSeason().toUpperCase() + ")");
         }
 
    
@@ -213,7 +206,12 @@ public class MenuView extends JFrame {
         btnAñadir.setForeground(Color.WHITE);
         btnAñadir.setBorder(new LineBorder(Color.GRAY, 1, true));
         btnAñadir.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
+        
+        btnAñadir.addActionListener(e -> {
+            int cantidadSeleccionada = (int) spnCantidad.getValue();
+            Mandado.añadirProducto(prod, cantidadSeleccionada);
+            JOptionPane.showMessageDialog(this, cantidadSeleccionada + "x " + prod.getName() + " añadido.");
+        });
 
        
         panelAcciones.add(lblCantTag);
@@ -229,4 +227,24 @@ public class MenuView extends JFrame {
 
         return tarjeta;
     }
+
+	public JLabel getLblCarrito() {
+		return lblCarrito;
+	}
+
+	public void setLblCarrito(JLabel lblCarrito) {
+		this.lblCarrito = lblCarrito;
+	}
+
+	public JLabel getLblInicio() {
+		return lblInicio;
+	}
+
+	public void setLblInicio(JLabel lblInicio) {
+		this.lblInicio = lblInicio;
+	}
+	
+	
+    
+    
 }

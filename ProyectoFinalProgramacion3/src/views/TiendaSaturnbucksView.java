@@ -344,13 +344,13 @@ public class TiendaSaturnbucksView {
             fila.setMaximumSize(new Dimension(620, 55));
             fila.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
 
-            // Nombre y Cantidad
+   
             JLabel lblDetalleProd = new JLabel(item.getCantidad() + "x   " + item.getProducto().product_name);
             lblDetalleProd.setFont(new Font("Arial", Font.PLAIN, 14));
             lblDetalleProd.setForeground(Color.WHITE);
             fila.add(lblDetalleProd, BorderLayout.WEST);
 
-            // Contenedor Derecho (Precio + Botón de acción)
+           
             JPanel panelDerecho = new JPanel(new FlowLayout(FlowLayout.RIGHT, 15, 0));
             panelDerecho.setOpaque(false);
 
@@ -359,8 +359,8 @@ public class TiendaSaturnbucksView {
             lblSubtotal.setFont(new Font("Monospaced", Font.BOLD, 14));
             lblSubtotal.setForeground(new Color(210, 180, 140));
 
-            // Botón Eliminar Ítem
-            JButton btnEliminar = new JButton("❌");
+
+            JButton btnEliminar = new JButton("X");
             btnEliminar.setFont(new Font("Arial", Font.PLAIN, 11));
             btnEliminar.setBackground(new Color(60, 20, 20)); // Color rojizo sutil
             btnEliminar.setForeground(Color.WHITE);
@@ -368,11 +368,11 @@ public class TiendaSaturnbucksView {
             btnEliminar.setCursor(new Cursor(Cursor.HAND_CURSOR));
             btnEliminar.setPreferredSize(new Dimension(32, 24));
             
-            // Lógica interactiva de actualización en caliente
+          
             btnEliminar.addActionListener(e -> {
                 CarritoManager.removerProducto(item.getProducto().product_id);
-                actualizarListaCarrito(); // Re-dibuja las tarjetas restantes
-                actualizarTextoTotal();  // Cambia la sumatoria inferior
+                actualizarListaCarrito(); 
+                actualizarTextoTotal();  
             });
 
             panelDerecho.add(lblSubtotal);

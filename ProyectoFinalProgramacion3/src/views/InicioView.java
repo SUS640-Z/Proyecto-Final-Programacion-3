@@ -26,6 +26,8 @@ import javax.swing.border.LineBorder;
 import components.AvatarCircular;
 import controllers.LoginController;
 import controllers.MenuController;
+import controllers.ProfileController;
+import controllers.RegistroController;
 //import controllers.RegistroController;
 import utils.Session;
 import models.User;
@@ -33,7 +35,6 @@ import models.User;
 public class InicioView extends JFrame {
 
     private JPanel contentPane;
-    //private User loggedUser; 
 
 
     public static void main(String[] args) {
@@ -49,7 +50,7 @@ public class InicioView extends JFrame {
         
         setTitle("Saturnbucks - Inicio");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setBounds(100, 100, 800, 525);
+        setBounds(100, 100, 800, 515);
         setResizable(false);
         setLocationRelativeTo(null);
         
@@ -246,6 +247,14 @@ public class InicioView extends JFrame {
         panelMenu.add(lblSeparador2);
         panelMenu.add(lblCerrar);
         
+        lblPerfil.addMouseListener(new MouseAdapter() {
+            public void mouseClicked(MouseEvent e) { 
+            	dispose();
+            	ProfileView perfilView = new ProfileView();
+            	new ProfileController(perfilView);
+            }
+        });
+        
         lblCerrar.addMouseListener(new MouseAdapter() {
             public void mouseClicked(MouseEvent e) { 
             	
@@ -268,5 +277,8 @@ public class InicioView extends JFrame {
 
         contentPane.add(panelMenu, BorderLayout.NORTH);
     }
+    
+    
+    
     
 }

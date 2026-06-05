@@ -1,10 +1,15 @@
 package controllers;
 
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.List;
 import javax.swing.JOptionPane;
 
 import models.Product;
 import repository.ProductRepository;
+import utils.Session;
+import views.CarritoFormDialog;
+import views.InicioView;
 import views.MenuView;
 
 
@@ -15,6 +20,7 @@ public class MenuController {
     public MenuController(MenuView view) {
         this.view = view;
         this.repo = new ProductRepository();
+        registerListeners();
         loadProducts();
     }
     
@@ -29,4 +35,21 @@ public class MenuController {
             ex.printStackTrace(); 
         }
     }
+    
+    private void registerListeners() {
+    	 this.view.getLblInicio().addMouseListener(new MouseAdapter() {
+             public void mouseClicked(MouseEvent e) {
+             	view.dispose();
+             	InicioView inicioView = new InicioView();
+             }
+         });
+    	 
+    	 
+    	 this.view.getLblCarrito().addMouseListener(new MouseAdapter() {
+             public void mouseClicked(MouseEvent e) {
+             	CarritoFormDialog carrito = new CarritoFormDialog(null);
+             }
+         });
+		
+	}
 }

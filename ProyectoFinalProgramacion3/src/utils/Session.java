@@ -35,6 +35,24 @@ public class Session {
 		return currentUser.getImagePath();
 	}
 	
+	public static String getEmail( ) {
+		return currentUser.getEmail();
+	}
+	
+	public static String getPhone( ) {
+		return currentUser.getTelefono();
+	}
+	
+	public static String getGender( ) {
+		return currentUser.getGenero();
+	}
+	
+	public static String getBithDate( ) {
+		return currentUser.getFechaNacimiento();
+	}
+	
+	
+	
 	
 
 }
