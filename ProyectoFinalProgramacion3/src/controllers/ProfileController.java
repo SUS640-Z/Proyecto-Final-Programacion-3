@@ -70,8 +70,8 @@ public class ProfileController {
 		
 
 		this.view.getBtnAgregarDireccion().addActionListener(e -> {
-			view.dispose();
-			new Dirreccion(Session.getCurrentUser()).setVisible(true);
+		    view.dispose();
+		    new Dirreccion(Session.getCurrentUser(), view).setVisible(true);
 		});
 
 		this.view.getBtnEditarPerfil().addActionListener(e -> {

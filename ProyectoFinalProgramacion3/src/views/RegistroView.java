@@ -183,7 +183,7 @@ public class RegistroView extends JFrame {
         
         c.insets = new Insets(2, 5, 0, 5); c.gridy = 13; panel.add(new LblSubtitulo("Género:"), c);
         c.insets = new Insets(0, 5, 5, 5); c.gridy = 14; 
-        String[] opcionesGenero = {"Seleccionar", "Fememenino", "Masculino"};
+        String[] opcionesGenero = {"Seleccionar", "Femenino", "Masculino"};
         cmbGenero = new JComboBox<>(opcionesGenero); panel.add(cmbGenero, c);
 
         c.insets = new Insets(2, 5, 0, 5); c.gridy = 16; panel.add(new LblSubtitulo("Correo electrónico:"), c);

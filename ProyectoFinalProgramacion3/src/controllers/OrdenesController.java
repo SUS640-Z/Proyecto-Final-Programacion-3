@@ -20,6 +20,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
+import javax.swing.JTextArea;
 import javax.swing.border.LineBorder;
 
 import models.Order;
@@ -191,35 +192,48 @@ public class OrdenesController {
 	    pnlModal.add(sep);
 	    pnlModal.add(Box.createRigidArea(new Dimension(0, 15)));
 
-	    // Sacamos los productos reales de esa orden desde la base de datos
+
 	    StringBuilder sbDetails = new StringBuilder();
-	    sbDetails.append(String.format("%-25s %-10s\n", "PRODUCTO", "CANTIDAD"));
-	    sbDetails.append("------------------------------------------\n");
-	    
+	    sbDetails.append(String.format("%-22s %-10s %-12s %-10s\n", "PRODUCTO", "CANT.", "PRECIO U.", "SUBTOTAL"));
+	    sbDetails.append("--------------------------------------------------------------------\n");
+
 	    try {
-	        List<OrderDetails> listaDetallesBD = detailsRepo.getOrdersDetails();
-	        boolean tieneDetalles = false;
-	        
-	        for(OrderDetails det : listaDetallesBD) {
-	            if(det.getOrder_id() == orden.getId()) {
-	                sbDetails.append(String.format("%-25s %-10d\n", det.getProduct_name(), det.getQuantity()));
-	                tieneDetalles = true;
-	            }
-	        }
-	        if(!tieneDetalles) {
-	            sbDetails.append("No se encontraron productos para esta orden.\n");
-	        }
+	         List<OrderDetails> listaDetallesBD = detailsRepo.getOrdersDetails();
+	         boolean tieneDetalles = false;
+	         
+	         for(OrderDetails det : listaDetallesBD) {
+	             if(det.getOrder_id() == orden.getId()) {
+	     
+	                 double subtotal = det.getPrice(); 
+	                 int cantidad = det.getQuantity();
+	                 
+
+	                 double precioUnitario = subtotal / cantidad;
+
+	                
+	                 sbDetails.append(String.format("%-22s %-10d $%-11.2f $%-10.2f\n", 
+	                     det.getProduct_name(), 
+	                     cantidad, 
+	                     precioUnitario, 
+	                     subtotal
+	                 ));
+	                 tieneDetalles = true;
+	             }
+	         }
+	         if(!tieneDetalles) {
+	             sbDetails.append("No se encontraron productos para esta orden.\n");
+	         }
 	    } catch (Exception ex) {
-	        sbDetails.append("Error cargando productos de la base de datos.");
+	         sbDetails.append("Error cargando productos de la base de datos.");
 	    }
 
-	    javax.swing.JTextArea txtProductos = new javax.swing.JTextArea(sbDetails.toString());
-	    txtProductos.setFont(new Font("Monospaced", Font.PLAIN, 13)); 
-	    txtProductos.setForeground(Color.WHITE);
-	    txtProductos.setBackground(new Color(27, 34, 18));
-	    txtProductos.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-	    txtProductos.setEditable(false);
-	    
+		JTextArea txtProductos = new JTextArea(sbDetails.toString());
+		txtProductos.setFont(new Font("Monospaced", Font.PLAIN, 13)); 
+		txtProductos.setForeground(Color.WHITE);
+		txtProductos.setBackground(new Color(27, 34, 18));
+		txtProductos.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+		txtProductos.setEditable(false);
+		    
 	    // NOTA: En BoxLayout, los componentes internos se alinean según el contenedor (JScrollPane)
 	    JScrollPane scrollArea = new JScrollPane(txtProductos);
 	    scrollArea.setBorder(new LineBorder(new Color(48, 60, 26)));

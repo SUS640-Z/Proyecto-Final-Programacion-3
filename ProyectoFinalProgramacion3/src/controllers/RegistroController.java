@@ -75,7 +75,7 @@ public class RegistroController{
 	        	if(genero.equals("Masculino")) {
 	        		conversionGenero="Masculine";
 	        	}else {
-	        		conversionGenero="Femenine";
+	        		conversionGenero="Feminine";
 	        	}
 	        	
 	            User nuevoUsuario = new User(

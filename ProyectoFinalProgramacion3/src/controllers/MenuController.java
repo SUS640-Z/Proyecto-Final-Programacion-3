@@ -2,6 +2,8 @@ package controllers;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -9,6 +11,7 @@ import models.Product;
 import repository.ProductRepository;
 import utils.Session;
 import views.CarritoFormDialog;
+import views.CarritoView;
 import views.InicioView;
 import views.MenuView;
 
@@ -46,21 +49,21 @@ public class MenuController {
     	 
     	 
     	 this.view.getLblCarrito().addMouseListener(new MouseAdapter() {
-             public void mouseClicked(MouseEvent e) {
-            	 view.setVisible(false);
-        
-                 CarritoFormDialog carrito = new CarritoFormDialog(view);
-                 
-              
-                 CarritoController control = new CarritoController(carrito); 
-                 
-    
-                 carrito.setVisible(true);
-                 
-               
-                 view.setVisible(true);
-             }
-         });
+    		    @Override
+    		    public void mouseClicked(MouseEvent e) {
+    		        // 1. Ocultamos el menú principal
+    		        view.setVisible(false);
+    		   
+    		        // 2. Abrimos el carrito
+    		        CarritoView carrito = new CarritoView();
+    		        carrito.setLocationRelativeTo(view);
+    		        
+    		        // 3. Pasamos la 'view' (menú principal) al controlador del carrito
+    		        CarritoController control = new CarritoController(carrito, view); 
+    		        
+    		        carrito.setVisible(true);
+    		    }
+    		});
 		
 	}
 }

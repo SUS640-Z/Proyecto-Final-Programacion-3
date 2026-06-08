@@ -11,6 +11,8 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -44,15 +46,24 @@ public class Dirreccion extends JFrame {
 	private JLabel lblCancelar;
 
 	private User loggedUser; 
+	private JFrame ventanaOrigen;
 
-	public Dirreccion(User loggedUser) {
+	public Dirreccion(User loggedUser,JFrame ventanaOrigen) {
 		this.loggedUser = loggedUser;
+		this.ventanaOrigen = ventanaOrigen;
 		
 		setTitle("Saturnbucks - Agregar Dirección");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setSize(450, 450); 
 		setLocationRelativeTo(null);
 		setResizable(true);
+		
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				regresarAOrigen();
+			}
+		});
 
 		try {
             Toolkit tk = Toolkit.getDefaultToolkit();
@@ -124,14 +135,18 @@ public class Dirreccion extends JFrame {
 		lblCancelar.setFont(new Font("Times New Roman", Font.PLAIN, 16));
 		lblCancelar.setCursor(new Cursor(Cursor.HAND_CURSOR));
 		lblCancelar.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) { 
-				int option = JOptionPane.showConfirmDialog(null, "¿Seguro que deseas cancelar? Se perderán los datos.", "Cancelar", JOptionPane.YES_NO_OPTION);
-    			if(option == JOptionPane.YES_OPTION) {
-    				new InicioView(loggedUser).setVisible(true);
-    				dispose(); 
-    			}
-			}
-		});
+		    @Override
+		    public void mouseClicked(MouseEvent e) { 
+		        int option = JOptionPane.showConfirmDialog(null, 
+		            "¿Seguro que deseas cancelar? Se perderán los datos.", 
+		            "Cancelar", 
+		            JOptionPane.YES_NO_OPTION);
+		            
+		        if (option == JOptionPane.YES_OPTION) {
+		            regresarAOrigen(); 
+		        }
+		    }
+		}); 
 		panel.add(lblCancelar, c);
 
 		JScrollPane mainScroll = new JScrollPane(panel);
@@ -168,13 +183,21 @@ public class Dirreccion extends JFrame {
 			repo.save(nuevaAddr);
 			
 			JOptionPane.showMessageDialog(this, "¡Tu dirección de envío ha sido guardada con éxito!", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-			new InicioView(loggedUser).setVisible(true);
-			dispose();
+			regresarAOrigen();
 			
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			JOptionPane.showMessageDialog(this, "Hubo un error al guardar tu dirección: " + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
 		}
+	}
+	
+	private void regresarAOrigen() {
+		if (ventanaOrigen != null) {
+			ventanaOrigen.setVisible(true);
+		} else {
+			new InicioView(loggedUser).setVisible(true);
+		}
+		dispose(); 
 	}
 
 	private void aplicarValidacionesEnTiempoReal() {
