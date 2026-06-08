@@ -165,95 +165,98 @@ public class OrdenesController {
 
 	// Recreamos tu Modal pero consultando la base de datos real
 	private void mostrarModalAuditoria(Order orden) {
-		JDialog modal = new JDialog(view, "Auditoría de Orden Relacional", true);
-		modal.setSize(500, 500);
-		modal.setLocationRelativeTo(view);
-		modal.setResizable(false);
+	    JDialog modal = new JDialog(view, "Auditoría de Orden Relacional", true);
+	    modal.setSize(500, 500);
+	    modal.setLocationRelativeTo(view);
+	    modal.setResizable(false);
 
-		JPanel pnlModal = new JPanel();
-		pnlModal.setLayout(new BoxLayout(pnlModal, BoxLayout.Y_AXIS));
-		pnlModal.setBackground(new Color(20, 25, 13)); 
-		pnlModal.setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
+	    JPanel pnlModal = new JPanel();
+	    pnlModal.setLayout(new BoxLayout(pnlModal, BoxLayout.Y_AXIS));
+	    pnlModal.setBackground(new Color(20, 25, 13)); 
+	    pnlModal.setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
 
-		JLabel lblTitulo = new JLabel("ORDER DETAILS (ID: " + orden.getId() + ")");
-		lblTitulo.setFont(new Font("Times New Roman", Font.BOLD, 22));
-		lblTitulo.setForeground(new Color(210, 180, 140));
-		lblTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
-		pnlModal.add(lblTitulo);
-		pnlModal.add(Box.createRigidArea(new Dimension(0, 20)));
+	    JLabel lblTitulo = new JLabel("Detalles de la orden (ID: " + orden.getId() + ")");
+	    lblTitulo.setFont(new Font("Times New Roman", Font.BOLD, 22));
+	    lblTitulo.setForeground(new Color(210, 180, 140));
+	    lblTitulo.setAlignmentX(Component.CENTER_ALIGNMENT);
+	    pnlModal.add(lblTitulo);
+	    pnlModal.add(Box.createRigidArea(new Dimension(0, 20)));
+	    agregarFilaDetalle(pnlModal, "Fecha de Orden:", orden.getOrderDate());
+	    agregarFilaDetalle(pnlModal, "Estado:", traducirEstado(orden.getStatus()));
 
-		agregarFilaDetalle(pnlModal, "Fecha de Orden:", orden.getOrderDate());
-		agregarFilaDetalle(pnlModal, "Cliente ID (user_id):", String.valueOf(orden.getUserId()));
-		agregarFilaDetalle(pnlModal, "Estado:", traducirEstado(orden.getStatus()));
+	    pnlModal.add(Box.createRigidArea(new Dimension(0, 10)));
+	    JSeparator sep = new JSeparator();
+	    sep.setForeground(new Color(48, 60, 26));
+	    sep.setMaximumSize(new Dimension(450, 2));
+	    pnlModal.add(sep);
+	    pnlModal.add(Box.createRigidArea(new Dimension(0, 15)));
 
-		pnlModal.add(Box.createRigidArea(new Dimension(0, 10)));
-		JSeparator sep = new JSeparator();
-		sep.setForeground(new Color(48, 60, 26));
-		sep.setMaximumSize(new Dimension(450, 2));
-		pnlModal.add(sep);
-		pnlModal.add(Box.createRigidArea(new Dimension(0, 15)));
+	    // Sacamos los productos reales de esa orden desde la base de datos
+	    StringBuilder sbDetails = new StringBuilder();
+	    sbDetails.append(String.format("%-25s %-10s\n", "PRODUCTO", "CANTIDAD"));
+	    sbDetails.append("------------------------------------------\n");
+	    
+	    try {
+	        List<OrderDetails> listaDetallesBD = detailsRepo.getOrdersDetails();
+	        boolean tieneDetalles = false;
+	        
+	        for(OrderDetails det : listaDetallesBD) {
+	            if(det.getOrder_id() == orden.getId()) {
+	                sbDetails.append(String.format("%-25s %-10d\n", det.getProduct_name(), det.getQuantity()));
+	                tieneDetalles = true;
+	            }
+	        }
+	        if(!tieneDetalles) {
+	            sbDetails.append("No se encontraron productos para esta orden.\n");
+	        }
+	    } catch (Exception ex) {
+	        sbDetails.append("Error cargando productos de la base de datos.");
+	    }
 
-		// Sacamos los productos reales de esa orden desde la base de datos
-		StringBuilder sbDetails = new StringBuilder();
-		sbDetails.append(String.format("%-25s %-10s\n", "PRODUCTO", "CANTIDAD"));
-		sbDetails.append("------------------------------------------\n");
-		
-		try {
-			// Filtramos los detalles reales que le pertenecen a este ID de orden
-			List<OrderDetails> listaDetallesBD = detailsRepo.getOrdersDetails();
-			boolean tieneDetalles = false;
-			
-			for(OrderDetails det : listaDetallesBD) {
-				if(det.getOrder_id() == orden.getId()) {
-					sbDetails.append(String.format("%-25s %-10d\n", det.getProduct_name(), det.getQuantity()));
-					tieneDetalles = true;
-				}
-			}
-			if(!tieneDetalles) {
-				sbDetails.append("No se encontraron productos para esta orden.\n");
-			}
-		} catch (Exception ex) {
-			sbDetails.append("Error cargando productos de la base de datos.");
-		}
+	    javax.swing.JTextArea txtProductos = new javax.swing.JTextArea(sbDetails.toString());
+	    txtProductos.setFont(new Font("Monospaced", Font.PLAIN, 13)); 
+	    txtProductos.setForeground(Color.WHITE);
+	    txtProductos.setBackground(new Color(27, 34, 18));
+	    txtProductos.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+	    txtProductos.setEditable(false);
+	    
+	    // NOTA: En BoxLayout, los componentes internos se alinean según el contenedor (JScrollPane)
+	    JScrollPane scrollArea = new JScrollPane(txtProductos);
+	    scrollArea.setBorder(new LineBorder(new Color(48, 60, 26)));
+	    
+	    // --- CAMBIOS AQUÍ PARA HACERLO GRANDE Y CENTRADO ---
+	    // Aumentamos la altura máxima de 150 a 220 para que se vea grande en el modal de 500x500
+	    scrollArea.setMaximumSize(new Dimension(450, 220)); 
+	    // Cambiamos la alineación al centro para que BoxLayout no lo tire a la izquierda
+	    scrollArea.setAlignmentX(Component.CENTER_ALIGNMENT); 
+	    // --------------------------------------------------
+	    
+	    pnlModal.add(scrollArea);
 
-		javax.swing.JTextArea txtProductos = new javax.swing.JTextArea(sbDetails.toString());
-		txtProductos.setFont(new Font("Monospaced", Font.PLAIN, 13)); 
-		txtProductos.setForeground(Color.WHITE);
-		txtProductos.setBackground(new Color(27, 34, 18));
-		txtProductos.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
-		txtProductos.setEditable(false);
-		txtProductos.setAlignmentX(Component.LEFT_ALIGNMENT);
-		
-		JScrollPane scrollArea = new JScrollPane(txtProductos);
-		scrollArea.setBorder(new LineBorder(new Color(48, 60, 26)));
-		scrollArea.setMaximumSize(new Dimension(450, 150));
-		scrollArea.setAlignmentX(Component.LEFT_ALIGNMENT);
-		pnlModal.add(scrollArea);
+	    pnlModal.add(Box.createRigidArea(new Dimension(0, 15)));
 
-		pnlModal.add(Box.createRigidArea(new Dimension(0, 15)));
+	    JLabel lblTotal = new JLabel("TOTAL ACUMULADO:  $" + orden.getTotal() + " MXN");
+	    lblTotal.setFont(new Font("Times New Roman", Font.BOLD, 18));
+	    lblTotal.setForeground(new Color(210, 180, 140));
+	    lblTotal.setAlignmentX(Component.CENTER_ALIGNMENT);
+	    pnlModal.add(lblTotal);
 
-		JLabel lblTotal = new JLabel("TOTAL ACUMULADO:  $" + orden.getTotal() + " MXN");
-		lblTotal.setFont(new Font("Times New Roman", Font.BOLD, 18));
-		lblTotal.setForeground(new Color(210, 180, 140));
-		lblTotal.setAlignmentX(Component.CENTER_ALIGNMENT);
-		pnlModal.add(lblTotal);
+	    pnlModal.add(Box.createRigidArea(new Dimension(0, 20)));
 
-		pnlModal.add(Box.createRigidArea(new Dimension(0, 20)));
+	    JButton btnCerrar = new JButton("Cerrar Detalles");
+	    btnCerrar.setFont(new Font("Times New Roman", Font.PLAIN, 16));
+	    btnCerrar.setBackground(new Color(48, 60, 26));
+	    btnCerrar.setForeground(Color.WHITE);
+	    btnCerrar.setBorder(new LineBorder(Color.GRAY, 2, true));
+	    btnCerrar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+	    btnCerrar.setPreferredSize(new Dimension(150, 35));
+	    btnCerrar.setMaximumSize(new Dimension(150, 35));
+	    btnCerrar.setAlignmentX(Component.CENTER_ALIGNMENT);
+	    btnCerrar.addActionListener(e -> modal.dispose());
+	    pnlModal.add(btnCerrar);
 
-		JButton btnCerrar = new JButton("Cerrar Detalles");
-		btnCerrar.setFont(new Font("Times New Roman", Font.PLAIN, 16));
-		btnCerrar.setBackground(new Color(48, 60, 26));
-		btnCerrar.setForeground(Color.WHITE);
-		btnCerrar.setBorder(new LineBorder(Color.GRAY, 2, true));
-		btnCerrar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-		btnCerrar.setPreferredSize(new Dimension(150, 35));
-		btnCerrar.setMaximumSize(new Dimension(150, 35));
-		btnCerrar.setAlignmentX(Component.CENTER_ALIGNMENT);
-		btnCerrar.addActionListener(e -> modal.dispose());
-		pnlModal.add(btnCerrar);
-
-		modal.add(pnlModal);
-		modal.setVisible(true);
+	    modal.add(pnlModal);
+	    modal.setVisible(true);
 	}
 
 	private void agregarFilaDetalle(JPanel panel, String tag, String info) {

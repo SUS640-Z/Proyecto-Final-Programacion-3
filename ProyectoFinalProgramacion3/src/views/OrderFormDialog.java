@@ -50,7 +50,7 @@ public class OrderFormDialog extends JDialog {
 		this.listaUsuariosBD = usuarios;
 		
 		setTitle(order == null ? "Agregar Pedido" : "Editar Pedido");
-		setSize(400, 500); 
+		setSize(400, 310); 
 		setLocationRelativeTo(parent);
 		setResizable(true);
 

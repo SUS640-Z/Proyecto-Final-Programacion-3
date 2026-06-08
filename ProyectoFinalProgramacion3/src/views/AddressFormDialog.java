@@ -54,7 +54,7 @@ public class AddressFormDialog extends JDialog {
 		this.listaUsuariosBD = usuarios;
 		
 		setTitle(address == null ? "Agregar Dirección" : "Editar Dirección");
-		setSize(450, 650); 
+		setSize(450, 480); 
 		setLocationRelativeTo(parent);
 		setResizable(true);
 
@@ -71,7 +71,7 @@ public class AddressFormDialog extends JDialog {
 		setContentPane(contentPane);
 
 		generarComponentes();
-		aplicarValidacionesEnTiempoReal(); // <--- AGREGA ESTA LÍNEA AQUÍ
+		aplicarValidacionesEnTiempoReal(); 
 		if (address != null) {
 			loadData();
 		}
@@ -136,7 +136,7 @@ public class AddressFormDialog extends JDialog {
 		btnGuardar.addActionListener(e -> save());
 		panel.add(btnGuardar, c);
 
-		// LABEL CANCELAR
+		//CANCELAR
 		c.insets = new Insets(10, 5, 10, 5); c.gridy = 16;
 		lblCancelar = new JLabel("<html><u>Cancelar</u></html>", JLabel.CENTER);
 		lblCancelar.setForeground(Color.WHITE);

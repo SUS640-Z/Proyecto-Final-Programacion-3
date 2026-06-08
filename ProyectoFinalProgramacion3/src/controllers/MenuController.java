@@ -47,8 +47,18 @@ public class MenuController {
     	 
     	 this.view.getLblCarrito().addMouseListener(new MouseAdapter() {
              public void mouseClicked(MouseEvent e) {
-             	CarritoFormDialog carrito = new CarritoFormDialog(null);
-             	CarritoController control = new CarritoController(carrito); 
+            	 view.setVisible(false);
+        
+                 CarritoFormDialog carrito = new CarritoFormDialog(view);
+                 
+              
+                 CarritoController control = new CarritoController(carrito); 
+                 
+    
+                 carrito.setVisible(true);
+                 
+               
+                 view.setVisible(true);
              }
          });
 		

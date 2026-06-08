@@ -17,7 +17,6 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.LineBorder;
@@ -31,6 +30,10 @@ public class CarritoFormDialog extends JDialog {
     private JLabel lblTotalNeto;
     private JComboBox<String> comboDirecciones; 
     
+
+    private JButton btnAgregarDireccion;
+    private JButton btnConfirmarOrden;
+    
     public CarritoFormDialog(JFrame parent) {
         super(parent, true);
         setTitle("Saturnbucks - Carrito de Compras");
@@ -43,7 +46,6 @@ public class CarritoFormDialog extends JDialog {
         setContentPane(contentPane);
 
         generarContenidoCarrito();
-        setVisible(true);
     }
     
     private void generarContenidoCarrito() {
@@ -68,7 +70,7 @@ public class CarritoFormDialog extends JDialog {
 
         actualizarListaCarrito();
 
-    
+       
         JPanel pnlAbajoContenedor = new JPanel();
         pnlAbajoContenedor.setLayout(new BoxLayout(pnlAbajoContenedor, BoxLayout.Y_AXIS));
         pnlAbajoContenedor.setBackground(new Color(20, 25, 13));
@@ -83,16 +85,14 @@ public class CarritoFormDialog extends JDialog {
         lblDireccion.setFont(new Font("Times New Roman", Font.BOLD, 14));
         lblDireccion.setForeground(new Color(210, 180, 140));
 
-       
         comboDirecciones = new JComboBox<>();
         comboDirecciones.setFont(new Font("Arial", Font.PLAIN, 13));
         comboDirecciones.setBackground(new Color(15, 19, 9));
         comboDirecciones.setForeground(Color.WHITE);
         comboDirecciones.setBorder(new LineBorder(new Color(48, 60, 26), 1, true));
         
-
       
-        JButton btnAgregarDireccion = new JButton("+");
+        btnAgregarDireccion = new JButton("+");
         btnAgregarDireccion.setFont(new Font("Arial", Font.BOLD, 12));
         btnAgregarDireccion.setBackground(new Color(48, 60, 26));
         btnAgregarDireccion.setForeground(Color.WHITE);
@@ -100,7 +100,6 @@ public class CarritoFormDialog extends JDialog {
         btnAgregarDireccion.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnAgregarDireccion.setPreferredSize(new Dimension(80, 25));
 
-        
         JPanel pnlSelectorYBoton = new JPanel(new BorderLayout(8, 0));
         pnlSelectorYBoton.setOpaque(false);
         pnlSelectorYBoton.add(comboDirecciones, BorderLayout.CENTER);
@@ -119,39 +118,13 @@ public class CarritoFormDialog extends JDialog {
         lblTotalNeto.setFont(new Font("Times New Roman", Font.BOLD, 18));
         lblTotalNeto.setForeground(Color.WHITE);
 
-        JButton btnConfirmarOrden = new JButton("Confirmar Pedido");
+      
+        btnConfirmarOrden = new JButton("Confirmar Pedido");
         btnConfirmarOrden.setFont(new Font("Times New Roman", Font.PLAIN, 16));
         btnConfirmarOrden.setBackground(new Color(48, 60, 26));
         btnConfirmarOrden.setForeground(Color.WHITE);
         btnConfirmarOrden.setBorder(new LineBorder(Color.GRAY, 2, true));
         btnConfirmarOrden.setCursor(new Cursor(Cursor.HAND_CURSOR));
-
-        btnConfirmarOrden.addActionListener(e -> {
-            if (Mandado.getItems().isEmpty()) {
-                JOptionPane.showMessageDialog(this, "El espacio está vacío. Agrega ítems en el menú.");
-                return;
-            }
-            
-            /*
-            int seleccionIdx = comboDirecciones.getSelectedIndex();
-            if (seleccionIdx <= 0) { 
-                JOptionPane.showMessageDialog(this, 
-                        "Por favor, selecciona o añade una dirección de envío válida.", 
-                        "Dirección requerida", 
-                        JOptionPane.WARNING_MESSAGE);
-                return;
-            }
-			*/
-            
-            
-            String direccionSeleccionada = (String) comboDirecciones.getSelectedItem();
-            
-            JOptionPane.showMessageDialog(this, "¡Pedido Procesado!\nDestino: " + direccionSeleccionada);
-            /*
-            CarritoManager.limpiarCarrito();
-            dispose();
-            */
-        });
 
         pnlBotonesYTotal.add(lblTotalNeto, BorderLayout.WEST);
         pnlBotonesYTotal.add(btnConfirmarOrden, BorderLayout.EAST);
@@ -160,7 +133,7 @@ public class CarritoFormDialog extends JDialog {
         contentPane.add(pnlAbajoContenedor, BorderLayout.SOUTH);
     }
       
-    private void actualizarListaCarrito() {
+    public void actualizarListaCarrito() {
         panelListaItems.removeAll();
 
         List<ProductMandado> productos = Mandado.getItems();
@@ -208,7 +181,7 @@ public class CarritoFormDialog extends JDialog {
         btnEliminar.setBorder(new LineBorder(Color.DARK_GRAY, 1, true));
         btnEliminar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnEliminar.setPreferredSize(new Dimension(32, 24));
-        
+
         btnEliminar.addActionListener(e -> {
             Mandado.removerProducto(p.getProducto().getId());
             actualizarListaCarrito(); 
@@ -223,18 +196,11 @@ public class CarritoFormDialog extends JDialog {
         return fila;
     }
       
-    private void actualizarTextoTotal() {
+    public void actualizarTextoTotal() {
         lblTotalNeto.setText("Monto de la Orden: $" + Mandado.calcularTotal());
     }
 
-	public JComboBox<String> getComboDirecciones() {
-		return comboDirecciones;
-	}
-
-	public void setComboDirecciones(JComboBox<String> comboDirecciones) {
-		this.comboDirecciones = comboDirecciones;
-	}
-    
-    
-    
+	public JComboBox<String> getComboDirecciones() { return comboDirecciones; }
+	public JButton getBtnAgregarDireccion() { return btnAgregarDireccion; }
+	public JButton getBtnConfirmarOrden() { return btnConfirmarOrden; }
 }

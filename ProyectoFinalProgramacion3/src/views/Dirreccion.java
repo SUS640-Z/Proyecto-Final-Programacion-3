@@ -50,7 +50,7 @@ public class Dirreccion extends JFrame {
 		
 		setTitle("Saturnbucks - Agregar Dirección");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(450, 650); 
+		setSize(450, 450); 
 		setLocationRelativeTo(null);
 		setResizable(true);
 

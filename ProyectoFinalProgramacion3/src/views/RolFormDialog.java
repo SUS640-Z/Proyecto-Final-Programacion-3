@@ -40,7 +40,8 @@ public class RolFormDialog extends JDialog {
 		super(parent, true);
 		this.rol = rol;
 		setTitle(rol == null ? "Agregar Rol" : "Editar Rol");
-		setSize(380, 350);
+		setSize(380, 300);
+		
 		setLocationRelativeTo(parent);
 		setResizable(false);
 

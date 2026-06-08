@@ -52,9 +52,9 @@ public class OrderDetailsFormDialog extends JDialog {
         super(parent, true);
         this.orderDetails = orderDetails;
         setTitle(orderDetails == null ? "Agregar Detalle de Orden" : "Editar Detalle de Orden");
-        setSize(400, 500);
+        setSize(400, 440);
         setLocationRelativeTo(parent);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+      
         setResizable(true);
         
         try {

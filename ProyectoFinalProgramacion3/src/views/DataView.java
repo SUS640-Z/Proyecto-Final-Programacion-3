@@ -79,7 +79,7 @@ public class DataView extends JFrame {
 		btnRoles = crearBoton("Roles");
 		btnAddresses = crearBoton("Direcciones");
 		btnOrders = crearBoton("Pedidos"); 
-		btnOrdersDetails = crearBoton("Detalles Órdenes");
+		btnOrdersDetails = crearBoton("Detalles Pedidos");
 		btnProducts = crearBoton("Productos");
 		btnProductsType = crearBoton("Tipos Prod.");
 		btnDashboard = crearBoton("Estadísticas"); 

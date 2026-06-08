@@ -64,7 +64,8 @@ public class UserFormDialog extends JDialog {
 		super(parent, true);
 		this.user = user;
 		setTitle(user == null ? "Agregar Usuario" : "Editar Usuario");
-		setSize(450, 750); 
+		setSize(450, 675); 
+		
 		setLocationRelativeTo(parent);
 		setResizable(true);
 

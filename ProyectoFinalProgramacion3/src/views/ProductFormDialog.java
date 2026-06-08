@@ -69,8 +69,8 @@ public class ProductFormDialog extends JDialog {
         this.product = product;
         setTitle(product == null ? "Agregar producto" : "Editar producto");
         setLocationRelativeTo(parent);
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        setBounds(100, 100, 400, 450); 
+
+        setBounds(100, 100, 400, 465); 
         setResizable(true);
         
         try {

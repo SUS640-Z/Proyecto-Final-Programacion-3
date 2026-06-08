@@ -22,11 +22,12 @@ public class DataBaseConnection {
 				String url = props.getProperty("db.url");
 				String user = props.getProperty("db.user");
 				String driver = props.getProperty("db.driver");
+				String password = props.getProperty("db.password");
 				Class.forName(driver);
 
-				String passwordForzada = "xXSap@2005Xx"; 
+				//String passwordForzada = "xXSap@2005Xx"; 
 				
-				connection = DriverManager.getConnection(url, user, passwordForzada);
+				connection = DriverManager.getConnection(url, user, password);
 			}
 			
 		} catch(Exception e) {
